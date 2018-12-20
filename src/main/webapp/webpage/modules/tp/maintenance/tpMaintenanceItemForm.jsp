@@ -39,7 +39,7 @@
 				<tr>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>零件名称：</label></td>
 					<td class="width-35">
-						<sys:gridselect url="${ctx}/tp/guardrail/tpMaterialPart/data" id="materialPart" name="materialPart.id" value="${tpMaintenanceItem.materialPart.id}" labelName="materialPart.name" labelValue="${tpMaintenanceItem.materialPart.name}"
+						<sys:gridselect url="${ctx}/tp/material/tpMaterialPart/data" id="materialPart" name="materialPart.id" value="${tpMaintenanceItem.materialPart.id}" labelName="materialPart.name" labelValue="${tpMaintenanceItem.materialPart.name}"
 							 title="选择零件名称" cssClass="form-control required" fieldLabels="零件名称|零件单位|零件单价|所属品类" fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.id" ></sys:gridselect>
 					</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>数量：</label></td>

@@ -7,7 +7,7 @@
 	<meta name="decorator" content="ani"/>
 	<%@ include file="/webpage/include/bootstraptable.jsp"%>
 	<%@include file="/webpage/include/treeview.jsp" %>
-	<%@include file="mySysAreaTreeList.js" %>
+	<%@include file="sysAreaTreeList.js" %>
 	<%@include file="tpRoadList.js" %>
 	
 </head>
@@ -31,13 +31,13 @@
 								</div>
 							</div>
 							<div class="col-sm-2" >
-								<button  class="btn btn-default btn-sm"  onclick="jp.openSaveDialog('新建区域表; InnoDB free: 34816 kB', '${ctx}/tp/road/mySysArea/form','800px', '500px')">
+								<button  class="btn btn-default btn-sm"  onclick="jp.openSaveDialog('新建区域表; InnoDB free: 34816 kB', '${ctx}/tp/road/sysArea/form','800px', '500px')">
 									<i class="fa fa-plus"></i>
 								</button>
 							</div>
 						</div>
 					</div>
-					<div id="mySysAreajsTree" style="overflow-x:auto; border:0px;"></div>
+					<div id="sysAreajsTree" style="overflow-x:auto; border:0px;"></div>
 				</div>
 				<div  class="col-sm-8 col-md-9">
 	
@@ -52,7 +52,7 @@
 			 <div class="col-xs-12 col-sm-6 col-md-4">
 				<label class="label-item single-overflow pull-left" title="所属区域：">所属区域：</label>
 				<sys:treeselect id="area" name="area.id" value="${tpRoad.area.id}" labelName="area.name" labelValue="${tpRoad.area.name}"
-					title="所属区域" url="/tp/road/mySysArea/treeData" extId="${tpRoad.id}" cssClass="form-control required" allowClear="true"/>
+					title="所属区域" url="/tp/road/sysArea/treeData" extId="${tpRoad.id}" cssClass="form-control required" allowClear="true"/>
 			</div>
 		 <div class="col-xs-12 col-sm-6 col-md-4">
 			<div style="margin-top:26px">

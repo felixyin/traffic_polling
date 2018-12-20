@@ -14,9 +14,9 @@ import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 import com.jeeplus.modules.tp.roadcross.mapper.TpRoadCrossingMapper;
 
 /**
- * 路口Service
+ * 路口管理Service
  * @author 尹彬
- * @version 2018-12-19
+ * @version 2018-12-20
  */
 @Service
 @Transactional(readOnly = true)

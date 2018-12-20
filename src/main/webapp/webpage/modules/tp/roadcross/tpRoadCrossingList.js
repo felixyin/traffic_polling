@@ -9,7 +9,7 @@ $(document).ready(function() {
                dataType: "json",
                contentType: "application/x-www-form-urlencoded",
                //显示检索按钮
-	           showSearch: true,
+	       showSearch: true,
                //显示刷新按钮
                showRefresh: true,
                //显示切换手机试图按钮
@@ -59,7 +59,7 @@ $(document).ready(function() {
                    }else if($el.data("item") == "view"){
                        view(row.id);
                    } else if($el.data("item") == "delete"){
-                        jp.confirm('确认要删除该路口记录吗？', function(){
+                        jp.confirm('确认要删除该路口管理记录吗？', function(){
                        	jp.loading();
                        	jp.get("${ctx}/tp/roadcross/tpRoadCrossing/delete?id="+row.id, function(data){
                    	  		if(data.success){
@@ -85,12 +85,11 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'tpRoad1.name',
-		        title: '道路1',
+		        field: 'sarea.name',
+		        title: '所属区域',
 		        sortable: true,
-		        sortName: 'tpRoad1.name'
+		        sortName: 'sarea.name'
 		        ,formatter:function(value, row , index){
-
 			   if(value == null || value ==""){
 				   value = "-";
 			   }
@@ -107,6 +106,13 @@ $(document).ready(function() {
 			   </c:choose>
 
 		        }
+		       
+		    }
+			,{
+		        field: 'tpRoad1.name',
+		        title: '道路1',
+		        sortable: true,
+		        sortName: 'tpRoad1.name'
 		       
 		    }
 			,{
@@ -188,7 +194,7 @@ $(document).ready(function() {
 							}else{
 								jp.error(data.msg);
 							}
-					   		jp.close(index);
+						   jp.close(index);
 						});//调用保存事件
 						return false;
 				  },
@@ -200,7 +206,8 @@ $(document).ready(function() {
 		});
 		
 		
-	 $("#export").click(function(){//导出Excel文件
+
+	$("#export").click(function(){//导出Excel文件
 	        var searchParam = $("#searchForm").serializeJSON();
 	        searchParam.pageNo = 1;
 	        searchParam.pageSize = -1;
@@ -216,7 +223,6 @@ $(document).ready(function() {
 
 			jp.downloadFile('${ctx}/tp/roadcross/tpRoadCrossing/export?'+values);
 	  })
-
 		    
 	  $("#search").click("click", function() {// 绑定查询按扭
 		  $('#tpRoadCrossingTable').bootstrapTable('refresh');
@@ -240,7 +246,7 @@ $(document).ready(function() {
   
   function deleteAll(){
 
-		jp.confirm('确认要删除该路口记录吗？', function(){
+		jp.confirm('确认要删除该路口管理记录吗？', function(){
 			jp.loading();  	
 			jp.get("${ctx}/tp/roadcross/tpRoadCrossing/deleteAll?ids=" + getIdSelections(), function(data){
          	  		if(data.success){
@@ -260,7 +266,7 @@ $(document).ready(function() {
   }
   
    function add(){
-	  jp.openSaveDialog('新增路口', "${ctx}/tp/roadcross/tpRoadCrossing/form",'800px', '500px');
+	  jp.openSaveDialog('新增路口管理', "${ctx}/tp/roadcross/tpRoadCrossing/form",'800px', '500px');
   }
 
 
@@ -269,16 +275,14 @@ $(document).ready(function() {
        if(id == undefined){
 	      id = getIdSelections();
 	}
-	jp.openSaveDialog('编辑路口', "${ctx}/tp/roadcross/tpRoadCrossing/form?id=" + id, '800px', '500px');
+	jp.openSaveDialog('编辑路口管理', "${ctx}/tp/roadcross/tpRoadCrossing/form?id=" + id, '800px', '500px');
   }
   
  function view(id){//没有权限时，不显示确定按钮
       if(id == undefined){
              id = getIdSelections();
       }
-        jp.openViewDialog('查看路口', "${ctx}/tp/roadcross/tpRoadCrossing/form?id=" + id, '800px', '500px');
+        jp.openViewDialog('查看路口管理', "${ctx}/tp/roadcross/tpRoadCrossing/form?id=" + id, '800px', '500px');
  }
-
-
 
 </script>

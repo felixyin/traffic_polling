@@ -45,7 +45,7 @@
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属区域：</label></td>
 					<td class="width-35">
 						<sys:treeselect id="area" name="area.id" value="${tpRoad.area.id}" labelName="area.name" labelValue="${tpRoad.area.name}"
-							title="所属区域" url="/tp/road/mySysArea/treeData" extId="${tpRoad.id}" cssClass="form-control required" allowClear="true"/>
+							title="所属区域" url="/tp/road/sysArea/treeData" extId="${tpRoad.id}" cssClass="form-control required" allowClear="true"/>
 					</td>
 				</tr>
 				<tr>

@@ -2,25 +2,59 @@
 <%@ include file="/webpage/include/taglib.jsp"%>
 <html>
 <head>
-	<title>路口管理</title>
+	<title>路口管理管理</title>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<meta name="decorator" content="ani"/>
 	<%@ include file="/webpage/include/bootstraptable.jsp"%>
 	<%@include file="/webpage/include/treeview.jsp" %>
+	<%@include file="sysArea2TreeList.js" %>
 	<%@include file="tpRoadCrossingList.js" %>
+	
 </head>
 <body>
 	<div class="wrapper wrapper-content">
 	<div class="panel panel-primary">
 	<div class="panel-heading">
-		<h3 class="panel-title">路口列表</h3>
+		<h3 class="panel-title">路口管理列表</h3>
 	</div>
 	<div class="panel-body">
+		<div class="row">
+				<div class="col-sm-4 col-md-3" >
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-10" >
+								<div class="input-search">
+									<button type="submit" class="input-search-btn">
+										<i class="fa fa-search" aria-hidden="true"></i></button>
+									<input   id="search_q" type="text" class="form-control input-sm" name="" placeholder="查找...">
+
+								</div>
+							</div>
+							<div class="col-sm-2" >
+								<button  class="btn btn-default btn-sm"  onclick="jp.openSaveDialog('新建区域表; InnoDB free: 34816 kB', '${ctx}/tp/roadcross/sysArea2/form','800px', '500px')">
+									<i class="fa fa-plus"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div id="sysArea2jsTree" style="overflow-x:auto; border:0px;"></div>
+				</div>
+				<div  class="col-sm-8 col-md-9">
 	
 	<!-- 搜索 -->
 	<div id="search-collapse" class="collapse">
 		<div class="accordion-inner">
 			<form:form id="searchForm" modelAttribute="tpRoadCrossing" class="form form-horizontal well clearfix">
+			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="道路1：">道路1：</label>
+				<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="tpRoad1" name="tpRoad1.id" value="${tpRoadCrossing.tpRoad1.id}" labelName="tpRoad1.name" labelValue="${tpRoadCrossing.tpRoad1.name}"
+					title="选择道路1" cssClass="form-control required" fieldLabels="道路1" fieldKeys="name" searchLabels="道路1" searchKeys="name" ></sys:gridselect>
+			</div>
+			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="道路2：">道路2：</label>
+				<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="tpRoad2" name="tpRoad2.id" value="${tpRoadCrossing.tpRoad2.id}" labelName="tpRoad2.name" labelValue="${tpRoadCrossing.tpRoad2.name}"
+					title="选择道路2" cssClass="form-control required" fieldLabels="道路2" fieldKeys="name" searchLabels="道路2" searchKeys="name" ></sys:gridselect>
+			</div>
 		 <div class="col-xs-12 col-sm-6 col-md-4">
 			<div style="margin-top:26px">
 			  <a  id="search" class="btn btn-primary btn-rounded  btn-bordered btn-sm"><i class="fa fa-search"></i> 查询</a>
@@ -82,5 +116,7 @@
 	</div>
 	</div>
 	</div>
+	</div>
+</div>
 </body>
 </html>

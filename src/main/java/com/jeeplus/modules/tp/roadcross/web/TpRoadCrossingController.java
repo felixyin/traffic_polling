@@ -4,7 +4,6 @@
 package com.jeeplus.modules.tp.roadcross.web;
 
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URLDecoder;
 import java.util.List;
 import java.util.Map;
@@ -13,12 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
-import com.jeeplus.modules.tp.road.entity.TpRoad;
-import com.jeeplus.modules.tp.road.service.TpRoadService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,191 +37,189 @@ import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 import com.jeeplus.modules.tp.roadcross.service.TpRoadCrossingService;
 
 /**
- * 路口Controller
- *
+ * 路口管理Controller
  * @author 尹彬
- * @version 2018-12-19
+ * @version 2018-12-20
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tp/roadcross/tpRoadCrossing")
 public class TpRoadCrossingController extends BaseController {
 
-    @Autowired
-    private TpRoadCrossingService tpRoadCrossingService;
+	@Autowired
+	private TpRoadCrossingService tpRoadCrossingService;
+	
+	@ModelAttribute
+	public TpRoadCrossing get(@RequestParam(required=false) String id) {
+		TpRoadCrossing entity = null;
+		if (StringUtils.isNotBlank(id)){
+			entity = tpRoadCrossingService.get(id);
+		}
+		if (entity == null){
+			entity = new TpRoadCrossing();
+		}
+		return entity;
+	}
+	
+	/**
+	 * 路口管理列表页面
+	 */
+	@RequiresPermissions("tp:roadcross:tpRoadCrossing:list")
+	@RequestMapping(value = {"list", ""})
+	public String list(TpRoadCrossing tpRoadCrossing, Model model) {
+		model.addAttribute("tpRoadCrossing", tpRoadCrossing);
+		return "modules/tp/roadcross/tpRoadCrossingList";
+	}
+	
+		/**
+	 * 路口管理列表数据
+	 */
+	@ResponseBody
+	@RequiresPermissions("tp:roadcross:tpRoadCrossing:list")
+	@RequestMapping(value = "data")
+	public Map<String, Object> data(TpRoadCrossing tpRoadCrossing, HttpServletRequest request, HttpServletResponse response, Model model) {
+		Page<TpRoadCrossing> page = tpRoadCrossingService.findPage(new Page<TpRoadCrossing>(request, response), tpRoadCrossing); 
+		return getBootstrapData(page);
+	}
 
-    @Autowired
-    private TpRoadService tpRoadService;
+	/**
+	 * 查看，增加，编辑路口管理表单页面
+	 */
+	@RequiresPermissions(value={"tp:roadcross:tpRoadCrossing:view","tp:roadcross:tpRoadCrossing:add","tp:roadcross:tpRoadCrossing:edit"},logical=Logical.OR)
+	@RequestMapping(value = "form")
+	public String form(TpRoadCrossing tpRoadCrossing, Model model) {
+		model.addAttribute("tpRoadCrossing", tpRoadCrossing);
+		return "modules/tp/roadcross/tpRoadCrossingForm";
+	}
 
-    @ModelAttribute
-    public TpRoadCrossing get(@RequestParam(required = false) String id) {
-        TpRoadCrossing entity = null;
-        if (StringUtils.isNotBlank(id)) {
-            entity = tpRoadCrossingService.get(id);
-        }
-        if (entity == null) {
-            entity = new TpRoadCrossing();
-        }
-        return entity;
-    }
-
-    /**
-     * 路口列表页面
-     */
-    @RequiresPermissions("tp:roadcross:tpRoadCrossing:list")
-    @RequestMapping(value = {"list", ""})
-    public String list(TpRoadCrossing tpRoadCrossing, Model model) {
-        model.addAttribute("tpRoadCrossing", tpRoadCrossing);
-        return "modules/tp/roadcross/tpRoadCrossingList";
-    }
-
-    /**
-     * 路口列表数据
-     */
-    @ResponseBody
-    @RequiresPermissions("tp:roadcross:tpRoadCrossing:list")
-    @RequestMapping(value = "data")
-    public Map<String, Object> data(TpRoadCrossing tpRoadCrossing, HttpServletRequest request, HttpServletResponse response, Model model) {
-        Page<TpRoadCrossing> page = tpRoadCrossingService.findPage(new Page<TpRoadCrossing>(request, response), tpRoadCrossing);
-        return getBootstrapData(page);
-    }
-
-    /**
-     * 查看，增加，编辑路口表单页面
-     */
-    @RequiresPermissions(value = {"tp:roadcross:tpRoadCrossing:view", "tp:roadcross:tpRoadCrossing:add", "tp:roadcross:tpRoadCrossing:edit"}, logical = Logical.OR)
-    @RequestMapping(value = "form")
-    public String form(TpRoadCrossing tpRoadCrossing, Model model) {
-        model.addAttribute("tpRoadCrossing", tpRoadCrossing);
-        return "modules/tp/roadcross/tpRoadCrossingForm";
-    }
-
-    /**
-     * 保存路口
-     */
-    @ResponseBody
-    @RequiresPermissions(value = {"tp:roadcross:tpRoadCrossing:add", "tp:roadcross:tpRoadCrossing:edit"}, logical = Logical.OR)
-    @RequestMapping(value = "save")
-    public AjaxJson save(TpRoadCrossing tpRoadCrossing, Model model) throws Exception {
-        AjaxJson j = new AjaxJson();
-        /**
-         * 后台hibernate-validation插件校验
-         */
-        String errMsg = beanValidator(tpRoadCrossing);
-        if (StringUtils.isNotBlank(errMsg)) {
-            j.setSuccess(false);
-            j.setMsg(errMsg);
-            return j;
-        }
-        //新增或编辑表单保存
-        tpRoadCrossingService.save(tpRoadCrossing);//保存
-        j.setSuccess(true);
-        j.setMsg("保存路口成功");
-        return j;
-    }
-
-    /**
-     * 删除路口
-     */
-    @ResponseBody
-    @RequiresPermissions("tp:roadcross:tpRoadCrossing:del")
-    @RequestMapping(value = "delete")
-    public AjaxJson delete(TpRoadCrossing tpRoadCrossing) {
-        AjaxJson j = new AjaxJson();
-        tpRoadCrossingService.delete(tpRoadCrossing);
-        j.setMsg("删除路口成功");
-        return j;
-    }
-
-    /**
-     * 批量删除路口
-     */
-    @ResponseBody
-    @RequiresPermissions("tp:roadcross:tpRoadCrossing:del")
-    @RequestMapping(value = "deleteAll")
-    public AjaxJson deleteAll(String ids) {
-        AjaxJson j = new AjaxJson();
-        String idArray[] = ids.split(",");
-        for (String id : idArray) {
-            tpRoadCrossingService.delete(tpRoadCrossingService.get(id));
-        }
-        j.setMsg("删除路口成功");
-        return j;
-    }
-
-    /**
-     * 导出excel文件
-     */
-    @ResponseBody
-    @RequiresPermissions("tp:roadcross:tpRoadCrossing:export")
+	/**
+	 * 保存路口管理
+	 */
+	@ResponseBody
+	@RequiresPermissions(value={"tp:roadcross:tpRoadCrossing:add","tp:roadcross:tpRoadCrossing:edit"},logical=Logical.OR)
+	@RequestMapping(value = "save")
+	public AjaxJson save(TpRoadCrossing tpRoadCrossing, Model model) throws Exception{
+		AjaxJson j = new AjaxJson();
+		/**
+		 * 后台hibernate-validation插件校验
+		 */
+		String errMsg = beanValidator(tpRoadCrossing);
+		if (StringUtils.isNotBlank(errMsg)){
+			j.setSuccess(false);
+			j.setMsg(errMsg);
+			return j;
+		}
+		//新增或编辑表单保存
+		tpRoadCrossingService.save(tpRoadCrossing);//保存
+		j.setSuccess(true);
+		j.setMsg("保存路口管理成功");
+		return j;
+	}
+	
+	/**
+	 * 删除路口管理
+	 */
+	@ResponseBody
+	@RequiresPermissions("tp:roadcross:tpRoadCrossing:del")
+	@RequestMapping(value = "delete")
+	public AjaxJson delete(TpRoadCrossing tpRoadCrossing) {
+		AjaxJson j = new AjaxJson();
+		tpRoadCrossingService.delete(tpRoadCrossing);
+		j.setMsg("删除路口管理成功");
+		return j;
+	}
+	
+	/**
+	 * 批量删除路口管理
+	 */
+	@ResponseBody
+	@RequiresPermissions("tp:roadcross:tpRoadCrossing:del")
+	@RequestMapping(value = "deleteAll")
+	public AjaxJson deleteAll(String ids) {
+		AjaxJson j = new AjaxJson();
+		String idArray[] =ids.split(",");
+		for(String id : idArray){
+			tpRoadCrossingService.delete(tpRoadCrossingService.get(id));
+		}
+		j.setMsg("删除路口管理成功");
+		return j;
+	}
+	
+	/**
+	 * 导出excel文件
+	 */
+	@ResponseBody
+	@RequiresPermissions("tp:roadcross:tpRoadCrossing:export")
     @RequestMapping(value = "export")
     public AjaxJson exportFile(TpRoadCrossing tpRoadCrossing, HttpServletRequest request, HttpServletResponse response) {
-        AjaxJson j = new AjaxJson();
-        try {
-            String fileName = "路口" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+		AjaxJson j = new AjaxJson();
+		try {
+            String fileName = "路口管理"+DateUtils.getDate("yyyyMMddHHmmss")+".xlsx";
             Page<TpRoadCrossing> page = tpRoadCrossingService.findPage(new Page<TpRoadCrossing>(request, response, -1), tpRoadCrossing);
-            new ExportExcel("路口", TpRoadCrossing.class).setDataList(page.getList()).write(response, fileName).dispose();
-            j.setSuccess(true);
-            j.setMsg("导出成功！");
-            return j;
-        } catch (Exception e) {
-            j.setSuccess(false);
-            j.setMsg("导出路口记录失败！失败信息：" + e.getMessage());
-        }
-        return j;
+    		new ExportExcel("路口管理", TpRoadCrossing.class).setDataList(page.getList()).write(response, fileName).dispose();
+    		j.setSuccess(true);
+    		j.setMsg("导出成功！");
+    		return j;
+		} catch (Exception e) {
+			j.setSuccess(false);
+			j.setMsg("导出路口管理记录失败！失败信息："+e.getMessage());
+		}
+			return j;
     }
 
-    /**
-     * 导入Excel数据
-     */
-    @ResponseBody
-    @RequiresPermissions("tp:roadcross:tpRoadCrossing:import")
+	/**
+	 * 导入Excel数据
+
+	 */
+	@ResponseBody
+	@RequiresPermissions("tp:roadcross:tpRoadCrossing:import")
     @RequestMapping(value = "import")
-    public AjaxJson importFile(@RequestParam("file") MultipartFile file, HttpServletResponse response, HttpServletRequest request) {
-        AjaxJson j = new AjaxJson();
-        try {
-            ImportExcel ei = new ImportExcel(file, 1, 0);
-            List<TpRoadCrossing> list = ei.getDataList(TpRoadCrossing.class);
-            for (TpRoadCrossing tpRoadCrossing : list) {
-                AjaxJson errMsg = importValidator(tpRoadCrossing.getTpRoad1());
-                if (errMsg != null) return errMsg;
-                AjaxJson errMsg1 = importValidator(tpRoadCrossing.getTpRoad2());
-                if (errMsg1 != null) return errMsg1;
-                try {
-                    tpRoadCrossingService.save(tpRoadCrossing);
-                } catch (Exception e) {
-                    String msg = e.getMessage();
-                    if (DuplicateKeyException.class.isInstance(e)) {
-                        msg = "存在重复导入数据：" + tpRoadCrossing.getFullName();
-                    }
-                    j.setSuccess(false);
-                    j.setMsg("导入路口失败！失败信息：" + msg);
-                }
-            }
-        } catch (Exception e) {
-            j.setSuccess(false);
-            j.setMsg("导入路口失败！失败信息：" + ((InvocationTargetException) e).getTargetException().getMessage());
-        }
-        return j;
+   	public AjaxJson importFile(@RequestParam("file")MultipartFile file, HttpServletResponse response, HttpServletRequest request) {
+		AjaxJson j = new AjaxJson();
+		try {
+			int successNum = 0;
+			int failureNum = 0;
+			StringBuilder failureMsg = new StringBuilder();
+			ImportExcel ei = new ImportExcel(file, 1, 0);
+			List<TpRoadCrossing> list = ei.getDataList(TpRoadCrossing.class);
+			for (TpRoadCrossing tpRoadCrossing : list){
+				try{
+					tpRoadCrossingService.save(tpRoadCrossing);
+					successNum++;
+				}catch(ConstraintViolationException ex){
+					failureNum++;
+				}catch (Exception ex) {
+					failureNum++;
+				}
+			}
+			if (failureNum>0){
+				failureMsg.insert(0, "，失败 "+failureNum+" 条路口管理记录。");
+			}
+			j.setMsg( "已成功导入 "+successNum+" 条路口管理记录"+failureMsg);
+		} catch (Exception e) {
+			j.setSuccess(false);
+			j.setMsg("导入路口管理失败！失败信息："+e.getMessage());
+		}
+		return j;
     }
-
-    /**
-     * 下载导入路口数据模板
-     */
-    @ResponseBody
-    @RequiresPermissions("tp:roadcross:tpRoadCrossing:import")
+	
+	/**
+	 * 下载导入路口管理数据模板
+	 */
+	@ResponseBody
+	@RequiresPermissions("tp:roadcross:tpRoadCrossing:import")
     @RequestMapping(value = "import/template")
-    public AjaxJson importFileTemplate(HttpServletResponse response) {
-        AjaxJson j = new AjaxJson();
-        try {
-            String fileName = "路口数据导入模板.xlsx";
-            List<TpRoadCrossing> list = Lists.newArrayList();
-            new ExportExcel("路口数据", TpRoadCrossing.class, 1).setDataList(list).write(response, fileName).dispose();
-            return null;
-        } catch (Exception e) {
-            j.setSuccess(false);
-            j.setMsg("导入模板下载失败！失败信息：" + e.getMessage());
-        }
-        return j;
+     public AjaxJson importFileTemplate(HttpServletResponse response) {
+		AjaxJson j = new AjaxJson();
+		try {
+            String fileName = "路口管理数据导入模板.xlsx";
+    		List<TpRoadCrossing> list = Lists.newArrayList(); 
+    		new ExportExcel("路口管理数据", TpRoadCrossing.class, 1).setDataList(list).write(response, fileName).dispose();
+    		return null;
+		} catch (Exception e) {
+			j.setSuccess(false);
+			j.setMsg( "导入模板下载失败！失败信息："+e.getMessage());
+		}
+		return j;
     }
 
 }

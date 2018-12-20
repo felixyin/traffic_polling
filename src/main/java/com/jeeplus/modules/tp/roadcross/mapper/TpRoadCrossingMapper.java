@@ -8,9 +8,9 @@ import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 
 /**
- * 路口MAPPER接口
+ * 路口管理MAPPER接口
  * @author 尹彬
- * @version 2018-12-19
+ * @version 2018-12-20
  */
 @MyBatisMapper
 public interface TpRoadCrossingMapper extends BaseMapper<TpRoadCrossing> {

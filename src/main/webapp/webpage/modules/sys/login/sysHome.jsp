@@ -88,15 +88,15 @@
 						<div class="chart-comment clearfix">
 							<div class="text-primary pull-left">
 								<span class="comment-header">55%</span><br />
-								<span class="comment-comment">搜素引擎</span>
+								<span class="comment-comment">交警派单</span>
 							</div>
 							<div class="text-success pull-left m-l">
 								<span class="comment-header">25%</span><br />
-								<span class="comment-comment">自主访问</span>
+								<span class="comment-comment">自主巡检</span>
 							</div>
 							<div class="text-warning pull-left m-l">
 								<span class="comment-header">20%</span><br />
-								<span class="comment-comment">友情链接</span>
+								<span class="comment-comment">群众举报</span>
 							</div>
 						</div>
 						<div id="lineChart" style="height:250px"></div>
@@ -131,7 +131,7 @@
 					<div class="top-right-chart row">
 								
 								<div class="col-sm-12">
-									<span class="heading">销售业绩 </span><br />
+									<span class="heading">维保业绩 </span><br />
 									<div id="cbar" style="height: 298px; padding-top:7px;"></div>
 								</div>
 					</div>

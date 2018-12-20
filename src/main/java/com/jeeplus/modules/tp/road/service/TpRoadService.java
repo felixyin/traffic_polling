@@ -5,7 +5,6 @@ package com.jeeplus.modules.tp.road.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,14 +16,11 @@ import com.jeeplus.modules.tp.road.mapper.TpRoadMapper;
 /**
  * 道路Service
  * @author 尹彬
- * @version 2018-12-19
+ * @version 2018-12-20
  */
 @Service
 @Transactional(readOnly = true)
 public class TpRoadService extends CrudService<TpRoadMapper, TpRoad> {
-
-	@Autowired
-	private TpRoadMapper tpRoadMapper;
 
 	public TpRoad get(String id) {
 		return super.get(id);
@@ -47,8 +43,5 @@ public class TpRoadService extends CrudService<TpRoadMapper, TpRoad> {
 	public void delete(TpRoad tpRoad) {
 		super.delete(tpRoad);
 	}
-
-	public TpRoad getByName(String name){
-		return tpRoadMapper.getByName(name);
-	}
+	
 }

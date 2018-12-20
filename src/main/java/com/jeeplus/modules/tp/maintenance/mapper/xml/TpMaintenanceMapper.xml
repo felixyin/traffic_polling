@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.tp.maintenance.mapper.TpMaintenanceMapper">
+    
+	<sql id="tpMaintenanceColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.num AS "num",
+		a.job_type AS "jobType",
+		a.job_source AS "source",
+		a.roadcross_id AS "roadCrossing.id",
+		a.postion AS "postion",
+		a.send_by AS "sendBy.id",
+		a.send_date AS "sendDate",
+		a.office AS "office.id",
+		a.job_begin_date AS "jobBeginDate",
+		a.job_end_date AS "jobEndDate",
+		a.money AS "money",
+		a.process AS "process",
+		a.pre_pic AS "prePic",
+		a.middle_pic AS "middlePic",
+		a.after_pic AS "afterPic",
+		a.approve AS "approve",
+		a.status AS "status",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		roadCrossing.name AS "roadCrossing.name",
+				
+				
+		sendBy.name AS "sendBy.name",
+				
+				
+		office.name AS "office.name"
+	</sql>
+	
+	<sql id="tpMaintenanceJoins">
+		
+		LEFT JOIN tp_road_crossing delFlag ON delFlag.id = a.del_flag
+		LEFT JOIN tp_road_crossing roadCrossing ON roadCrossing.id = a.roadcross_id
+		LEFT JOIN sys_user sendBy ON sendBy.id = a.send_by
+		LEFT JOIN sys_office office ON office.id = a.office
+	</sql>
+	
+    <resultMap type="TpMaintenance" id="TpMaintenanceResult" autoMapping="true">
+    	<result column="process" property="process"   typeHandler="com.jeeplus.core.mapper.ConvertBlobTypeHandler"/>
+    </resultMap>
+    
+	<select id="get" resultMap="TpMaintenanceResult" >
+		SELECT 
+			<include refid="tpMaintenanceColumns"/>
+		FROM tp_maintenance a
+		<include refid="tpMaintenanceJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultMap="TpMaintenanceResult" >
+		SELECT 
+			<include refid="tpMaintenanceColumns"/>
+		FROM tp_maintenance a
+		<include refid="tpMaintenanceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="num != null and num != ''">
+				AND a.num = #{num}
+			</if>
+			<if test="jobType != null and jobType != ''">
+				AND a.job_type = #{jobType}
+			</if>
+			<if test="source != null and source != ''">
+				AND a.job_source = #{source}
+			</if>
+			<if test="roadCrossing != null and roadCrossing.id != null and roadCrossing.id != ''">
+				AND a.roadcross_id = #{roadCrossing.id}
+			</if>
+			<if test="sendBy != null and sendBy.id != null and sendBy.id != ''">
+				AND a.send_by = #{sendBy.id}
+			</if>
+			<if test="beginSendDate != null and endSendDate != null ">
+				AND a.send_date BETWEEN #{beginSendDate} AND #{endSendDate}
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office = #{office.id}
+			</if>
+			<if test="beginJobBeginDate != null and endJobBeginDate != null ">
+				AND a.job_begin_date BETWEEN #{beginJobBeginDate} AND #{endJobBeginDate}
+			</if>
+			<if test="beginJobEndDate != null and endJobEndDate != null ">
+				AND a.job_end_date BETWEEN #{beginJobEndDate} AND #{endJobEndDate}
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultMap="TpMaintenanceResult" >
+		SELECT 
+			<include refid="tpMaintenanceColumns"/>
+		FROM tp_maintenance a
+		<include refid="tpMaintenanceJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tp_maintenance(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			num,
+			job_type,
+			job_source,
+			roadcross_id,
+			postion,
+			send_by,
+			send_date,
+			office,
+			job_begin_date,
+			job_end_date,
+			money,
+			process,
+			pre_pic,
+			middle_pic,
+			after_pic,
+			approve,
+			status
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{num},
+			#{jobType},
+			#{source},
+			#{roadCrossing.id},
+			#{postion},
+			#{sendBy.id},
+			#{sendDate},
+			#{office.id},
+			#{jobBeginDate},
+			#{jobEndDate},
+			#{money},
+			#{process},
+			#{prePic},
+			#{middlePic},
+			#{afterPic},
+			#{approve},
+			#{status}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tp_maintenance SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			num = #{num},
+			job_type = #{jobType},
+			job_source = #{source},
+			roadcross_id = #{roadCrossing.id},
+			postion = #{postion},
+			send_by = #{sendBy.id},
+			send_date = #{sendDate},
+			office = #{office.id},
+			job_begin_date = #{jobBeginDate},
+			job_end_date = #{jobEndDate},
+			money = #{money},
+			process = #{process},
+			pre_pic = #{prePic},
+			middle_pic = #{middlePic},
+			after_pic = #{afterPic},
+			approve = #{approve},
+			status = #{status}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM tp_maintenance
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE tp_maintenance SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="TpMaintenance" statementType="STATEMENT">
+		select * FROM tp_maintenance  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

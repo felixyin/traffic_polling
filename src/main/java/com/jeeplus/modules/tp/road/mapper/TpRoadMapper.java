@@ -10,11 +10,9 @@ import com.jeeplus.modules.tp.road.entity.TpRoad;
 /**
  * 道路MAPPER接口
  * @author 尹彬
- * @version 2018-12-19
+ * @version 2018-12-20
  */
 @MyBatisMapper
 public interface TpRoadMapper extends BaseMapper<TpRoad> {
-
-    public TpRoad getByName(String name);
-
+	
 }

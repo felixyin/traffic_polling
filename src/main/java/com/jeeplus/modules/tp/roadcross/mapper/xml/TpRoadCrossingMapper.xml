@@ -9,6 +9,7 @@
 		a.update_by AS "updateBy.id",
 		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
+		a.sarea_id AS "sarea.id",
 		a.road1_id AS "tpRoad1.id",
 		a.road2_id AS "tpRoad2.id",
 		a.road3_id AS "tpRoad3.id",
@@ -16,27 +17,18 @@
 		a.road5_id AS "tpRoad5.id",
 		a.road6_id AS "tpRoad6.id",
 		a.remarks AS "remarks",
-				
-				
-				
-				
-				
-				
+		a.name AS "name",
+		b.name AS "sarea.name",
 		tpRoad1.name AS "tpRoad1.name",
-				
 		tpRoad2.name AS "tpRoad2.name",
-				
 		tpRoad3.name AS "tpRoad3.name",
-				
 		tpRoad4.name AS "tpRoad4.name",
-				
 		tpRoad5.name AS "tpRoad5.name",
-				
 		tpRoad6.name AS "tpRoad6.name"
 	</sql>
 	
 	<sql id="tpRoadCrossingJoins">
-		
+			LEFT JOIN sys_area b ON b.id = a.sarea_id
 		LEFT JOIN tp_road tpRoad1 ON tpRoad1.id = a.road1_id
 		LEFT JOIN tp_road tpRoad2 ON tpRoad2.id = a.road2_id
 		LEFT JOIN tp_road tpRoad3 ON tpRoad3.id = a.road3_id
@@ -62,13 +54,25 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
+                    <if test="sarea != null  and sarea.id != null and sarea.id != ''">
+                        AND (b.id = #{sarea.id} OR b.parent_ids LIKE
+                        <if test="dbName == 'oracle'">'%,'||#{sarea.id}||',%')</if>
+                        <if test="dbName == 'mysql'">CONCAT('%,', #{sarea.id}, ',%'))</if>
+                        <if test="dbName == 'mssql'">'%'+#{sarea.id}+'%')</if>
+                    </if>
+			<if test="tpRoad1 != null and tpRoad1.id != null and tpRoad1.id != ''">
+				AND a.road1_id = #{tpRoad1.id}
+			</if>
+			<if test="tpRoad2 != null and tpRoad2.id != null and tpRoad2.id != ''">
+				AND a.road2_id = #{tpRoad2.id}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -87,7 +91,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.create_date ASC
 			</otherwise>
 		</choose>
 	</select>
@@ -100,13 +104,15 @@
 			update_by,
 			update_date,
 			del_flag,
+			sarea_id,
 			road1_id,
 			road2_id,
 			road3_id,
 			road4_id,
 			road5_id,
 			road6_id,
-			remarks
+			remarks,
+			name
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -114,13 +120,15 @@
 			#{updateBy.id},
 			#{updateDate},
 			#{delFlag},
+			#{sarea.id},
 			#{tpRoad1.id},
 			#{tpRoad2.id},
 			#{tpRoad3.id},
 			#{tpRoad4.id},
 			#{tpRoad5.id},
 			#{tpRoad6.id},
-			#{remarks}
+			#{remarks},
+			#{name}
 		)
 	</insert>
 	
@@ -128,13 +136,15 @@
 		UPDATE tp_road_crossing SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
+			sarea_id = #{sarea.id},
 			road1_id = #{tpRoad1.id},
 			road2_id = #{tpRoad2.id},
 			road3_id = #{tpRoad3.id},
 			road4_id = #{tpRoad4.id},
 			road5_id = #{tpRoad5.id},
 			road6_id = #{tpRoad6.id},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			name = #{name}
 		WHERE id = #{id}
 	</update>
 	
@@ -142,14 +152,28 @@
 	<!--物理删除-->
 	<update id="delete">
 		DELETE FROM tp_road_crossing
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE sarea_id = #{sarea.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 	<!--逻辑删除-->
 	<update id="deleteByLogic">
 		UPDATE tp_road_crossing SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE id = #{id}
+		<choose>
+			<when test="id !=null and id != ''">
+				WHERE id = #{id}
+			</when>
+			<otherwise>
+				WHERE sarea_id = #{sarea.id}
+			</otherwise>
+		</choose>
 	</update>
 	
 	

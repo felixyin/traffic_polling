@@ -23,7 +23,7 @@
 			<form:form id="searchForm" modelAttribute="tpMaintenanceItem" class="form form-horizontal well clearfix">
 			 <div class="col-xs-12 col-sm-6 col-md-4">
 				<label class="label-item single-overflow pull-left" title="零件名称：">零件名称：</label>
-				<sys:gridselect url="${ctx}/tp/material/tpMaterialPart/data" id="materialPart" name="materialPart.id" value="${tpMaintenanceItem.materialPart.id}" labelName="materialPart.name" labelValue="${tpMaintenanceItem.materialPart.name}"
+				<sys:gridselect url="${ctx}/tp/guardrail/tpMaterialPart/data" id="materialPart" name="materialPart.id" value="${tpMaintenanceItem.materialPart.id}" labelName="materialPart.name" labelValue="${tpMaintenanceItem.materialPart.name}"
 					title="选择零件名称" cssClass="form-control required" fieldLabels="零件名称|零件单位|零件单价|所属品类" fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.id" ></sys:gridselect>
 			</div>
 			 <div class="col-xs-12 col-sm-6 col-md-4">

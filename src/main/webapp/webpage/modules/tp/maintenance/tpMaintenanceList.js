@@ -178,90 +178,90 @@ $(document).ready(function() {
 		        sortName: 'jobEndDate'
 		       
 		    }
-			,{
-		        field: 'money',
-		        title: '总费用',
-		        sortable: true,
-		        sortName: 'money'
-		       
-		    }
-		    ,{
-		        field: 'process',
-		        title: '施工过程',
-		        sortable: true,
-		        sortName: 'process',
-		        formatter:function(value, row , index){
-		        	return jp.unescapeHTML(value);
-		        }
-		       
-		    }
-		    ,{
-		        field: 'prePic',
-		        title: '施工前照片',
-		        sortable: true,
-		        sortName: 'prePic',
-		        formatter:function(value, row , index){
-		        	var valueArray = value.split("|");
-		        	var labelArray = [];
-		        	for(var i =0 ; i<valueArray.length; i++){
-		        		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
-		        		{
-		        			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
-		        		}else{
-		        			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
-		        		}
-		        	}
-		        	return labelArray.join(" ");
-		        }
-		       
-		    }
-		    ,{
-		        field: 'middlePic',
-		        title: '施工中照片',
-		        sortable: true,
-		        sortName: 'middlePic',
-		        formatter:function(value, row , index){
-		        	var valueArray = value.split("|");
-		        	var labelArray = [];
-		        	for(var i =0 ; i<valueArray.length; i++){
-		        		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
-		        		{
-		        			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
-		        		}else{
-		        			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
-		        		}
-		        	}
-		        	return labelArray.join(" ");
-		        }
-		       
-		    }
-		    ,{
-		        field: 'afterPic',
-		        title: '施工后照片',
-		        sortable: true,
-		        sortName: 'afterPic',
-		        formatter:function(value, row , index){
-		        	var valueArray = value.split("|");
-		        	var labelArray = [];
-		        	for(var i =0 ; i<valueArray.length; i++){
-		        		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
-		        		{
-		        			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
-		        		}else{
-		        			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
-		        		}
-		        	}
-		        	return labelArray.join(" ");
-		        }
-		       
-		    }
-			,{
-		        field: 'approve',
-		        title: '审批意见',
-		        sortable: true,
-		        sortName: 'approve'
-		       
-		    }
+			// ,{
+		    //     field: 'money',
+		    //     title: '总费用',
+		    //     sortable: true,
+		    //     sortName: 'money'
+		    //
+		    // }
+		    // ,{
+		    //     field: 'process',
+		    //     title: '施工过程',
+		    //     sortable: true,
+		    //     sortName: 'process',
+		    //     formatter:function(value, row , index){
+		    //     	return jp.unescapeHTML(value);
+		    //     }
+		    //
+		    // }
+		    // ,{
+		    //     field: 'prePic',
+		    //     title: '施工前照片',
+		    //     sortable: true,
+		    //     sortName: 'prePic',
+		    //     formatter:function(value, row , index){
+		    //     	var valueArray = value.split("|");
+		    //     	var labelArray = [];
+		    //     	for(var i =0 ; i<valueArray.length; i++){
+		    //     		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
+		    //     		{
+		    //     			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
+		    //     		}else{
+		    //     			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
+		    //     		}
+		    //     	}
+		    //     	return labelArray.join(" ");
+		    //     }
+		    //
+		    // }
+		    // ,{
+		    //     field: 'middlePic',
+		    //     title: '施工中照片',
+		    //     sortable: true,
+		    //     sortName: 'middlePic',
+		    //     formatter:function(value, row , index){
+		    //     	var valueArray = value.split("|");
+		    //     	var labelArray = [];
+		    //     	for(var i =0 ; i<valueArray.length; i++){
+		    //     		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
+		    //     		{
+		    //     			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
+		    //     		}else{
+		    //     			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
+		    //     		}
+		    //     	}
+		    //     	return labelArray.join(" ");
+		    //     }
+		    //
+		    // }
+		    // ,{
+		    //     field: 'afterPic',
+		    //     title: '施工后照片',
+		    //     sortable: true,
+		    //     sortName: 'afterPic',
+		    //     formatter:function(value, row , index){
+		    //     	var valueArray = value.split("|");
+		    //     	var labelArray = [];
+		    //     	for(var i =0 ; i<valueArray.length; i++){
+		    //     		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
+		    //     		{
+		    //     			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
+		    //     		}else{
+		    //     			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
+		    //     		}
+		    //     	}
+		    //     	return labelArray.join(" ");
+		    //     }
+		    //
+		    // }
+			// ,{
+		    //     field: 'approve',
+		    //     title: '审批意见',
+		    //     sortable: true,
+		    //     sortName: 'approve'
+		    //
+		    // }
 			,{
 		        field: 'status',
 		        title: '任务状态',

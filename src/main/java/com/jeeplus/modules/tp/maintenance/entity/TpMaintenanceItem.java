@@ -3,8 +3,9 @@
  */
 package com.jeeplus.modules.tp.maintenance.entity;
 
-import com.jeeplus.modules.tp.material.entity.TpMaterialPart;
+import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
 import javax.validation.constraints.NotNull;
+import com.jeeplus.modules.tp.material.entity.TpMaterialPart;
 
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
@@ -17,8 +18,11 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 public class TpMaintenanceItem extends DataEntity<TpMaintenanceItem> {
 	
 	private static final long serialVersionUID = 1L;
-	private TpMaintenance maintenance;		// 维保单编号 父类
+	private TpMaintenance maintenance;		// 维保单编号
 	private TpMaterialPart materialPart;		// 零件名称
+	private String category;		// 所属品类
+	private String unit;		// 单位
+	private Double price;		// 单价
 	private Integer count;		// 数量
 	private Double money;		// 金额
 	private Integer beginCount;		// 开始 数量
@@ -34,10 +38,12 @@ public class TpMaintenanceItem extends DataEntity<TpMaintenanceItem> {
 		super(id);
 	}
 
-	public TpMaintenanceItem(TpMaintenance maintenance){
-		this.maintenance = maintenance;
-	}
+    public TpMaintenanceItem(TpMaintenance maintenance){
+        this.maintenance = maintenance;
+    }
 
+	@NotNull(message="维保单编号不能为空")
+	@ExcelField(title="维保单编号", align=2, sort=6)
 	public TpMaintenance getMaintenance() {
 		return maintenance;
 	}
@@ -56,8 +62,35 @@ public class TpMaintenanceItem extends DataEntity<TpMaintenanceItem> {
 		this.materialPart = materialPart;
 	}
 	
+	@ExcelField(title="所属品类", align=2, sort=8)
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	@ExcelField(title="单位", align=2, sort=9)
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	
+	@ExcelField(title="单价", align=2, sort=10)
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+	
 	@NotNull(message="数量不能为空")
-	@ExcelField(title="数量", align=2, sort=8)
+	@ExcelField(title="数量", align=2, sort=11)
 	public Integer getCount() {
 		return count;
 	}
@@ -66,7 +99,7 @@ public class TpMaintenanceItem extends DataEntity<TpMaintenanceItem> {
 		this.count = count;
 	}
 	
-	@ExcelField(title="金额", align=2, sort=9)
+	@ExcelField(title="金额", align=2, sort=12)
 	public Double getMoney() {
 		return money;
 	}

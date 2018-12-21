@@ -39,14 +39,18 @@
                 }
             });
 
-            $( document ).on( "change", ".my-count,.my-money", function() {
+            $(document).on("keyup", ".my-count,.my-price", function () {
                 var allMoney = 0;
-                $('.my-count').each(function(idx,ele){
-                    var count =  $(ele).val();
-                    var money = $(ele).parents('tr').find('.my-money').val();
-                    if(count && money){
-                        var result = parseInt(count) * parseInt(money);
+                $('.my-count').each(function (idx, ele) {
+                    var count = $(ele).val();
+                    var row = $(ele).parents('tr');
+                    var price = row.find('.my-price').val();
+                    if (count && price) {
+                        var result = parseInt(count) * parseInt(price);
+                        row.find('.my-money').val(result);
                         allMoney += result;
+                    }else{
+                        row.find('.my-money').val(0);
                     }
                 });
                 $('#my-money-id').val(allMoney);
@@ -90,12 +94,25 @@
                 $(obj).parent().parent().removeClass("error");
             }
         }
+
+        function gridselectChange() {
+            return function (id, items) {
+                var domRowId = $('#'+ id.split('_')[0]).get(0);
+                var dataRow = items[0];
+                if (domRowId && dataRow) {
+                    $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
+                    $(domRowId).find('.my-unit').val(dataRow['unit']);
+                    $(domRowId).find('.my-price').val(dataRow['price']);
+                }
+            }
+        }
     </script>
     <style type="text/css">
         .panel-body {
             width: 95% !important;
         }
-        .note-editing-area{
+
+        .note-editing-area {
             height: 120px;
         }
     </style>
@@ -178,7 +195,8 @@
                             </div>
                             <label class="col-sm-2 control-label">物料总费用：</label>
                             <div class="col-sm-4">
-                                <form:input readonly="true" id="my-money-id" path="money" htmlEscape="false" class="form-control  isFloatGtZero"/>
+                                <form:input readonly="true" id="my-money-id" path="money" htmlEscape="false"
+                                            class="form-control  isFloatGtZero"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -237,12 +255,12 @@
                             </div>
                         </div>
                         <%--<div class="form-group">--%>
-                            <%--<label class="col-sm-2 control-label">任务状态：</label>--%>
-                            <%--<div class="col-sm-10">--%>
-                                <%--<form:radiobuttons path="status" items="${fns:getDictList('job_status')}"--%>
-                                                   <%--itemLabel="label" itemValue="value" htmlEscape="false"--%>
-                                                   <%--class="i-checks "/>--%>
-                            <%--</div>--%>
+                        <%--<label class="col-sm-2 control-label">任务状态：</label>--%>
+                        <%--<div class="col-sm-10">--%>
+                        <%--<form:radiobuttons path="status" items="${fns:getDictList('job_status')}"--%>
+                        <%--itemLabel="label" itemValue="value" htmlEscape="false"--%>
+                        <%--class="i-checks "/>--%>
+                        <%--</div>--%>
                         <%--</div>--%>
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
@@ -261,10 +279,10 @@
                                             <th><font color="red">*</font>零件名称</th>
                                             <th>品类</th>
                                             <th>单位</th>
-                                            <th>单价</th>
+                                            <th><font color="red">*</font>单价</th>
                                             <th><font color="red">*</font>数量</th>
                                             <th>金额</th>
-                                            <th>备注信息</th>
+                                                <%--<th>备注信息</th>--%>
                                             <th width="10">&nbsp;</th>
                                         </tr>
                                         </thead>
@@ -283,39 +301,45 @@
                             name="tpMaintenanceItemList[{{idx}}].materialPart.id" value="{{row.materialPart.id}}"
                             labelName="tpMaintenanceItemList{{idx}}.materialPart.name" labelValue="{{row.materialPart.name}}"
 							title="选择零件名称" cssClass="form-control  required" fieldLabels="零件名称|零件单位|零件单价|所属品类"
-							fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.name" >
+							fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.name"
+							>
                         </sys:gridselect>
 					</td>
 					
 					
 					<td>
-						<input  type="text" readonly="readonly" value="{{row.materialPart.material.name}}"    class="form-control required isIntGtZero"/>
+						<input  type="text" readonly="readonly" value="{{row.category}}" name="tpMaintenanceItemList[{{idx}}].category"  class="my-category-name form-control required "/>
 					</td>
 					
 
 					<td>
-						<input  type="text" readonly="readonly" value="{{row.materialPart.material.unit}}"    class="form-control required isIntGtZero"/>
+						<input  type="text" readonly="readonly" value="{{row.unit}}"   name="tpMaintenanceItemList[{{idx}}].unit"   class="my-unit form-control required "/>
 					</td>
 
 
 					<td>
-						<input  type="text"  value="{{row.materialPart.price}}"    class="my-count form-control required isIntGtZero"/>
+						<input  type="number"  value="{{row.price}}"   name="tpMaintenanceItemList[{{idx}}].price"  class="my-price form-control required isFloatGtZero"/>
+					</td>
+
+					<td>
+						<input id="tpMaintenanceItemList{{idx}}_count" name="tpMaintenanceItemList[{{idx}}].count" type="number" value="{{row.count}}"    class="my-count form-control isIntGtZero"/>
 					</td>
 
 
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_money" name="tpMaintenanceItemList[{{idx}}].money" type="number" value="{{row.money}}"    class="my-money form-control "/>
+						<input  readonly="readonly" id="tpMaintenanceItemList{{idx}}_money" name="tpMaintenanceItemList[{{idx}}].money" type="number" value="{{row.money}}"    class="my-money form-control "/>
 					</td>
 					
-					
-					<td>
-						<input id="tpMaintenanceItemList{{idx}}_remarks" name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
-					</td>
+
 					
 					<td class="text-center" width="10">
 						{{#delBtn}}<span class="close" onclick="delRow(this, '#tpMaintenanceItemList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 					</td>
 				</tr>//-->
+                                        <%--
+					<td>
+						<input readonly="readonly"  id="tpMaintenanceItemList{{idx}}_remarks" name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
+					</td>--%>
                                     </script>
                                     <script type="text/javascript">
                                         var tpMaintenanceItemRowIdx = 0,

@@ -11,6 +11,9 @@
 		a.del_flag AS "delFlag",
 		a.maintenance_id AS "maintenance.id",
 		a.material_part_id AS "materialPart.id",
+		a.category AS "category",
+		a.unit AS "unit",
+		a.price AS "price",
 		a.count AS "count",
 		a.money AS "money",
 		a.remarks AS "remarks",
@@ -21,7 +24,7 @@
 				
 				
 		b.num AS "maintenance.num",
-				
+
 		materialPart.name AS "materialPart.name",
 		materialPart.price AS "materialPart.price"
 	</sql>
@@ -107,6 +110,9 @@
 			del_flag,
 			maintenance_id,
 			material_part_id,
+			category,
+			unit,
+			price,
 			count,
 			money,
 			remarks
@@ -119,6 +125,9 @@
 			#{delFlag},
 			#{maintenance.id},
 			#{materialPart.id},
+			#{category},
+			#{unit},
+			#{price},
 			#{count},
 			#{money},
 			#{remarks}
@@ -131,6 +140,9 @@
 			update_date = #{updateDate},
 			maintenance_id = #{maintenance.id},
 			material_part_id = #{materialPart.id},
+			category = #{category},
+			unit = #{unit},
+			price = #{price},
 			count = #{count},
 			money = #{money},
 			remarks = #{remarks}

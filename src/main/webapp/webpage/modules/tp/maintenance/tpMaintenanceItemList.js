@@ -110,6 +110,27 @@ $(document).ready(function() {
 		       
 		    }
 			,{
+		        field: 'category',
+		        title: '所属品类',
+		        sortable: true,
+		        sortName: 'category'
+		       
+		    }
+			,{
+		        field: 'unit',
+		        title: '单位',
+		        sortable: true,
+		        sortName: 'unit'
+		       
+		    }
+			,{
+		        field: 'price',
+		        title: '单价',
+		        sortable: true,
+		        sortName: 'price'
+		       
+		    }
+			,{
 		        field: 'count',
 		        title: '数量',
 		        sortable: true,

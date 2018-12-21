@@ -14,7 +14,8 @@
 <%@ attribute name="cssClass" type="java.lang.String" required="false" description="css样式"%>
 <%@ attribute name="isMultiSelected" type="java.lang.Boolean" required="false" description="是否允许多选"%>
 <%@ attribute name="disabled" type="java.lang.String" required="false" description="是否限制选择，如果限制，设置为disabled"%>
-	<input id="${id}Id" name="${name}"  type="hidden" value="${value}"/>
+<%--<%@ attribute name="cbFunName" type="java.lang.String" required="false" description="回调函数名称"%>--%>
+	<input id="${id}Id" name="${name}"  type="hidden" value="${value}" />
 	<div class="input-group" style="width: 100%">
 		<input id="${id}Name"  name="${labelName }" ${allowInput?'':'readonly="readonly"'}  type="text" value="${labelValue}" data-msg-required="${dataMsgRequired}"
 		class="${cssClass}" style="${cssStyle}"/>
@@ -27,7 +28,7 @@
     </div>
 	 <label id="${id}Name-error" class="error" for="${id}Name" style="display:none"></label>
 <script type="text/javascript">
-$(document).ready(function(){
+    $(document).ready(function(){
 	$("#${id}Button, #${id}Name").click(function(){
 		if ($("#${id}Button").hasClass("disabled")){
 			return true;
@@ -57,6 +58,18 @@ $(document).ready(function(){
 		    	 }
 		    	 $("#${id}Id").val(ids.join(","));
 		    	 $("#${id}Name").val(names.join(","));
+		    	 <%--var cbFunName = '${cbFunName}';--%>
+		    	 <%--if(cbFunName){--%>
+                     <%--debugger;--%>
+                     <%--var domRowId = $('${id}'.split('_')[0]).get(0);--%>
+                     <%--with(window.top.frames['iframe11']){--%>
+                         <%--${cbFunName}(domRowId,items);--%>
+                     <%--}--%>
+		    	 <%--}--%>
+
+				if(gridselectChange){
+					gridselectChange()('${id}',items);
+				}
 				 top.layer.close(index);//关闭对话框。
 			  },
 			  cancel: function(index){ 

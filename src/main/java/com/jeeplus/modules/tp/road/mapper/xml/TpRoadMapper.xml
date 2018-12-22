@@ -161,5 +161,8 @@
 	<select id="findUniqueByProperty" resultType="TpRoad" statementType="STATEMENT">
 		select * FROM tp_road  where ${propertyName} = '${value}'
 	</select>
-	
+    <select id="findByName" resultType="TpRoad">
+		select * from tp_road t where t.name = #{name}
+	</select>
+
 </mapper>

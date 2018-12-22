@@ -5,13 +5,20 @@ package com.jeeplus.modules.tp.road.web;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.tp.road.entity.SysArea;
+import com.jeeplus.modules.tp.road.service.SysAreaService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.config.Global;
 import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
@@ -45,6 +51,9 @@ public class TpRoadController extends BaseController {
 
 	@Autowired
 	private TpRoadService tpRoadService;
+
+	@Autowired
+	private SysAreaService sysAreaService;
 	
 	@ModelAttribute
 	public TpRoad get(@RequestParam(required=false) String id) {
@@ -219,5 +228,72 @@ public class TpRoadController extends BaseController {
 		}
 		return j;
     }
+
+
+	/**
+	 * 解析 图吧 数据，分析导入数据库
+	 */
+	@ResponseBody
+	@RequiresPermissions("tp:road:tpRoad:import")
+	@RequestMapping(value = "parse", method = RequestMethod.GET)
+	public AjaxJson parseDataFromTuBa() {
+		AjaxJson j = new AjaxJson();
+		try {
+			new Thread() {
+				@Override
+				public void run() {
+					try {
+
+						List<String> list = tpRoadService.findAllList(new TpRoad()).stream().map(TpRoad::getName).collect(Collectors.toList());
+
+						Document doc = Jsoup.connect("http://poi.mapbar.com/jinan/G70/").userAgent("Chrome").cookie("auth", "toke22").timeout(90000).post();
+//            String title = doc.title();
+
+						Element e = doc.getElementsByClass("sortC").get(0);
+						Elements eles = e.getElementsByTag("a");
+						for (Element ee : eles) {
+							String roadName = ee.text().trim();
+							System.out.println(roadName);
+							if (list.contains(roadName)) continue;
+
+							boolean b = true;
+							try {
+								List<TpRoad> roads =  tpRoadService.findByName(roadName);
+							} catch (Exception e3) {
+								b = false;
+							}
+							if (b) {
+								String url = ee.attributes().get("href");
+//                System.out.println(url);
+								Document doc2 = Jsoup.connect(url).userAgent("Mis").cookie("auth", "toke23").timeout(90000).post();
+								Element e1 = doc2.getElementsByClass("POI_ulA").get(0);
+								Element ele2 = e1.children().get(1).children().get(2);
+								String areaName = ele2.text();
+								System.out.println(areaName);
+
+								TpRoad tpRoad = new TpRoad();
+								List<SysArea> areas= sysAreaService.findByName(areaName);
+								if(areas != null && areas.size()>0){
+									tpRoad.setArea(areas.get(0));
+								}
+								tpRoad.setName(roadName);
+								tpRoad.setRoadType("3");
+								tpRoad.setRoadType("《图吧》导入");
+								tpRoadService.save(tpRoad);
+							}
+						}
+					} catch (Exception e) {
+
+					}
+				}
+			}.start();
+//            System.out.println(title);
+		} catch (Exception e) {
+			j.setSuccess(false);
+			j.setMsg("导入道路失败！失败信息：" + e.getMessage());
+		}
+		return j;
+	}
+
 
 }

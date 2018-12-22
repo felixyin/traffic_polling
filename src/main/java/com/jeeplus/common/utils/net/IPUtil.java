@@ -15,7 +15,7 @@ import com.google.common.net.InetAddresses;
  * 
  * 主要包含int, String/IPV4String, InetAdress/Inet4Address之间的互相转换
  * 
- * 先将字符串传换为byte[]再用InetAddress.getByAddress(byte[])，避免了InetAddress.getByName(ip)可能引起的DNS访问.
+ * 先将字符串传换为byte[]再用InetAddress.getByAddress(byte[])，避免了InetAddress.findByName(ip)可能引起的DNS访问.
  * 
  * InetAddress与String的转换其实消耗不小，如果是有限的地址，建议进行缓存.
  * 

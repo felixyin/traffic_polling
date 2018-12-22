@@ -105,8 +105,11 @@
 		</where>
 		ORDER BY a.sort ASC
 	</select>
-	
-	<insert id="insert">
+    <select id="getByName" resultType="com.jeeplus.modules.tp.road.entity.SysArea">
+		select * from sys_area t where t.name = #{name}
+	</select>
+
+    <insert id="insert">
 		INSERT INTO sys_area(
 			id,
 			parent_id,

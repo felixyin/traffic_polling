@@ -7,6 +7,8 @@ import com.jeeplus.core.persistence.TreeMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.tp.road.entity.SysArea;
 
+import java.util.List;
+
 /**
  * 路口MAPPER接口
  * @author 尹彬
@@ -14,5 +16,6 @@ import com.jeeplus.modules.tp.road.entity.SysArea;
  */
 @MyBatisMapper
 public interface SysAreaMapper extends TreeMapper<SysArea> {
-	
+
+    List<SysArea> getByName(String name);
 }

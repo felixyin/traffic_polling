@@ -7,6 +7,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.tp.road.entity.TpRoad;
 
+import java.util.List;
+
 /**
  * 道路MAPPER接口
  * @author 尹彬
@@ -14,5 +16,6 @@ import com.jeeplus.modules.tp.road.entity.TpRoad;
  */
 @MyBatisMapper
 public interface TpRoadMapper extends BaseMapper<TpRoad> {
-	
+
+    List<TpRoad> findByName(String roadName);
 }

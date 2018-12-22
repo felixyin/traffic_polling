@@ -5,6 +5,8 @@ package com.jeeplus.modules.tp.road.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.tp.road.entity.TpRoad;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ import com.jeeplus.modules.tp.road.mapper.SysAreaMapper;
 @Service
 @Transactional(readOnly = true)
 public class SysAreaService extends TreeService<SysAreaMapper, SysArea> {
+
+	@Autowired
+	private SysAreaMapper sysAreaMapper;
 
 	public SysArea get(String id) {
 		return super.get(id);
@@ -42,5 +47,9 @@ public class SysAreaService extends TreeService<SysAreaMapper, SysArea> {
 	public void delete(SysArea sysArea) {
 		super.delete(sysArea);
 	}
-	
+
+
+	public List<SysArea> findByName(String name) {
+		return sysAreaMapper.getByName(name);
+	}
 }

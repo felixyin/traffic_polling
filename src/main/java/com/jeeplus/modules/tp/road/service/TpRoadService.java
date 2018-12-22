@@ -5,6 +5,8 @@ package com.jeeplus.modules.tp.road.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.tp.road.entity.SysArea;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ import com.jeeplus.modules.tp.road.mapper.TpRoadMapper;
 @Service
 @Transactional(readOnly = true)
 public class TpRoadService extends CrudService<TpRoadMapper, TpRoad> {
+
+	@Autowired
+	private TpRoadMapper tpRoadMapper;
 
 	public TpRoad get(String id) {
 		return super.get(id);
@@ -43,5 +48,8 @@ public class TpRoadService extends CrudService<TpRoadMapper, TpRoad> {
 	public void delete(TpRoad tpRoad) {
 		super.delete(tpRoad);
 	}
-	
+
+	public List<TpRoad> findByName(String roadName) {
+	    return tpRoadMapper.findByName(roadName);
+	}
 }

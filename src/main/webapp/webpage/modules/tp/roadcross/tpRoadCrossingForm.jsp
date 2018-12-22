@@ -67,17 +67,15 @@
 						<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="tpRoad4" name="tpRoad4.id" value="${tpRoadCrossing.tpRoad4.id}" labelName="tpRoad4.name" labelValue="${tpRoadCrossing.tpRoad4.name}"
 							 title="选择道路4" cssClass="form-control " fieldLabels="道路4" fieldKeys="name" searchLabels="道路4" searchKeys="name" ></sys:gridselect>
 					</td>
-					<td class="width-15 active"><label class="pull-right">道路5：</label></td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>经度：</label></td>
 					<td class="width-35">
-						<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="tpRoad5" name="tpRoad5.id" value="${tpRoadCrossing.tpRoad5.id}" labelName="tpRoad5.name" labelValue="${tpRoadCrossing.tpRoad5.name}"
-							 title="选择道路5" cssClass="form-control " fieldLabels="道路5" fieldKeys="name" searchLabels="道路5" searchKeys="name" ></sys:gridselect>
+						<form:input path="lng" htmlEscape="false"    class="form-control required isFloatGtZero"/>
 					</td>
 				</tr>
 				<tr>
-					<td class="width-15 active"><label class="pull-right">道路6：</label></td>
+					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>维度：</label></td>
 					<td class="width-35">
-						<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="tpRoad6" name="tpRoad6.id" value="${tpRoadCrossing.tpRoad6.id}" labelName="tpRoad6.name" labelValue="${tpRoadCrossing.tpRoad6.name}"
-							 title="选择道路6" cssClass="form-control " fieldLabels="道路6" fieldKeys="name" searchLabels="道路6" searchKeys="name" ></sys:gridselect>
+						<form:input path="lat" htmlEscape="false"    class="form-control required isFloatGtZero"/>
 					</td>
 					<td class="width-15 active"><label class="pull-right">备注信息：</label></td>
 					<td class="width-35">

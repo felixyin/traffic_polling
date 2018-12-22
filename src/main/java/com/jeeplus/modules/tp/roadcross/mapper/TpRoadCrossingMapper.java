@@ -10,7 +10,7 @@ import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 /**
  * 路口管理MAPPER接口
  * @author 尹彬
- * @version 2018-12-20
+ * @version 2018-12-22
  */
 @MyBatisMapper
 public interface TpRoadCrossingMapper extends BaseMapper<TpRoadCrossing> {

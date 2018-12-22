@@ -230,6 +230,15 @@ public class TpMaintenanceController extends BaseController {
 		}
 		return j;
     }
-	
+
+	/**
+	 * 选择地点
+	 */
+	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
+	@RequestMapping(value = {"selectPostion"})
+	public String selectPostion(TpMaintenance tpMaintenance, Model model) {
+		model.addAttribute("tpMaintenance", tpMaintenance);
+		return "modules/tp/maintenance/tpSelectPostion";
+	}
 
 }

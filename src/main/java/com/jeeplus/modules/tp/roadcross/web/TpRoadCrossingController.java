@@ -39,7 +39,7 @@ import com.jeeplus.modules.tp.roadcross.service.TpRoadCrossingService;
 /**
  * 路口管理Controller
  * @author 尹彬
- * @version 2018-12-20
+ * @version 2018-12-22
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tp/roadcross/tpRoadCrossing")

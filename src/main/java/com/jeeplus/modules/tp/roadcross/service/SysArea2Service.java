@@ -16,7 +16,7 @@ import com.jeeplus.modules.tp.roadcross.mapper.SysArea2Mapper;
 /**
  * 路口Service
  * @author 尹彬
- * @version 2018-12-20
+ * @version 2018-12-22
  */
 @Service
 @Transactional(readOnly = true)

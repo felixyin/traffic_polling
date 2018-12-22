@@ -85,27 +85,31 @@ $(document).ready(function() {
 		       
 		    }
 			,{
+		        field: 'name',
+		        title: '全称',
+		        sortable: true,
+		        sortName: 'name'
+		        ,formatter:function(value, row , index){
+		        	value = jp.unescapeHTML(value);
+				   <c:choose>
+					   <c:when test="${fns:hasPermission('tp:roadcross:tpRoadCrossing:edit')}">
+					      return "<a href='javascript:edit(\""+row.id+"\")'>"+value+"</a>";
+				      </c:when>
+					  <c:when test="${fns:hasPermission('tp:roadcross:tpRoadCrossing:view')}">
+					      return "<a href='javascript:view(\""+row.id+"\")'>"+value+"</a>";
+				      </c:when>
+					  <c:otherwise>
+					      return value;
+				      </c:otherwise>
+				   </c:choose>
+		         }
+		       
+		    }
+			,{
 		        field: 'sarea.name',
 		        title: '所属区域',
 		        sortable: true,
 		        sortName: 'sarea.name'
-		        ,formatter:function(value, row , index){
-			   if(value == null || value ==""){
-				   value = "-";
-			   }
-			   <c:choose>
-				   <c:when test="${fns:hasPermission('tp:roadcross:tpRoadCrossing:edit')}">
-				      return "<a href='javascript:edit(\""+row.id+"\")'>"+value+"</a>";
-			      </c:when>
-				  <c:when test="${fns:hasPermission('tp:roadcross:tpRoadCrossing:view')}">
-				      return "<a href='javascript:view(\""+row.id+"\")'>"+value+"</a>";
-			      </c:when>
-				  <c:otherwise>
-				      return value;
-			      </c:otherwise>
-			   </c:choose>
-
-		        }
 		       
 		    }
 			,{
@@ -137,17 +141,17 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'tpRoad5.name',
-		        title: '道路5',
+		        field: 'lng',
+		        title: '经度',
 		        sortable: true,
-		        sortName: 'tpRoad5.name'
+		        sortName: 'lng'
 		       
 		    }
 			,{
-		        field: 'tpRoad6.name',
-		        title: '道路6',
+		        field: 'lat',
+		        title: '维度',
 		        sortable: true,
-		        sortName: 'tpRoad6.name'
+		        sortName: 'lat'
 		       
 		    }
 			,{

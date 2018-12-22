@@ -1,4 +1,4 @@
-package com.jeeplus;
+package jsonscn.json2bean;
 
 
 import com.jeeplus.common.utils.JsonUtils;

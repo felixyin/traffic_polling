@@ -10,7 +10,7 @@ import com.jeeplus.modules.tp.roadcross.entity.SysArea2;
 /**
  * 路口MAPPER接口
  * @author 尹彬
- * @version 2018-12-20
+ * @version 2018-12-22
  */
 @MyBatisMapper
 public interface SysArea2Mapper extends TreeMapper<SysArea2> {

@@ -12,7 +12,7 @@ import com.jeeplus.core.persistence.TreeEntity;
 /**
  * 路口Entity
  * @author 尹彬
- * @version 2018-12-20
+ * @version 2018-12-22
  */
 public class SysArea2 extends TreeEntity<SysArea2> {
 	

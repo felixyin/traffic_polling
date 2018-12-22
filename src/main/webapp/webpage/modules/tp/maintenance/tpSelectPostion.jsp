@@ -2,7 +2,7 @@
 <%@ include file="/webpage/include/taglib.jsp" %>
 <html>
 <head>
-    <title>施工管理</title>
+    <title>选择地点</title>
     <meta name="decorator" content="ani"/>
     <!-- SUMMERNOTE -->
     <%@include file="/webpage/include/summernote.jsp" %>
@@ -39,7 +39,6 @@
                 }
             });
 
-            // 合计金额方法
             $(document).on("keyup", ".my-count,.my-price", function () {
                 var allMoney = 0;
                 $('.my-count').each(function (idx, ele) {
@@ -50,7 +49,7 @@
                         var result = parseInt(count) * parseInt(price);
                         row.find('.my-money').val(result);
                         allMoney += result;
-                    } else {
+                    }else{
                         row.find('.my-money').val(0);
                     }
                 });
@@ -96,10 +95,9 @@
             }
         }
 
-        // 施工物料选择回调函数
-        function gridselectChange() { // 必须采用闭包的方式
+        function gridselectChange() {
             return function (id, items) {
-                var domRowId = $('#' + id.split('_')[0]).get(0);
+                var domRowId = $('#'+ id.split('_')[0]).get(0);
                 var dataRow = items[0];
                 if (domRowId && dataRow) {
                     $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
@@ -107,19 +105,6 @@
                     $(domRowId).find('.my-price').val(dataRow['price']);
                 }
             }
-        }
-
-        function postionSelectCallback() {
-            return function (param) {
-                alert(JSON.parse(param));
-            }
-        }
-
-        // 打开选择详细地址对话框
-        function openSelectPostionDialog() {
-            var lng = 1.324;
-            var lat = 32.234;
-            jp.openChildDialog("编辑位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?lng=" + lng + "&lat" + lat, "800px", "500px", postionSelectCallback);
         }
     </script>
     <style type="text/css">
@@ -163,14 +148,6 @@
                                     <form:options items="${fns:getDictList('job_source')}" itemLabel="label"
                                                   itemValue="value" htmlEscape="false"/>
                                 </form:select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>选择地点：</label>
-                            <div class="col-sm-4">
-                                <input type="button" class="btn btn-primary btn-block  btn-parsley"
-                                       data-loading-text="正在计算..." value="选择地点"
-                                       onclick="openSelectPostionDialog();"/>
                             </div>
                         </div>
                         <div class="form-group">

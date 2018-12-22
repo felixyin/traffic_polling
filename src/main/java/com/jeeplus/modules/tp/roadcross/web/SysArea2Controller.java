@@ -31,7 +31,7 @@ import com.jeeplus.modules.tp.roadcross.service.SysArea2Service;
 /**
  * 路口Controller
  * @author 尹彬
- * @version 2018-12-20
+ * @version 2018-12-22
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tp/roadcross/sysArea2")

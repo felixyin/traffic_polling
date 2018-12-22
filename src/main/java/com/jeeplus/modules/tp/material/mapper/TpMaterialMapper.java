@@ -10,7 +10,7 @@ import com.jeeplus.modules.tp.material.entity.TpMaterial;
 /**
  * 物料MAPPER接口
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 @MyBatisMapper
 public interface TpMaterialMapper extends BaseMapper<TpMaterial> {

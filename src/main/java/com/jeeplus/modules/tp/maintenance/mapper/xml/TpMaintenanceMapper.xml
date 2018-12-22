@@ -13,8 +13,13 @@
 		a.num AS "num",
 		a.job_type AS "jobType",
 		a.job_source AS "source",
-		a.roadcross_id AS "roadCrossing.id",
-		a.postion AS "postion",
+		a.location AS "location",
+		a.area_id AS "area.id",
+		a.roadcross_id AS "roadcross.id",
+		a.nearest_junction AS "nearestJunction",
+		a.road_id AS "road.id",
+		a.address AS "address",
+		a.nearest_poi AS "nearestPoi",
 		a.send_by AS "sendBy.id",
 		a.send_date AS "sendDate",
 		a.office AS "office.id",
@@ -37,7 +42,14 @@
 				
 				
 				
-		roadCrossing.name AS "roadCrossing.name",
+				
+		area.name AS "area.name",
+				
+		roadcross.name AS "roadcross.name",
+				
+				
+		road.name AS "road.name",
+				
 				
 				
 		sendBy.name AS "sendBy.name",
@@ -49,7 +61,9 @@
 	<sql id="tpMaintenanceJoins">
 		
 		LEFT JOIN tp_road_crossing delFlag ON delFlag.id = a.del_flag
-		LEFT JOIN tp_road_crossing roadCrossing ON roadCrossing.id = a.roadcross_id
+		LEFT JOIN sys_area area ON area.id = a.area_id
+		LEFT JOIN tp_road_crossing roadcross ON roadcross.id = a.roadcross_id
+		LEFT JOIN tp_road road ON road.id = a.road_id
 		LEFT JOIN sys_user sendBy ON sendBy.id = a.send_by
 		LEFT JOIN sys_office office ON office.id = a.office
 	</sql>
@@ -83,8 +97,26 @@
 			<if test="source != null and source != ''">
 				AND a.job_source = #{source}
 			</if>
-			<if test="roadCrossing != null and roadCrossing.id != null and roadCrossing.id != ''">
-				AND a.roadcross_id = #{roadCrossing.id}
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+			<if test="roadcross != null and roadcross.id != null and roadcross.id != ''">
+				AND a.roadcross_id = #{roadcross.id}
+			</if>
+			<if test="road != null and road.id != null and road.id != ''">
+				AND a.road_id = #{road.id}
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address LIKE 
+					<if test="dbName == 'oracle'">'%'||#{address}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{address}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{address},'%')</if>
+			</if>
+			<if test="nearestPoi != null and nearestPoi != ''">
+				AND a.nearest_poi LIKE 
+					<if test="dbName == 'oracle'">'%'||#{nearestPoi}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{nearestPoi}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{nearestPoi},'%')</if>
 			</if>
 			<if test="sendBy != null and sendBy.id != null and sendBy.id != ''">
 				AND a.send_by = #{sendBy.id}
@@ -146,8 +178,13 @@
 			num,
 			job_type,
 			job_source,
+			location,
+			area_id,
 			roadcross_id,
-			postion,
+			nearest_junction,
+			road_id,
+			address,
+			nearest_poi,
 			send_by,
 			send_date,
 			office,
@@ -171,8 +208,13 @@
 			#{num},
 			#{jobType},
 			#{source},
-			#{roadCrossing.id},
-			#{postion},
+			#{location},
+			#{area.id},
+			#{roadcross.id},
+			#{nearestJunction},
+			#{road.id},
+			#{address},
+			#{nearestPoi},
 			#{sendBy.id},
 			#{sendDate},
 			#{office.id},
@@ -196,8 +238,13 @@
 			num = #{num},
 			job_type = #{jobType},
 			job_source = #{source},
-			roadcross_id = #{roadCrossing.id},
-			postion = #{postion},
+			location = #{location},
+			area_id = #{area.id},
+			roadcross_id = #{roadcross.id},
+			nearest_junction = #{nearestJunction},
+			road_id = #{road.id},
+			address = #{address},
+			nearest_poi = #{nearestPoi},
 			send_by = #{sendBy.id},
 			send_date = #{sendDate},
 			office = #{office.id},

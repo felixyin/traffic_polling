@@ -13,12 +13,12 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 施工物料Entity
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 public class TpMaintenanceItem extends DataEntity<TpMaintenanceItem> {
 	
 	private static final long serialVersionUID = 1L;
-	private TpMaintenance maintenance;		// 维保单编号
+	private TpMaintenance maintenance;		// 维保单编号 父类
 	private TpMaterialPart materialPart;		// 零件名称
 	private String category;		// 所属品类
 	private String unit;		// 单位
@@ -38,12 +38,11 @@ public class TpMaintenanceItem extends DataEntity<TpMaintenanceItem> {
 		super(id);
 	}
 
-    public TpMaintenanceItem(TpMaintenance maintenance){
-        this.maintenance = maintenance;
-    }
+	public TpMaintenanceItem(TpMaintenance maintenance){
+		this.maintenance = maintenance;
+	}
 
 	@NotNull(message="维保单编号不能为空")
-	@ExcelField(title="维保单编号", align=2, sort=6)
 	public TpMaintenance getMaintenance() {
 		return maintenance;
 	}

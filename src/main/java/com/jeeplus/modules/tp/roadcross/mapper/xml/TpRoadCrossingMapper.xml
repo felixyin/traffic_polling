@@ -11,6 +11,7 @@
 		a.del_flag AS "delFlag",
 		a.name AS "name",
 		a.sarea_id AS "sarea.id",
+		a.township AS "township",
 		a.road1_id AS "tpRoad1.id",
 		a.road2_id AS "tpRoad2.id",
 		a.road3_id AS "tpRoad3.id",
@@ -56,6 +57,12 @@
                         <if test="dbName == 'mysql'">CONCAT('%,', #{sarea.id}, ',%'))</if>
                         <if test="dbName == 'mssql'">'%'+#{sarea.id}+'%')</if>
                     </if>
+			<if test="township != null and township != ''">
+				AND a.township LIKE 
+					<if test="dbName == 'oracle'">'%'||#{township}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{township}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{township},'%')</if>
+			</if>
 			<if test="tpRoad1 != null and tpRoad1.id != null and tpRoad1.id != ''">
 				AND a.road1_id = #{tpRoad1.id}
 			</if>
@@ -102,6 +109,7 @@
 			del_flag,
 			name,
 			sarea_id,
+			township,
 			road1_id,
 			road2_id,
 			road3_id,
@@ -118,6 +126,7 @@
 			#{delFlag},
 			#{name},
 			#{sarea.id},
+			#{township},
 			#{tpRoad1.id},
 			#{tpRoad2.id},
 			#{tpRoad3.id},
@@ -134,6 +143,7 @@
 			update_date = #{updateDate},
 			name = #{name},
 			sarea_id = #{sarea.id},
+			township = #{township},
 			road1_id = #{tpRoad1.id},
 			road2_id = #{tpRoad2.id},
 			road3_id = #{tpRoad3.id},

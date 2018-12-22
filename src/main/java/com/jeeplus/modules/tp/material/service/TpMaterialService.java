@@ -20,7 +20,7 @@ import com.jeeplus.modules.tp.material.mapper.TpMaterialPartMapper;
 /**
  * 物料Service
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 @Service
 @Transactional(readOnly = true)

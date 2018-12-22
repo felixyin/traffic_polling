@@ -38,7 +38,7 @@ import com.jeeplus.modules.tp.material.service.TpMaterialService;
 /**
  * 物料Controller
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tp/material/tpMaterial")

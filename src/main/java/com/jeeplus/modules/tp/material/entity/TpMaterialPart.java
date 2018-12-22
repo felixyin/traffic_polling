@@ -3,6 +3,7 @@
  */
 package com.jeeplus.modules.tp.material.entity;
 
+import com.jeeplus.modules.tp.material.entity.TpMaterial;
 import javax.validation.constraints.NotNull;
 
 import com.jeeplus.core.persistence.DataEntity;
@@ -11,7 +12,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 物料零件Entity
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 public class TpMaterialPart extends DataEntity<TpMaterialPart> {
 	
@@ -37,6 +38,7 @@ public class TpMaterialPart extends DataEntity<TpMaterialPart> {
 		this.material = material;
 	}
 
+	@NotNull(message="物料表外建不能为空")
 	public TpMaterial getMaterial() {
 		return material;
 	}

@@ -130,17 +130,52 @@ $(document).ready(function() {
 		       
 		    }
 			,{
-		        field: 'roadCrossing.name',
-		        title: '任务地点',
+		        field: 'location',
+		        title: '经纬度',
 		        sortable: true,
-		        sortName: 'roadCrossing.name'
+		        sortName: 'location'
 		       
 		    }
 			,{
-		        field: 'postion',
-		        title: '具体位置',
+		        field: 'area.name',
+		        title: '所属区域',
 		        sortable: true,
-		        sortName: 'postion'
+		        sortName: 'area.name'
+		       
+		    }
+			,{
+		        field: 'roadcross.name',
+		        title: '所属路口',
+		        sortable: true,
+		        sortName: 'roadcross.name'
+		       
+		    }
+			,{
+		        field: 'nearestJunction',
+		        title: '所属路口相对位置',
+		        sortable: true,
+		        sortName: 'nearestJunction'
+		       
+		    }
+			,{
+		        field: 'road.name',
+		        title: '所属道路',
+		        sortable: true,
+		        sortName: 'road.name'
+		       
+		    }
+			,{
+		        field: 'address',
+		        title: '搜索用地址',
+		        sortable: true,
+		        sortName: 'address'
+		       
+		    }
+			,{
+		        field: 'nearestPoi',
+		        title: '搜索地址相对位置',
+		        sortable: true,
+		        sortName: 'nearestPoi'
 		       
 		    }
 			,{
@@ -178,90 +213,90 @@ $(document).ready(function() {
 		        sortName: 'jobEndDate'
 		       
 		    }
-			// ,{
-		    //     field: 'money',
-		    //     title: '总费用',
-		    //     sortable: true,
-		    //     sortName: 'money'
-		    //
-		    // }
-		    // ,{
-		    //     field: 'process',
-		    //     title: '施工过程',
-		    //     sortable: true,
-		    //     sortName: 'process',
-		    //     formatter:function(value, row , index){
-		    //     	return jp.unescapeHTML(value);
-		    //     }
-		    //
-		    // }
-		    // ,{
-		    //     field: 'prePic',
-		    //     title: '施工前照片',
-		    //     sortable: true,
-		    //     sortName: 'prePic',
-		    //     formatter:function(value, row , index){
-		    //     	var valueArray = value.split("|");
-		    //     	var labelArray = [];
-		    //     	for(var i =0 ; i<valueArray.length; i++){
-		    //     		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
-		    //     		{
-		    //     			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
-		    //     		}else{
-		    //     			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
-		    //     		}
-		    //     	}
-		    //     	return labelArray.join(" ");
-		    //     }
-		    //
-		    // }
-		    // ,{
-		    //     field: 'middlePic',
-		    //     title: '施工中照片',
-		    //     sortable: true,
-		    //     sortName: 'middlePic',
-		    //     formatter:function(value, row , index){
-		    //     	var valueArray = value.split("|");
-		    //     	var labelArray = [];
-		    //     	for(var i =0 ; i<valueArray.length; i++){
-		    //     		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
-		    //     		{
-		    //     			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
-		    //     		}else{
-		    //     			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
-		    //     		}
-		    //     	}
-		    //     	return labelArray.join(" ");
-		    //     }
-		    //
-		    // }
-		    // ,{
-		    //     field: 'afterPic',
-		    //     title: '施工后照片',
-		    //     sortable: true,
-		    //     sortName: 'afterPic',
-		    //     formatter:function(value, row , index){
-		    //     	var valueArray = value.split("|");
-		    //     	var labelArray = [];
-		    //     	for(var i =0 ; i<valueArray.length; i++){
-		    //     		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
-		    //     		{
-		    //     			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
-		    //     		}else{
-		    //     			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
-		    //     		}
-		    //     	}
-		    //     	return labelArray.join(" ");
-		    //     }
-		    //
-		    // }
-			// ,{
-		    //     field: 'approve',
-		    //     title: '审批意见',
-		    //     sortable: true,
-		    //     sortName: 'approve'
-		    //
-		    // }
+			,{
+		        field: 'money',
+		        title: '总费用',
+		        sortable: true,
+		        sortName: 'money'
+		       
+		    }
+		    ,{
+		        field: 'process',
+		        title: '施工过程',
+		        sortable: true,
+		        sortName: 'process',
+		        formatter:function(value, row , index){
+		        	return jp.unescapeHTML(value);
+		        }
+		       
+		    }
+		    ,{
+		        field: 'prePic',
+		        title: '施工前照片',
+		        sortable: true,
+		        sortName: 'prePic',
+		        formatter:function(value, row , index){
+		        	var valueArray = value.split("|");
+		        	var labelArray = [];
+		        	for(var i =0 ; i<valueArray.length; i++){
+		        		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
+		        		{
+		        			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
+		        		}else{
+		        			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
+		        		}
+		        	}
+		        	return labelArray.join(" ");
+		        }
+		       
+		    }
+		    ,{
+		        field: 'middlePic',
+		        title: '施工中照片',
+		        sortable: true,
+		        sortName: 'middlePic',
+		        formatter:function(value, row , index){
+		        	var valueArray = value.split("|");
+		        	var labelArray = [];
+		        	for(var i =0 ; i<valueArray.length; i++){
+		        		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
+		        		{
+		        			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
+		        		}else{
+		        			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
+		        		}
+		        	}
+		        	return labelArray.join(" ");
+		        }
+		       
+		    }
+		    ,{
+		        field: 'afterPic',
+		        title: '施工后照片',
+		        sortable: true,
+		        sortName: 'afterPic',
+		        formatter:function(value, row , index){
+		        	var valueArray = value.split("|");
+		        	var labelArray = [];
+		        	for(var i =0 ; i<valueArray.length; i++){
+		        		if(!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(valueArray[i]))
+		        		{
+		        			labelArray[i] = "<a href=\""+valueArray[i]+"\" url=\""+valueArray[i]+"\" target=\"_blank\">"+decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/")+1))+"</a>"
+		        		}else{
+		        			labelArray[i] = '<img   onclick="jp.showPic(\''+valueArray[i]+'\')"'+' height="50px" src="'+valueArray[i]+'">';
+		        		}
+		        	}
+		        	return labelArray.join(" ");
+		        }
+		       
+		    }
+			,{
+		        field: 'approve',
+		        title: '审批意见',
+		        sortable: true,
+		        sortName: 'approve'
+		       
+		    }
 			,{
 		        field: 'status',
 		        title: '任务状态',
@@ -454,6 +489,9 @@ $(document).ready(function() {
 						<thead>
 							<tr>
 								<th>零件名称</th>
+								<th>所属品类</th>
+								<th>单位</th>
+								<th>单价</th>
 								<th>数量</th>
 								<th>金额</th>
 								<th>备注信息</th>
@@ -469,6 +507,15 @@ $(document).ready(function() {
 				<tr>
 					<td>
 						{{row.materialPart.name}}
+					</td>
+					<td>
+						{{row.category}}
+					</td>
+					<td>
+						{{row.unit}}
+					</td>
+					<td>
+						{{row.price}}
 					</td>
 					<td>
 						{{row.count}}

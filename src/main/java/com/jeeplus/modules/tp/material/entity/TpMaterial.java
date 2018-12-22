@@ -12,7 +12,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 物料Entity
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 public class TpMaterial extends DataEntity<TpMaterial> {
 	

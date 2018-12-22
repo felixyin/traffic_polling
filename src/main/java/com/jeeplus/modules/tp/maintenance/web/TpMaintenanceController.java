@@ -40,7 +40,7 @@ import com.jeeplus.modules.tp.maintenance.service.TpMaintenanceService;
 /**
  * 施工Controller
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tp/maintenance/tpMaintenance")
@@ -234,7 +234,7 @@ public class TpMaintenanceController extends BaseController {
 	/**
 	 * 选择地点
 	 */
-	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
+//	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
 	@RequestMapping(value = {"selectPostion"})
 	public String selectPostion(TpMaintenance tpMaintenance, Model model) {
 		model.addAttribute("tpMaintenance", tpMaintenance);

@@ -10,7 +10,7 @@ import com.jeeplus.modules.tp.maintenance.entity.TpMaintenanceItem;
 /**
  * 施工物料MAPPER接口
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 @MyBatisMapper
 public interface TpMaintenanceItemMapper extends BaseMapper<TpMaintenanceItem> {

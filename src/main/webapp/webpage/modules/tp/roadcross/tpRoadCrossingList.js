@@ -113,6 +113,13 @@ $(document).ready(function() {
 		       
 		    }
 			,{
+		        field: 'township',
+		        title: '所属街道',
+		        sortable: true,
+		        sortName: 'township'
+		       
+		    }
+			,{
 		        field: 'tpRoad1.name',
 		        title: '道路1',
 		        sortable: true,

@@ -24,7 +24,7 @@
 				
 				
 		b.num AS "maintenance.num",
-
+				
 		materialPart.name AS "materialPart.name",
 		materialPart.price AS "materialPart.price"
 	</sql>

@@ -46,6 +46,10 @@
 		<div class="accordion-inner">
 			<form:form id="searchForm" modelAttribute="tpRoadCrossing" class="form form-horizontal well clearfix">
 			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="所属街道：">所属街道：</label>
+				<form:input path="township" htmlEscape="false" maxlength="64"  class=" form-control"/>
+			</div>
+			 <div class="col-xs-12 col-sm-6 col-md-4">
 				<label class="label-item single-overflow pull-left" title="道路1：">道路1：</label>
 				<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="tpRoad1" name="tpRoad1.id" value="${tpRoadCrossing.tpRoad1.id}" labelName="tpRoad1.name" labelValue="${tpRoadCrossing.tpRoad1.name}"
 					title="选择道路1" cssClass="form-control required" fieldLabels="道路1" fieldKeys="name" searchLabels="道路1" searchKeys="name" ></sys:gridselect>

@@ -119,7 +119,7 @@
         function openSelectPostionDialog() {
             var lng = 1.324;
             var lat = 32.234;
-            jp.openChildDialog("编辑位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?lng=" + lng + "&lat" + lat, "800px", "500px", postionSelectCallback);
+            jp.openChildDialog("编辑位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?lng=" + lng + "&lat" + lat, "1050px", "580px", postionSelectCallback);
         }
     </script>
     <style type="text/css">
@@ -148,16 +148,24 @@
                                action="${ctx}/tp/maintenance/tpMaintenance/save" method="post" class="form-horizontal">
                         <form:hidden path="id"/>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label"><font color="red">*</font>任务编号：</label>
+                            <div class="col-sm-10">
+                                <form:input path="num" htmlEscape="false" class="form-control required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务类型：</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <form:select path="jobType" class="form-control required">
                                     <form:option value="" label=""/>
                                     <form:options items="${fns:getDictList('job_type')}" itemLabel="label"
                                                   itemValue="value" htmlEscape="false"/>
                                 </form:select>
                             </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务来源：</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <form:select path="source" class="form-control required">
                                     <form:option value="" label=""/>
                                     <form:options items="${fns:getDictList('job_source')}" itemLabel="label"
@@ -166,38 +174,79 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>选择地点：</label>
-                            <div class="col-sm-4">
+                            <label class="col-sm-2 control-label"><font color="red">*</font>选择位置：</label>
+                            <div class="col-sm-10">
                                 <input type="button" class="btn btn-primary btn-block  btn-parsley"
                                        data-loading-text="正在计算..." value="选择地点"
                                        onclick="openSelectPostionDialog();"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>任务地点：</label>
-                            <div class="col-sm-4">
-                                <sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadCrossing"
-                                                name="roadCrossing.id" value="${tpMaintenance.roadCrossing.id}"
-                                                labelName="roadCrossing.name"
-                                                labelValue="${tpMaintenance.roadCrossing.name}"
-                                                title="选择任务地点" cssClass="form-control required" fieldLabels="路口名称|所属区域"
-                                                fieldKeys="name|sarea.name" searchLabels="路口名称|所属区域"
+                            <label class="col-sm-2 control-label"><font color="red">*</font>经纬度：</label>
+                            <div class="col-sm-10">
+                                <form:input path="location" htmlEscape="false" class="form-control required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><font color="red">*</font>所属区域：</label>
+                            <div class="col-sm-10">
+                                <sys:treeselect id="area" name="area.id" value="${tpMaintenance.area.id}"
+                                                labelName="area.name" labelValue="${tpMaintenance.area.name}"
+                                                title="区域" url="/sys/area/treeData" cssClass="form-control required"
+                                                allowClear="true" notAllowSelectParent="true"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><font color="red">*</font>所属路口：</label>
+                            <div class="col-sm-10">
+                                <sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross"
+                                                name="roadcross.id" value="${tpMaintenance.roadcross.id}"
+                                                labelName="roadcross.name" labelValue="${tpMaintenance.roadcross.name}"
+                                                title="选择所属路口" cssClass="form-control required"
+                                                fieldLabels="路口名称|所属区域|所属街道" fieldKeys="name|sarea.name|township"
+                                                searchLabels="路口名称|所属区域" searchKeys="name|sarea.name"></sys:gridselect>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><font color="red">*</font>所属路口相对位置：</label>
+                            <div class="col-sm-10">
+                                <form:input path="nearestJunction" htmlEscape="false" class="form-control required"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">所属道路：</label>
+                            <div class="col-sm-10">
+                                <sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id"
+                                                value="${tpMaintenance.road.id}" labelName="road.name"
+                                                labelValue="${tpMaintenance.road.name}"
+                                                title="选择所属道路" cssClass="form-control " fieldLabels="道路名称|所属区域"
+                                                fieldKeys="name|sarea.name" searchLabels="道路名称|所属区域"
                                                 searchKeys="name|sarea.name"></sys:gridselect>
                             </div>
-                            <label class="col-sm-2 control-label"><font color="red">*</font>具体位置：</label>
-                            <div class="col-sm-4">
-                                <form:input path="postion" htmlEscape="false" class="form-control required"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索用地址：</label>
+                            <div class="col-sm-10">
+                                <form:input path="address" htmlEscape="false" class="form-control "/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">搜索地址相对位置：</label>
+                            <div class="col-sm-10">
+                                <form:input path="nearestPoi" htmlEscape="false" class="form-control "/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">派单人：</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <sys:userselect id="sendBy" name="sendBy.id" value="${tpMaintenance.sendBy.id}"
                                                 labelName="sendBy.name" labelValue="${tpMaintenance.sendBy.name}"
                                                 cssClass="form-control "/>
                             </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">派单时间：</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <div class='input-group form_datetime' id='sendDate'>
                                     <input type='text' name="sendDate" class="form-control "
                                            value="<fmt:formatDate value="${tpMaintenance.sendDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
@@ -209,22 +258,17 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工单位：</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <sys:treeselect id="office" name="office.id" value="${tpMaintenance.office.id}"
                                                 labelName="office.name" labelValue="${tpMaintenance.office.name}"
                                                 title="部门" url="/sys/office/treeData?type=2"
                                                 cssClass="form-control required" allowClear="true"
                                                 notAllowSelectParent="true"/>
                             </div>
-                            <label class="col-sm-2 control-label">物料总费用：</label>
-                            <div class="col-sm-4">
-                                <form:input readonly="true" id="my-money-id" path="money" htmlEscape="false"
-                                            class="form-control  isFloatGtZero"/>
-                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工开始时间：</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <div class='input-group form_datetime' id='jobBeginDate'>
                                     <input type='text' name="jobBeginDate" class="form-control required"
                                            value="<fmt:formatDate value="${tpMaintenance.jobBeginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
@@ -233,8 +277,10 @@
 							</span>
                                 </div>
                             </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工结束时间：</label>
-                            <div class="col-sm-4">
+                            <div class="col-sm-10">
                                 <div class='input-group form_datetime' id='jobEndDate'>
                                     <input type='text' name="jobEndDate" class="form-control required"
                                            value="<fmt:formatDate value="${tpMaintenance.jobEndDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
@@ -244,7 +290,12 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">总费用：</label>
+                            <div class="col-sm-10">
+                                <form:input path="money" htmlEscape="false" class="form-control  isFloatGtZero"/>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">施工过程：</label>
                             <div class="col-sm-10">
@@ -256,17 +307,21 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">施工前照片：</label>
-                            <div class="col-sm-2">
+                            <div class="col-sm-10">
                                 <sys:fileUpload path="prePic" value="${tpMaintenance.prePic}" type="file"
                                                 uploadPath="/tp/maintenance/tpMaintenance"/>
                             </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">施工中照片：</label>
-                            <div class="col-sm-2">
+                            <div class="col-sm-10">
                                 <sys:fileUpload path="middlePic" value="${tpMaintenance.middlePic}" type="file"
                                                 uploadPath="/tp/maintenance/tpMaintenance"/>
                             </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label">施工后照片：</label>
-                            <div class="col-sm-2">
+                            <div class="col-sm-10">
                                 <sys:fileUpload path="afterPic" value="${tpMaintenance.afterPic}" type="file"
                                                 uploadPath="/tp/maintenance/tpMaintenance"/>
                             </div>
@@ -277,14 +332,14 @@
                                 <form:textarea path="approve" htmlEscape="false" rows="4" class="form-control "/>
                             </div>
                         </div>
-                        <%--<div class="form-group">--%>
-                        <%--<label class="col-sm-2 control-label">任务状态：</label>--%>
-                        <%--<div class="col-sm-10">--%>
-                        <%--<form:radiobuttons path="status" items="${fns:getDictList('job_status')}"--%>
-                        <%--itemLabel="label" itemValue="value" htmlEscape="false"--%>
-                        <%--class="i-checks "/>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">任务状态：</label>
+                            <div class="col-sm-10">
+                                <form:radiobuttons path="status" items="${fns:getDictList('job_status')}"
+                                                   itemLabel="label" itemValue="value" htmlEscape="false"
+                                                   class="i-checks "/>
+                            </div>
+                        </div>
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">施工物料：</a>
@@ -300,12 +355,12 @@
                                         <tr>
                                             <th class="hide"></th>
                                             <th><font color="red">*</font>零件名称</th>
-                                            <th>品类</th>
+                                            <th>所属品类</th>
                                             <th>单位</th>
-                                            <th><font color="red">*</font>单价</th>
+                                            <th>单价</th>
                                             <th><font color="red">*</font>数量</th>
                                             <th>金额</th>
-                                                <%--<th>备注信息</th>--%>
+                                            <th>备注信息</th>
                                             <th width="10">&nbsp;</th>
                                         </tr>
                                         </thead>
@@ -320,49 +375,44 @@
 					</td>
 					
 					<td>
-						<sys:gridselect url="${ctx}/tp/material/tpMaterialPart/data" id="tpMaintenanceItemList{{idx}}_materialPart"
-                            name="tpMaintenanceItemList[{{idx}}].materialPart.id" value="{{row.materialPart.id}}"
-                            labelName="tpMaintenanceItemList{{idx}}.materialPart.name" labelValue="{{row.materialPart.name}}"
-							title="选择零件名称" cssClass="form-control  required" fieldLabels="零件名称|零件单位|零件单价|所属品类"
-							fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.name"
-							>
-                        </sys:gridselect>
+						<sys:gridselect url="${ctx}/tp/guardrail/tpMaterialPart/data" id="tpMaintenanceItemList{{idx}}_materialPart" name="tpMaintenanceItemList[{{idx}}].materialPart.id" value="{{row.materialPart.id}}" labelName="tpMaintenanceItemList{{idx}}.materialPart.name" labelValue="{{row.materialPart.name}}"
+							 title="选择零件名称" cssClass="form-control  required" fieldLabels="零件名称|零件单位|零件单价|所属品类" fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.name" ></sys:gridselect>
 					</td>
 					
 					
 					<td>
-						<input  type="text" readonly="readonly" value="{{row.category}}" name="tpMaintenanceItemList[{{idx}}].category"  class="my-category-name form-control required "/>
+						<input id="tpMaintenanceItemList{{idx}}_category" name="tpMaintenanceItemList[{{idx}}].category" type="text" value="{{row.category}}"    class="form-control "/>
 					</td>
 					
-
+					
 					<td>
-						<input  type="text" readonly="readonly" value="{{row.unit}}"   name="tpMaintenanceItemList[{{idx}}].unit"   class="my-unit form-control required "/>
-					</td>
-
-
-					<td>
-						<input  type="number"  value="{{row.price}}"   name="tpMaintenanceItemList[{{idx}}].price"  class="my-price form-control required isFloatGtZero"/>
-					</td>
-
-					<td>
-						<input id="tpMaintenanceItemList{{idx}}_count" name="tpMaintenanceItemList[{{idx}}].count" type="number" value="{{row.count}}"    class="my-count form-control isIntGtZero"/>
-					</td>
-
-
-					<td>
-						<input  readonly="readonly" id="tpMaintenanceItemList{{idx}}_money" name="tpMaintenanceItemList[{{idx}}].money" type="number" value="{{row.money}}"    class="my-money form-control "/>
+						<input id="tpMaintenanceItemList{{idx}}_unit" name="tpMaintenanceItemList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control "/>
 					</td>
 					
-
+					
+					<td>
+						<input id="tpMaintenanceItemList{{idx}}_price" name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="tpMaintenanceItemList{{idx}}_count" name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"    class="form-control required isIntGtZero"/>
+					</td>
+					
+					
+					<td>
+						<input id="tpMaintenanceItemList{{idx}}_money" name="tpMaintenanceItemList[{{idx}}].money" type="text" value="{{row.money}}"    class="form-control "/>
+					</td>
+					
+					
+					<td>
+						<input id="tpMaintenanceItemList{{idx}}_remarks" name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
+					</td>
 					
 					<td class="text-center" width="10">
 						{{#delBtn}}<span class="close" onclick="delRow(this, '#tpMaintenanceItemList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 					</td>
 				</tr>//-->
-                                        <%--
-					<td>
-						<input readonly="readonly"  id="tpMaintenanceItemList{{idx}}_remarks" name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
-					</td>--%>
                                     </script>
                                     <script type="text/javascript">
                                         var tpMaintenanceItemRowIdx = 0,

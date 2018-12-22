@@ -3,8 +3,10 @@
  */
 package com.jeeplus.modules.tp.maintenance.entity;
 
-import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
+import com.jeeplus.modules.tp.road.entity.SysArea;
 import javax.validation.constraints.NotNull;
+import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
+import com.jeeplus.modules.tp.road.entity.TpRoad;
 import com.jeeplus.modules.sys.entity.User;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -18,7 +20,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 施工Entity
  * @author 尹彬
- * @version 2018-12-21
+ * @version 2018-12-22
  */
 public class TpMaintenance extends DataEntity<TpMaintenance> {
 	
@@ -26,8 +28,13 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	private String num;		// 任务编号
 	private String jobType;		// 任务类型
 	private String source;		// 任务来源
-	private TpRoadCrossing roadCrossing;		// 任务地点
-	private String postion;		// 具体位置
+	private String location;		// 经纬度
+	private SysArea area;		// 所属区域
+	private TpRoadCrossing roadcross;		// 所属路口
+	private String nearestJunction;		// 所属路口相对位置
+	private TpRoad road;		// 所属道路
+	private String address;		// 搜索用地址
+	private String nearestPoi;		// 搜索地址相对位置
 	private User sendBy;		// 派单人
 	private Date sendDate;		// 派单时间
 	private Office office;		// 施工单位
@@ -83,26 +90,72 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.source = source;
 	}
 	
-	@NotNull(message="任务地点不能为空")
-	@ExcelField(title="任务地点", fieldType=TpRoadCrossing.class, value="roadCrossing.name", align=2, sort=10)
-	public TpRoadCrossing getRoadCrossing() {
-		return roadCrossing;
+	@ExcelField(title="经纬度", align=2, sort=10)
+	public String getLocation() {
+		return location;
 	}
 
-	public void setRoadCrossing(TpRoadCrossing roadCrossing) {
-		this.roadCrossing = roadCrossing;
+	public void setLocation(String location) {
+		this.location = location;
 	}
 	
-	@ExcelField(title="具体位置", align=2, sort=11)
-	public String getPostion() {
-		return postion;
+	@NotNull(message="所属区域不能为空")
+	@ExcelField(title="所属区域", fieldType=SysArea.class, value="area.name", align=2, sort=11)
+	public SysArea getArea() {
+		return area;
 	}
 
-	public void setPostion(String postion) {
-		this.postion = postion;
+	public void setArea(SysArea area) {
+		this.area = area;
 	}
 	
-	@ExcelField(title="派单人", fieldType=User.class, value="sendBy.name", align=2, sort=12)
+	@NotNull(message="所属路口不能为空")
+	@ExcelField(title="所属路口", fieldType=TpRoadCrossing.class, value="roadcross.name", align=2, sort=12)
+	public TpRoadCrossing getRoadcross() {
+		return roadcross;
+	}
+
+	public void setRoadcross(TpRoadCrossing roadcross) {
+		this.roadcross = roadcross;
+	}
+	
+	@ExcelField(title="所属路口相对位置", align=2, sort=13)
+	public String getNearestJunction() {
+		return nearestJunction;
+	}
+
+	public void setNearestJunction(String nearestJunction) {
+		this.nearestJunction = nearestJunction;
+	}
+	
+	@ExcelField(title="所属道路", fieldType=TpRoad.class, value="road.name", align=2, sort=14)
+	public TpRoad getRoad() {
+		return road;
+	}
+
+	public void setRoad(TpRoad road) {
+		this.road = road;
+	}
+	
+	@ExcelField(title="搜索用地址", align=2, sort=15)
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	@ExcelField(title="搜索地址相对位置", align=2, sort=16)
+	public String getNearestPoi() {
+		return nearestPoi;
+	}
+
+	public void setNearestPoi(String nearestPoi) {
+		this.nearestPoi = nearestPoi;
+	}
+	
+	@ExcelField(title="派单人", fieldType=User.class, value="sendBy.name", align=2, sort=17)
 	public User getSendBy() {
 		return sendBy;
 	}
@@ -112,7 +165,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	}
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@ExcelField(title="派单时间", align=2, sort=13)
+	@ExcelField(title="派单时间", align=2, sort=18)
 	public Date getSendDate() {
 		return sendDate;
 	}
@@ -122,7 +175,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	}
 	
 	@NotNull(message="施工单位不能为空")
-	@ExcelField(title="施工单位", fieldType=Office.class, value="office.name", align=2, sort=14)
+	@ExcelField(title="施工单位", fieldType=Office.class, value="office.name", align=2, sort=19)
 	public Office getOffice() {
 		return office;
 	}
@@ -133,7 +186,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="施工开始时间不能为空")
-	@ExcelField(title="施工开始时间", align=2, sort=15)
+	@ExcelField(title="施工开始时间", align=2, sort=20)
 	public Date getJobBeginDate() {
 		return jobBeginDate;
 	}
@@ -144,7 +197,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="施工结束时间不能为空")
-	@ExcelField(title="施工结束时间", align=2, sort=16)
+	@ExcelField(title="施工结束时间", align=2, sort=21)
 	public Date getJobEndDate() {
 		return jobEndDate;
 	}
@@ -153,7 +206,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.jobEndDate = jobEndDate;
 	}
 	
-	@ExcelField(title="总费用", align=2, sort=17)
+	@ExcelField(title="总费用", align=2, sort=22)
 	public Double getMoney() {
 		return money;
 	}
@@ -162,7 +215,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.money = money;
 	}
 	
-	@ExcelField(title="施工过程", align=2, sort=18)
+	@ExcelField(title="施工过程", align=2, sort=23)
 	public String getProcess() {
 		return process;
 	}
@@ -171,7 +224,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.process = process;
 	}
 	
-	@ExcelField(title="施工前照片", align=2, sort=19)
+	@ExcelField(title="施工前照片", align=2, sort=24)
 	public String getPrePic() {
 		return prePic;
 	}
@@ -180,7 +233,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.prePic = prePic;
 	}
 	
-	@ExcelField(title="施工中照片", align=2, sort=20)
+	@ExcelField(title="施工中照片", align=2, sort=25)
 	public String getMiddlePic() {
 		return middlePic;
 	}
@@ -189,7 +242,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.middlePic = middlePic;
 	}
 	
-	@ExcelField(title="施工后照片", align=2, sort=21)
+	@ExcelField(title="施工后照片", align=2, sort=26)
 	public String getAfterPic() {
 		return afterPic;
 	}
@@ -198,7 +251,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.afterPic = afterPic;
 	}
 	
-	@ExcelField(title="审批意见", align=2, sort=22)
+	@ExcelField(title="审批意见", align=2, sort=27)
 	public String getApprove() {
 		return approve;
 	}
@@ -207,7 +260,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.approve = approve;
 	}
 	
-	@ExcelField(title="任务状态", dictType="job_status", align=2, sort=23)
+	@ExcelField(title="任务状态", dictType="job_status", align=2, sort=28)
 	public String getStatus() {
 		return status;
 	}

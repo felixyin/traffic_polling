@@ -40,9 +40,27 @@
 				</form:select>
 			</div>
 			 <div class="col-xs-12 col-sm-6 col-md-4">
-				<label class="label-item single-overflow pull-left" title="任务地点：">任务地点：</label>
-										<sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadCrossing" name="roadCrossing.id" value="${tpMaintenance.roadCrossing.id}" labelName="roadCrossing.name" labelValue="${tpMaintenance.roadCrossing.name}"
-							 title="选择任务地点" cssClass="form-control required" fieldLabels="路口名称|所属区域" fieldKeys="name|sarea.name" searchLabels="路口名称|所属区域" searchKeys="name|sarea.name" ></sys:gridselect>
+				<label class="label-item single-overflow pull-left" title="所属区域：">所属区域：</label>
+				<sys:treeselect id="area" name="area.id" value="${tpMaintenance.area.id}" labelName="area.name" labelValue="${tpMaintenance.area.name}"
+					title="区域" url="/sys/area/treeData" cssClass="form-control" allowClear="true" notAllowSelectParent="true"/>
+			</div>
+			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="所属路口：">所属路口：</label>
+										<sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross" name="roadcross.id" value="${tpMaintenance.roadcross.id}" labelName="roadcross.name" labelValue="${tpMaintenance.roadcross.name}"
+							 title="选择所属路口" cssClass="form-control required" fieldLabels="路口名称|所属区域|所属街道" fieldKeys="name|sarea.name|township" searchLabels="路口名称|所属区域" searchKeys="name|sarea.name" ></sys:gridselect>
+			</div>
+			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="所属道路：">所属道路：</label>
+										<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id" value="${tpMaintenance.road.id}" labelName="road.name" labelValue="${tpMaintenance.road.name}"
+							 title="选择所属道路" cssClass="form-control " fieldLabels="道路名称|所属区域" fieldKeys="name|sarea.name" searchLabels="道路名称|所属区域" searchKeys="name|sarea.name" ></sys:gridselect>
+			</div>
+			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="搜索用地址：">搜索用地址：</label>
+				<form:input path="address" htmlEscape="false" maxlength="100"  class=" form-control"/>
+			</div>
+			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="搜索地址相对位置：">搜索地址相对位置：</label>
+				<form:input path="nearestPoi" htmlEscape="false" maxlength="64"  class=" form-control"/>
 			</div>
 			 <div class="col-xs-12 col-sm-6 col-md-4">
 				<label class="label-item single-overflow pull-left" title="派单人：">派单人：</label>

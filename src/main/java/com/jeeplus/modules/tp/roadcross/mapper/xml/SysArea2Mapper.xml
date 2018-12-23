@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.tp.roadcross.mapper.SysArea2Mapper">
 
-    <resultMap id="sysArea2Result" type="SysArea2">
+    <resultMap id="SysAreaResult" type="SysArea">
    		<result property="id" column="id" />
 		<result property="name" column="name" />
 		<result property="sort" column="sort" />
@@ -12,7 +12,7 @@
 		<association property="hasChildren" column="id" select="hasChildren" />
     </resultMap>
     
-	<sql id="sysArea2Columns">
+	<sql id="SysAreaColumns">
 		a.id AS "id",
 		a.parent_id AS "parent.id",
 		a.parent_ids AS "parentIds",
@@ -31,25 +31,25 @@
 
 	
 
-	<sql id="sysArea2Joins">
+	<sql id="SysAreaJoins">
 		
 	</sql>
 	
 
     
-	<select id="get" resultType="SysArea2">
+	<select id="get" resultType="SysArea">
 		SELECT 
-			<include refid="sysArea2Columns"/>
+			<include refid="SysAreaColumns"/>
 		FROM sys_area a
-		<include refid="sysArea2Joins"/>
+		<include refid="SysAreaJoins"/>
 		WHERE a.id = #{id}
 	</select>
 	
-	<select id="findList" resultType="SysArea2">
+	<select id="findList" resultType="SysArea">
 		SELECT 
-			<include refid="sysArea2Columns"/>
+			<include refid="SysAreaColumns"/>
 		FROM sys_area a
-		<include refid="sysArea2Joins"/>
+		<include refid="SysAreaJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -72,11 +72,11 @@
 		ORDER BY a.sort ASC
 	</select>
 	
-	<select id="findAllList" resultType="SysArea2">
+	<select id="findAllList" resultType="SysArea">
 		SELECT 
-			<include refid="sysArea2Columns"/>
+			<include refid="SysAreaColumns"/>
 		FROM sys_area a
-		<include refid="sysArea2Joins"/>
+		<include refid="SysAreaJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
@@ -84,7 +84,7 @@
 		ORDER BY a.sort ASC
 	</select>
 	
-	<select id="getChildren" parameterType="String" resultMap="sysArea2Result">  
+	<select id="getChildren" parameterType="String" resultMap="SysAreaResult">  
         select * from sys_area where parent_id = #{id} ORDER BY sort 
     </select> 
      
@@ -92,13 +92,13 @@
         select case when exists(select 1 from sys_area where parent_id = #{id}) then 1 else 0 end ${dual}
     </select>
     
-	<select id="findByParentIdsLike" resultType="SysArea2">
+	<select id="findByParentIdsLike" resultType="SysArea">
 		SELECT
 			a.id,
 			a.parent_id AS "parent.id",
 			a.parent_ids
 		FROM sys_area a
-		<include refid="sysArea2Joins"/>
+		<include refid="SysAreaJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			AND a.parent_ids LIKE #{parentIds}

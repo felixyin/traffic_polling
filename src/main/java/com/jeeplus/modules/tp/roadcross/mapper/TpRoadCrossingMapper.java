@@ -7,6 +7,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 
+import java.util.List;
+
 /**
  * 路口管理MAPPER接口
  * @author 尹彬
@@ -14,5 +16,6 @@ import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
  */
 @MyBatisMapper
 public interface TpRoadCrossingMapper extends BaseMapper<TpRoadCrossing> {
-	
+
+    List<TpRoadCrossing> findByName(String fullName);
 }

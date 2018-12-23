@@ -5,6 +5,7 @@ package com.jeeplus.modules.tp.roadcross.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,9 @@ import com.jeeplus.modules.tp.roadcross.mapper.TpRoadCrossingMapper;
 @Service
 @Transactional(readOnly = true)
 public class TpRoadCrossingService extends CrudService<TpRoadCrossingMapper, TpRoadCrossing> {
+
+	@Autowired
+	private TpRoadCrossingMapper tpRoadCrossingMapper;
 
 	public TpRoadCrossing get(String id) {
 		return super.get(id);
@@ -43,5 +47,8 @@ public class TpRoadCrossingService extends CrudService<TpRoadCrossingMapper, TpR
 	public void delete(TpRoadCrossing tpRoadCrossing) {
 		super.delete(tpRoadCrossing);
 	}
-	
+
+    public List<TpRoadCrossing> findByName(String fullName) {
+		return tpRoadCrossingMapper.findByName(fullName);
+    }
 }

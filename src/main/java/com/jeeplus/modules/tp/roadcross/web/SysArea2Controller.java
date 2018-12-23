@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.Logical;
+import com.jeeplus.modules.tp.road.entity.SysArea;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,10 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.jeeplus.common.json.AjaxJson;
-import com.jeeplus.common.config.Global;
 import com.jeeplus.core.web.BaseController;
 import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.modules.tp.roadcross.entity.SysArea2;
 import com.jeeplus.modules.tp.roadcross.service.SysArea2Service;
 
 /**
@@ -41,13 +39,13 @@ public class SysArea2Controller extends BaseController {
 	private SysArea2Service sysArea2Service;
 	
 	@ModelAttribute
-	public SysArea2 get(@RequestParam(required=false) String id) {
-		SysArea2 entity = null;
+	public SysArea get(@RequestParam(required=false) String id) {
+		SysArea entity = null;
 		if (StringUtils.isNotBlank(id)){
 			entity = sysArea2Service.get(id);
 		}
 		if (entity == null){
-			entity = new SysArea2();
+			entity = new SysArea();
 		}
 		return entity;
 	}
@@ -56,7 +54,7 @@ public class SysArea2Controller extends BaseController {
 	 * 路口列表页面
 	 */
 	@RequestMapping(value = {"list", ""})
-	public String list(SysArea2 sysArea2,  HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String list(SysArea sysArea2, HttpServletRequest request, HttpServletResponse response, Model model) {
 		
 		return "modules/tp/roadcross/sysArea2List";
 	}
@@ -65,14 +63,14 @@ public class SysArea2Controller extends BaseController {
 	 * 查看，增加，编辑路口表单页面
 	 */
 	@RequestMapping(value = "form")
-	public String form(SysArea2 sysArea2, Model model) {
+	public String form(SysArea sysArea2, Model model) {
 		if (sysArea2.getParent()!=null && StringUtils.isNotBlank(sysArea2.getParent().getId())){
 			sysArea2.setParent(sysArea2Service.get(sysArea2.getParent().getId()));
 			// 获取排序号，最末节点排序号+30
 			if (StringUtils.isBlank(sysArea2.getId())){
-				SysArea2 sysArea2Child = new SysArea2();
-				sysArea2Child.setParent(new SysArea2(sysArea2.getParent().getId()));
-				List<SysArea2> list = sysArea2Service.findList(sysArea2); 
+				SysArea sysArea2Child = new SysArea();
+				sysArea2Child.setParent(new SysArea(sysArea2.getParent().getId()));
+				List<SysArea> list = sysArea2Service.findList(sysArea2);
 				if (list.size() > 0){
 					sysArea2.setSort(list.get(list.size()-1).getSort());
 					if (sysArea2.getSort() != null){
@@ -93,7 +91,7 @@ public class SysArea2Controller extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "save")
-	public AjaxJson save(SysArea2 sysArea2, Model model) throws Exception{
+	public AjaxJson save(SysArea sysArea2, Model model) throws Exception{
 		AjaxJson j = new AjaxJson();
 		/**
 		 * 后台hibernate-validation插件校验
@@ -115,7 +113,7 @@ public class SysArea2Controller extends BaseController {
 	
 	@ResponseBody
 	@RequestMapping(value = "getChildren")
-	public List<SysArea2> getChildren(String parentId){
+	public List<SysArea> getChildren(String parentId){
 		if("-1".equals(parentId)){//如果是-1，没指定任何父节点，就从根节点开始查找
 			parentId = "0";
 		}
@@ -127,7 +125,7 @@ public class SysArea2Controller extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "delete")
-	public AjaxJson delete(SysArea2 sysArea2) {
+	public AjaxJson delete(SysArea sysArea2) {
 		AjaxJson j = new AjaxJson();
 		sysArea2Service.delete(sysArea2);
 		j.setSuccess(true);
@@ -140,9 +138,9 @@ public class SysArea2Controller extends BaseController {
 	@RequestMapping(value = "treeData")
 	public List<Map<String, Object>> treeData(@RequestParam(required=false) String extId, HttpServletResponse response) {
 		List<Map<String, Object>> mapList = Lists.newArrayList();
-		List<SysArea2> list = sysArea2Service.findList(new SysArea2());
+		List<SysArea> list = sysArea2Service.findList(new SysArea());
 		for (int i=0; i<list.size(); i++){
-			SysArea2 e = list.get(i);
+			SysArea e = list.get(i);
 			if (StringUtils.isBlank(extId) || (extId!=null && !extId.equals(e.getId()) && e.getParentIds().indexOf(","+extId+",")==-1)){
 				Map<String, Object> map = Maps.newHashMap();
 				map.put("id", e.getId());

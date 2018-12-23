@@ -5,7 +5,7 @@ package com.jeeplus.modules.tp.roadcross.mapper;
 
 import com.jeeplus.core.persistence.TreeMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
-import com.jeeplus.modules.tp.roadcross.entity.SysArea2;
+import com.jeeplus.modules.tp.road.entity.SysArea;
 
 /**
  * 路口MAPPER接口
@@ -13,6 +13,6 @@ import com.jeeplus.modules.tp.roadcross.entity.SysArea2;
  * @version 2018-12-22
  */
 @MyBatisMapper
-public interface SysArea2Mapper extends TreeMapper<SysArea2> {
+public interface SysArea2Mapper extends TreeMapper<SysArea> {
 	
 }

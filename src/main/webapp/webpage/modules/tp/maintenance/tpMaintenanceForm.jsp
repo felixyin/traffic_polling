@@ -6,6 +6,7 @@
     <meta name="decorator" content="ani"/>
     <!-- SUMMERNOTE -->
     <%@include file="/webpage/include/summernote.jsp" %>
+    <script src="${ctxStatic}/plugin/jquery-autocomplete/jquery.autocomplete.min.js"></script>
     <script type="text/javascript">
 
         $(document).ready(function () {
@@ -56,12 +57,33 @@
                 });
                 $('#my-money-id').val(allMoney);
             });
+
+            var countries = [
+                { value: 'Andorra', data: 'AD' },
+                // ...
+                { value: 'Zimbabwe', data: 'ZZ' }
+            ];
+
+            // $('#my-mp-autocomplete').autocomplete({
+            //     lookup: countries,
+            //     onSelect: function (suggestion) {
+            //         alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+            //     }
+            // });
+            $('#my-mp-autocomplete').autocomplete({
+                serviceUrl: '/autocomplete/countries',
+                onSelect: function (suggestion) {
+                    alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+                }
+            });
+
         });
 
         function addRow(list, idx, tpl, row) {
-            $(list).append(Mustache.render(tpl, {
+            var $row = $(Mustache.render(tpl, {
                 idx: idx, delBtn: true, row: row
             }));
+            $(list).append($row);
             $(list + idx).find("select").each(function () {
                 $(this).val($(this).attr("data-value"));
             });
@@ -78,6 +100,9 @@
                     format: "YYYY-MM-DD HH:mm:ss"
                 });
             });
+            // 自动打开选择物料零件窗口
+            $row.find('.my-select-material-part').trigger('click');
+            // $row.find('.my-select-material-part').click();
         }
 
         function delRow(obj, prefix) {
@@ -109,17 +134,43 @@
             }
         }
 
-        function postionSelectCallback() {
-            return function (param) {
-                alert(JSON.parse(param));
+        // 地址选择，保存成功后，显示到施工管理表单控件中
+        function postionSelectCallback(param) {
+            // console.log(param);
+            if (param && param.tpMaintenance) {
+                var tm = param.tpMaintenance;
+
+                var location = tm.location;
+                $('#location').val(location);
+
+                var area = tm.area;
+                $('#areaName').val(area.name);
+                $('#areaId').val(area.id);
+
+                var roadcross = tm.roadcross;
+                $('#roadcrossName').val(roadcross.name);
+                $('#roadcrossId').val(roadcross.id);
+
+                var nearestJunction = tm.nearestJunction;
+                $('#nearestJunction').val(nearestJunction);
+
+                var road = tm.road;
+                $('#roadName').val(road.name);
+                $('#roadId').val(road.id);
+
+                var address = tm.address;
+                $('#address').val(address);
+
+                var nearestPoi = tm.nearestPoi;
+                $('#nearestPoi').val(nearestPoi);
             }
         }
 
         // 打开选择详细地址对话框
         function openSelectPostionDialog() {
-            var lng = 1.324;
-            var lat = 32.234;
-            jp.openChildDialog("编辑位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?lng=" + lng + "&lat" + lat, "1050px", "580px", postionSelectCallback);
+            var location = $('#location').val();
+            var roadcrossName = $('#roadcrossName').val();
+            jp.openChildDialog("编辑位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
         }
     </script>
     <style type="text/css">
@@ -342,14 +393,19 @@
                         </div>
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">施工物料：</a>
+                                <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">施工物料明细：</a>
                                 </li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane fade in  active">
-                                    <a class="btn btn-white btn-sm"
-                                       onclick="addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl);tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;"
-                                       title="新增"><i class="fa fa-plus"></i> 新增</a>
+                                    <div class="form-inline" style="height: 42px;line-height: 38px;">
+                                        <a class="btn btn-white btn-large"
+                                           onclick="addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl);tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;"
+                                           title="新增"><i class="fa fa-plus"></i> 新增物料</a>
+                                        <input  type="text" autocomplete="off" class="form-control "
+                                               style="width: 300px;"
+                                               placeholder="关键词搜索后回车(快速添加方式)" id="my-mp-autocomplete">
+                                    </div>
                                     <table class="table table-striped table-bordered table-condensed">
                                         <thead>
                                         <tr>
@@ -375,16 +431,18 @@
 					</td>
 					
 					<td>
-						<sys:gridselect url="${ctx}/tp/guardrail/tpMaterialPart/data" id="tpMaintenanceItemList{{idx}}_materialPart" name="tpMaintenanceItemList[{{idx}}].materialPart.id" value="{{row.materialPart.id}}" labelName="tpMaintenanceItemList{{idx}}.materialPart.name" labelValue="{{row.materialPart.name}}"
-							 title="选择零件名称" cssClass="form-control  required" fieldLabels="零件名称|零件单位|零件单价|所属品类" fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.name" ></sys:gridselect>
+						<sys:gridselect url="${ctx}/tp/material/tpMaterialPart/data" id="tpMaintenanceItemList{{idx}}_materialPart"
+                            name="tpMaintenanceItemList[{{idx}}].materialPart.id" value="{{row.materialPart.id}}"
+                            labelName="tpMaintenanceItemList{{idx}}.materialPart.name" labelValue="{{row.materialPart.name}}"
+                            title="选择零件名称" cssClass="form-control required my-select-material-part" fieldLabels="零件名称|零件单位|零件单价|所属品类"
+                            fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.name" >
+                        </sys:gridselect>
 					</td>
-					
-					
+
 					<td>
 						<input id="tpMaintenanceItemList{{idx}}_category" name="tpMaintenanceItemList[{{idx}}].category" type="text" value="{{row.category}}"    class="form-control "/>
 					</td>
-					
-					
+
 					<td>
 						<input id="tpMaintenanceItemList{{idx}}_unit" name="tpMaintenanceItemList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control "/>
 					</td>

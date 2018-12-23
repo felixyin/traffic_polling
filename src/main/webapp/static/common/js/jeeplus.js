@@ -18,7 +18,7 @@
         },
 
         warning: function (msg) {//通知
-            return top.layer.msg(msg, {icon: 0,time: 6000});
+            return top.layer.msg(msg, {icon: 0, time: 6000});
         },
 
         success: function (msg) {
@@ -26,7 +26,7 @@
         },
 
         error: function (msg) {
-            return top.layer.msg(msg, {icon: 2,time: 6000});
+            return top.layer.msg(msg, {icon: 2, time: 6000});
         },
 
         //layer之外的另一个选择toast风格消息提示框,直接使用jp.toastr调用
@@ -518,7 +518,11 @@
                     var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
                     iframeWin.contentWindow.save(parentObj);//在子窗口定义save方法，负责实际业务逻辑的执行
                 },
-                cancel: function (index) {
+                cancel: function (index, layero) {
+                    // var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+                    // if (iframeWin.contentWindow.cancel) {
+                    //     iframeWin.contentWindow.cancel(parentObj);//在子窗口定义save方法，负责实际业务逻辑的执行
+                    // }
                 }
             });
         },

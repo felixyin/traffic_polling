@@ -187,5 +187,9 @@
 	<select id="findUniqueByProperty" resultType="TpRoadCrossing" statementType="STATEMENT">
 		select * FROM tp_road_crossing  where ${propertyName} = '${value}'
 	</select>
-	
+
+    <select id="findByName" resultType="TpRoadCrossing">
+		select * from tp_road_crossing where `name` = #{name}
+	</select>
+
 </mapper>

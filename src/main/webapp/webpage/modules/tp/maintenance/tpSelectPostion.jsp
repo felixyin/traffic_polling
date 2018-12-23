@@ -74,8 +74,9 @@
         .my-right {
             flex: 11;
         }
-        .amap-zoomcontrol{
-            display: none!important;
+
+        .amap-zoomcontrol {
+            display: none !important;
         }
     </style>
 </head>
@@ -89,7 +90,7 @@
                 </div>
                 <div class="panel-body">
                     <div class="input-item">
-                        <input id='tipinput' type="text" placeholder="输入任意地址定位大概范围">
+                        <input id='tipinput' type="text" autocomplete="off" placeholder="输入任意地址定位大概范围" value="${roadcrossName}">
                     </div>
                     <%--<div class="title" style="color: darkred;margin-top: 5px;">注意：快速定位后，请拖拽右边的地图进行精确定位，定位后务必检查详细位置</div>--%>
                 </div>
@@ -107,10 +108,10 @@
                     <div id='address'></div>
                     <div class='c'>最近的路口:</div>
                     <div id='nearestJunction'></div>
-                    <div class='c'>最近的路:</div>
+                    <div class='c'>最近的道路:</div>
                     <div id='nearestRoad'></div>
-                    <div class='c'>最近的POI:</div>
-                    <div id='nearestPOI'></div>
+                    <%--<div class='c'>最近的POI:</div>--%>
+                    <%--<div id='nearestPOI'></div>--%>
                 </div>
             </div>
         </div>
@@ -138,7 +139,33 @@
 <script type="text/javascript">
     // $('#container').height($(window).height() - 95);
     // $('#my-detail').height($(window).height() - 250);
+    var _positionResult;
 
+    function save(callbackFun) {
+        delete _positionResult.regeocode.addressComponent.businessAreas;
+        delete _positionResult.regeocode.aois;
+        delete _positionResult.regeocode.pois;
+        // console.log(_positionResult);
+        if (!_positionResult) {
+            jp.warning('请等待"详细位置"计算完毕.');
+            return false;
+        } else {
+            jp.loading();
+            jp.post("${ctx}/tp/maintenance/tpMaintenance/savePosition", {json: encodeURIComponent(JSON.stringify(_positionResult))}, function (data) {
+                if (data.success) {
+                    var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+                    parent.layer.close(dialogIndex);
+                    jp.success(data.msg);
+                    callbackFun(data.body);
+                } else {
+                    jp.error(data.msg);
+                }
+            })
+        }
+    }
+
+
+    // TODO ------------------
     var city = '青岛市';
     AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
         var map = new AMap.Map('container', {
@@ -149,12 +176,28 @@
             road 道路及道路标注
             building 建筑物
              */
-            features: ['bg', 'road', 'point', 'building'],// 多个种类要素显示
+            features: [
+                // 'bg',
+                'road',
+                // 'point',
+                // 'building'
+            ],// 多个种类要素显示
             // resizeEnable: true,
             zoom: 17,
             scrollWheel: true,
             city: city
         });
+
+        var location = '${location}';
+        if (location) {
+            var list = location.split(',');
+            var lng = list[0];
+            var lat = list[1];
+            // 传入经纬度，设置地图中心点
+            var position = new AMap.LngLat(lng, lat);  // 标准写法
+            // 简写 var position = [116, 39];
+            map.setCenter(position);
+        }
 
         // ----------------------------------- 输入提示
         var auto = new AMap.Autocomplete({
@@ -165,7 +208,7 @@
 
         // ----------------------------------- 选中自动完成行，地图定位
         AMap.event.addListener(auto, "select", function (e) {
-            console.log(e);
+            // console.log(e);
             // 传入经纬度，设置地图中心点
             var position = new AMap.LngLat(e.poi.location.lng, e.poi.location.lat);  // 标准写法
             // 简写 var position = [116, 39];
@@ -186,19 +229,19 @@
         });
 
         positionPicker.on('success', function (positionResult) {
-            console.log(JSON.stringify(positionResult));
+            _positionResult = positionResult;
             document.getElementById('lnglat').innerHTML = positionResult.position;
             document.getElementById('address').innerHTML = positionResult.address;
             document.getElementById('nearestJunction').innerHTML = positionResult.nearestJunction;
             document.getElementById('nearestRoad').innerHTML = positionResult.nearestRoad;
-            document.getElementById('nearestPOI').innerHTML = positionResult.nearestPOI;
+            // document.getElementById('nearestPOI').innerHTML = positionResult.nearestPOI;
         });
         positionPicker.on('fail', function (positionResult) {
             document.getElementById('lnglat').innerHTML = ' ';
             document.getElementById('address').innerHTML = ' ';
             document.getElementById('nearestJunction').innerHTML = ' ';
             document.getElementById('nearestRoad').innerHTML = ' ';
-            document.getElementById('nearestPOI').innerHTML = ' ';
+            // document.getElementById('nearestPOI').innerHTML = ' ';
         });
 
         positionPicker.start();

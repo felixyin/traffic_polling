@@ -3,8 +3,9 @@
  */
 package com.jeeplus.modules.tp.roadcross.entity;
 
-import com.jeeplus.modules.tp.roadcross.entity.SysArea2;
 import javax.validation.constraints.NotNull;
+
+import com.jeeplus.modules.tp.road.entity.SysArea;
 import com.jeeplus.modules.tp.road.entity.TpRoad;
 
 import com.jeeplus.core.persistence.DataEntity;
@@ -19,7 +20,7 @@ public class TpRoadCrossing extends DataEntity<TpRoadCrossing> {
 	
 	private static final long serialVersionUID = 1L;
 	private String name;		// 全称
-	private SysArea2 sarea;		// 所属区域 父类
+	private SysArea sarea;		// 所属区域 父类
 	private String township;		// 所属街道
 	private TpRoad tpRoad1;		// 道路1
 	private TpRoad tpRoad2;		// 道路2
@@ -36,7 +37,7 @@ public class TpRoadCrossing extends DataEntity<TpRoadCrossing> {
 		super(id);
 	}
 
-	public TpRoadCrossing(SysArea2 sarea){
+	public TpRoadCrossing(SysArea sarea){
 		this.sarea = sarea;
 	}
 
@@ -50,11 +51,11 @@ public class TpRoadCrossing extends DataEntity<TpRoadCrossing> {
 	}
 	
 	@NotNull(message="所属区域不能为空")
-	public SysArea2 getSarea() {
+	public SysArea getSarea() {
 		return sarea;
 	}
 
-	public void setSarea(SysArea2 sarea) {
+	public void setSarea(SysArea sarea) {
 		this.sarea = sarea;
 	}
 	

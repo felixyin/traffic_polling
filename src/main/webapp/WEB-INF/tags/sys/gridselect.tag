@@ -21,14 +21,13 @@
            data-msg-required="${dataMsgRequired}"
            class="${cssClass}" style="${cssStyle}"/>
     <span class="input-group-btn">
-	       		 <button type="button" id="${id}Button"
-                         class="btn <c:if test="${fn:contains(cssClass, 'input-sm')}"> btn-sm </c:if><c:if test="${fn:contains(cssClass, 'input-lg')}"> btn-lg </c:if>  btn-primary ${disabled} ${hideBtn ? 'hide' : ''}"><i
-                         class="fa fa-search"></i>
-	             </button> 
-	               <button type="button" id="${id}DelButton" class="close" data-dismiss="alert"
-                           style="position: absolute; top: 5px; right: 53px; z-index: 999; display: block;">×</button>
-       		 </span>
-
+         <button type="button" id="${id}Button"
+                 class="btn <c:if test="${fn:contains(cssClass, 'input-sm')}"> btn-sm </c:if><c:if test="${fn:contains(cssClass, 'input-lg')}"> btn-lg </c:if>  btn-primary ${disabled} ${hideBtn ? 'hide' : ''}">
+             <i class="fa fa-search"></i>
+         </button>
+         <button type="button" id="${id}DelButton" class="close" data-dismiss="alert"
+                 style="position: absolute; top: 5px; right: 53px; z-index: 999; display: block;">×</button>
+     </span>
 </div>
 <label id="${id}Name-error" class="error" for="${id}Name" style="display:none"></label>
 <script type="text/javascript">
@@ -72,6 +71,7 @@
                     <%--}--%>
 
                     try {
+                        // 增加选择回调函数
                         if (gridselectChange) {
                             gridselectChange()('${id}', items);
                         }

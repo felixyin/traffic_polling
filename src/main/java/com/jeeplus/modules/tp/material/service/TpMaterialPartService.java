@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +47,8 @@ public class TpMaterialPartService extends CrudService<TpMaterialPartMapper, TpM
     public void save(TpMaterialPart tpMaterialPart) {
         try {
             HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
-            tpMaterialPart.setName_py(PinyinHelper.toHanYuPinyinString(tpMaterialPart.getName(), format, " ", true));
+            format.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+            tpMaterialPart.setName_py(PinyinHelper.toHanYuPinyinString(tpMaterialPart.getName(), format, "", false));
         } catch (Exception e) {
             e.printStackTrace();
         }

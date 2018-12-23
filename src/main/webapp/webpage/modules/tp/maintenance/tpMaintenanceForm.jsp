@@ -40,26 +40,11 @@
                 }
             });
 
-            // 合计金额方法
-            $(document).on("keyup", ".my-count,.my-price", function () {
-                var allMoney = 0;
-                $('.my-count').each(function (idx, ele) {
-                    var count = $(ele).val();
-                    var row = $(ele).parents('tr');
-                    var price = row.find('.my-price').val();
-                    if (count && price) {
-                        var result = parseInt(count) * parseInt(price);
-                        row.find('.my-money').val(result);
-                        allMoney += result;
-                    } else {
-                        row.find('.my-money').val(0);
-                    }
-                });
-                $('#my-money-id').val(allMoney);
-            });
 
+            $(document).on("keyup", ".my-count,.my-price", calMoney);
+
+            // 自动完成物料零件，回车自动创建一行
             var _mp_id;
-
             $("#my-mp-autocomplete").easyAutocomplete({
                 url: function (query) {
                     return '${ctx}/tp/material/tpMaterialPart/autocomplete?query=' + query;
@@ -147,6 +132,29 @@
                 $(obj).html("&times;").attr("title", "删除");
                 $(obj).parent().parent().removeClass("error");
             }
+            calMoney();
+        }
+
+
+        // 合计金额方法
+        function calMoney() {
+            var allMoney = 0;
+            var context = $('.close').filter(function () {
+                return $(this).attr('title') == '删除';
+            }).parents('tr');
+            $('.my-count', context).each(function (idx, ele) {
+                var count = $(ele).val();
+                var row = $(ele).parents('tr');
+                var price = row.find('.my-price').val();
+                if (count && price) {
+                    var result = parseInt(count) * parseInt(price);
+                    row.find('.my-money').val(result);
+                    allMoney += result;
+                } else {
+                    row.find('.my-money').val(0);
+                }
+            });
+            $('#money').val(allMoney);
         }
 
         // 施工物料选择回调函数
@@ -158,6 +166,8 @@
                     $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
                     $(domRowId).find('.my-unit').val(dataRow['unit']);
                     $(domRowId).find('.my-price').val(dataRow['price']);
+                    // 修改零件，可能会引起金额变化，需要重新计算
+                    calMoney();
                 }
             }
         }
@@ -213,6 +223,10 @@
 
         .note-editing-area {
             height: 120px;
+        }
+
+        .error {
+            background-color: palevioletred!important;
         }
     </style>
 </head>
@@ -491,12 +505,12 @@
 					
 					
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_count" name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"    class="form-control required isIntGtZero"/>
+						<input id="tpMaintenanceItemList{{idx}}_count" name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"    class="form-control required isIntGtZero my-count"/>
 					</td>
 					
 					
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_money" name="tpMaintenanceItemList[{{idx}}].money" type="text" value="{{row.money}}"    class="form-control "/>
+						<input id="tpMaintenanceItemList{{idx}}_money" name="tpMaintenanceItemList[{{idx}}].money" type="text" value="{{row.money}}"    class="form-control my-money"/>
 					</td>
 					
 					

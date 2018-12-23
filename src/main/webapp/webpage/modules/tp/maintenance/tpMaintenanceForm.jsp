@@ -6,9 +6,9 @@
     <meta name="decorator" content="ani"/>
     <!-- SUMMERNOTE -->
     <%@include file="/webpage/include/summernote.jsp" %>
-    <script src="${ctxStatic}/plugin/jquery-autocomplete/jquery.autocomplete.min.js"></script>
+    <link href="${ctxStatic}/plugin/jquery-autocomplete/easy-autocomplete.min.css" rel="stylesheet">
+    <script src="${ctxStatic}/plugin/jquery-autocomplete/jquery.easy-autocomplete.min.js"></script>
     <script type="text/javascript">
-
         $(document).ready(function () {
             jp.ajaxForm("#inputForm", function (data) {
                 if (data.success) {
@@ -58,28 +58,56 @@
                 $('#my-money-id').val(allMoney);
             });
 
-            var countries = [
-                { value: 'Andorra', data: 'AD' },
-                // ...
-                { value: 'Zimbabwe', data: 'ZZ' }
-            ];
+            var _mp_id;
 
-            // $('#my-mp-autocomplete').autocomplete({
-            //     lookup: countries,
-            //     onSelect: function (suggestion) {
-            //         alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-            //     }
-            // });
-            $('#my-mp-autocomplete').autocomplete({
-                serviceUrl: '/autocomplete/countries',
-                onSelect: function (suggestion) {
-                    alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+            $("#my-mp-autocomplete").easyAutocomplete({
+                url: function (query) {
+                    return '${ctx}/tp/material/tpMaterialPart/autocomplete?query=' + query;
+                },
+                getValue: function (result) {
+                    _mp_id = result.code;
+                    return result.name;
+                },
+                list: {
+                    onChooseEvent: function () {
+                        // 验证是否已经存在
+                        var size = $('#tpMaintenanceItemList').find(':hidden').filter(function () {
+                            return $(this).val() == _mp_id;
+                        }).size();
+                        if (size > 0) {
+                            jp.warning('您已经添加过这个物料!');
+                            $('#my-mp-autocomplete').select();
+                            return false;
+                        }
+
+                        // 获取物料信息，自动填写表单
+                        jp.get("${ctx}/tp/material/tpMaterialPart/getById?id=" + _mp_id, function (dataRow) {
+                            if (dataRow) {
+                                addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl, {}, true);
+                                var domRowId = '#tpMaintenanceItemList' + tpMaintenanceItemRowIdx;
+                                var smp = $(domRowId).find('.my-select-material-part');
+                                smp.val(dataRow['name']);
+                                smp.parent().prev(':hidden').val(dataRow['id']);
+                                $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
+                                $(domRowId).find('.my-unit').val(dataRow['unit']);
+                                $(domRowId).find('.my-price').val(dataRow['price']);
+                                tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;
+
+                                jp.success('增加成功，您可以快速变换输入，增加下一个物料');
+                                var st = setTimeout(function () {
+                                    $('#my-mp-autocomplete').val('').focus();
+                                    clearTimeout(st);
+                                }, 300)
+                            } else {
+                                jp.error('服务器发生错误，快速添加方式不可用,请使用左侧新增物料按钮');
+                            }
+                        });
+                    }
                 }
             });
-
         });
 
-        function addRow(list, idx, tpl, row) {
+        function addRow(list, idx, tpl, row, notAutoOpen) {
             var $row = $(Mustache.render(tpl, {
                 idx: idx, delBtn: true, row: row
             }));
@@ -101,7 +129,7 @@
                 });
             });
             // 自动打开选择物料零件窗口
-            $row.find('.my-select-material-part').trigger('click');
+            if (!notAutoOpen) $row.find('.my-select-material-part').trigger('click');
             // $row.find('.my-select-material-part').click();
         }
 
@@ -125,7 +153,7 @@
         function gridselectChange() { // 必须采用闭包的方式
             return function (id, items) {
                 var domRowId = $('#' + id.split('_')[0]).get(0);
-                var dataRow = items[0];
+                var dataRow = items[0]; //单选
                 if (domRowId && dataRow) {
                     $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
                     $(domRowId).find('.my-unit').val(dataRow['unit']);
@@ -176,6 +204,11 @@
     <style type="text/css">
         .panel-body {
             width: 95% !important;
+        }
+
+        .easy-autocomplete {
+            display: inline-block;
+            z-index: 1000;
         }
 
         .note-editing-area {
@@ -402,8 +435,8 @@
                                         <a class="btn btn-white btn-large"
                                            onclick="addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl);tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;"
                                            title="新增"><i class="fa fa-plus"></i> 新增物料</a>
-                                        <input  type="text" autocomplete="off" class="form-control "
-                                               style="width: 300px;"
+                                        <input type="text" class="form-control "
+                                               style="width: 450px;display: inline-block!important;"
                                                placeholder="关键词搜索后回车(快速添加方式)" id="my-mp-autocomplete">
                                     </div>
                                     <table class="table table-striped table-bordered table-condensed">
@@ -440,16 +473,20 @@
 					</td>
 
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_category" name="tpMaintenanceItemList[{{idx}}].category" type="text" value="{{row.category}}"    class="form-control "/>
+						<input id="tpMaintenanceItemList{{idx}}_category" name="tpMaintenanceItemList[{{idx}}].category" type="text" value="{{row.category}}"    class="form-control my-category-name"/>
 					</td>
 
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_unit" name="tpMaintenanceItemList[{{idx}}].unit" type="text" value="{{row.unit}}"    class="form-control "/>
+						<select id="tpMaintenanceItemList{{idx}}_unit" name="tpMaintenanceItemList[{{idx}}].unit" data-value="{{row.unit}}" class="form-control m-b  required my-unit">
+							<option value=""></option>
+							<c:forEach items="${fns:getDictList('material_unit')}" var="dict">
+								<option value="${dict.value}">${dict.label}</option>
+							</c:forEach>
+						</select>
 					</td>
-					
-					
+
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_price" name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"    class="form-control "/>
+						<input id="tpMaintenanceItemList{{idx}}_price" name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"    class="form-control my-price"/>
 					</td>
 					
 					

@@ -12,7 +12,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 物料Entity
  * @author 尹彬
- * @version 2018-12-22
+ * @version 2018-12-23
  */
 public class TpMaterial extends DataEntity<TpMaterial> {
 	
@@ -22,6 +22,7 @@ public class TpMaterial extends DataEntity<TpMaterial> {
 	private String company;		// 生产单位
 	private String pic;		// 图片
 	private String standards;		// 规格描述
+	private String name_py;		// 名称拼音
 	private List<TpMaterialPart> tpMaterialPartList = Lists.newArrayList();		// 子表列表
 	
 	public TpMaterial() {
@@ -75,6 +76,15 @@ public class TpMaterial extends DataEntity<TpMaterial> {
 
 	public void setStandards(String standards) {
 		this.standards = standards;
+	}
+	
+	@ExcelField(title="名称拼音", align=2, sort=12)
+	public String getName_py() {
+		return name_py;
+	}
+
+	public void setName_py(String name_py) {
+		this.name_py = name_py;
 	}
 	
 	public List<TpMaterialPart> getTpMaterialPartList() {

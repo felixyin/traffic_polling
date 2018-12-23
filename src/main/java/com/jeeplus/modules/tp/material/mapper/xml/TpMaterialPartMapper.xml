@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.tp.material.mapper.TpMaterialPartMapper">
-    
-	<sql id="tpMaterialPartColumns">
+
+    <sql id="tpMaterialPartColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -16,6 +16,7 @@
 		a.pic AS "pic",
 		a.standards AS "standards",
 		a.remarks AS "remarks",
+		a.name_py AS "name_py",
 				
 				
 				
@@ -24,84 +25,84 @@
 				
 		b.name AS "material.name"
 	</sql>
-	
-	<sql id="tpMaterialPartJoins">
+
+    <sql id="tpMaterialPartJoins">
 		
 			LEFT JOIN tp_material b ON b.id = a.material_id
 	</sql>
-	
-    
-	<select id="get" resultType="TpMaterialPart" >
-		SELECT 
-			<include refid="tpMaterialPartColumns"/>
-		FROM tp_material_part a
-		<include refid="tpMaterialPartJoins"/>
-		WHERE a.id = #{id}
-	</select>
-	
-	<select id="findList" resultType="TpMaterialPart" >
-		SELECT 
-			<include refid="tpMaterialPartColumns"/>
-		FROM tp_material_part a
-		<include refid="tpMaterialPartJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			${dataScope}
-			<if test="material != null and material.id != null and material.id != ''">
-				AND a.material_id = #{material.id}
-			</if>
-			<if test="name != null and name != ''">
-				AND a.name LIKE 
-					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
-			</if>
-			<if test="beginPrice != null and endPrice != null ">
-				AND a.price BETWEEN #{beginPrice} AND #{endPrice}
-			</if>
-			<if test="standards != null and standards != ''">
-				AND a.standards LIKE 
-					<if test="dbName == 'oracle'">'%'||#{standards}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{standards}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{standards},'%')</if>
-			</if>
-			<if test="remarks != null and remarks != ''">
-				AND a.remarks LIKE 
-					<if test="dbName == 'oracle'">'%'||#{remarks}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{remarks}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{remarks},'%')</if>
-			</if>
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.create_date ASC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<select id="findAllList" resultType="TpMaterialPart" >
-		SELECT 
-			<include refid="tpMaterialPartColumns"/>
-		FROM tp_material_part a
-		<include refid="tpMaterialPartJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			${dataScope}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.create_date ASC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<insert id="insert">
+
+
+    <select id="get" resultType="TpMaterialPart">
+        SELECT
+        <include refid="tpMaterialPartColumns"/>
+        FROM tp_material_part a
+        <include refid="tpMaterialPartJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="TpMaterialPart">
+        SELECT
+        <include refid="tpMaterialPartColumns"/>
+        FROM tp_material_part a
+        <include refid="tpMaterialPartJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+            <if test="material != null and material.id != null and material.id != ''">
+                AND a.material_id = #{material.id}
+            </if>
+            <if test="name != null and name != ''">
+                AND a.name LIKE
+                <if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+            </if>
+            <if test="beginPrice != null and endPrice != null ">
+                AND a.price BETWEEN #{beginPrice} AND #{endPrice}
+            </if>
+            <if test="standards != null and standards != ''">
+                AND a.standards LIKE
+                <if test="dbName == 'oracle'">'%'||#{standards}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{standards}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{standards},'%')</if>
+            </if>
+            <if test="remarks != null and remarks != ''">
+                AND a.remarks LIKE
+                <if test="dbName == 'oracle'">'%'||#{remarks}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{remarks}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{remarks},'%')</if>
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_date ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="TpMaterialPart">
+        SELECT
+        <include refid="tpMaterialPartColumns"/>
+        FROM tp_material_part a
+        <include refid="tpMaterialPartJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.create_date ASC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
 		INSERT INTO tp_material_part(
 			id,
 			create_by,
@@ -115,7 +116,8 @@
 			price,
 			pic,
 			standards,
-			remarks
+			remarks,
+			name_py
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -129,11 +131,12 @@
 			#{price},
 			#{pic},
 			#{standards},
-			#{remarks}
+			#{remarks},
+			#{name_py}
 		)
 	</insert>
-	
-	<update id="update">
+
+    <update id="update">
 		UPDATE tp_material_part SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
@@ -143,42 +146,47 @@
 			price = #{price},
 			pic = #{pic},
 			standards = #{standards},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			name_py = #{name_py}
 		WHERE id = #{id}
 	</update>
-	
-	
-	<!--物理删除-->
-	<update id="delete">
-		DELETE FROM tp_material_part
-		<choose>
-			<when test="id !=null and id != ''">
-				WHERE id = #{id}
-			</when>
-			<otherwise>
-				WHERE material_id = #{material.id}
-			</otherwise>
-		</choose>
-	</update>
-	
-	<!--逻辑删除-->
-	<update id="deleteByLogic">
-		UPDATE tp_material_part SET 
-			del_flag = #{DEL_FLAG_DELETE}
-		<choose>
-			<when test="id !=null and id != ''">
-				WHERE id = #{id}
-			</when>
-			<otherwise>
-				WHERE material_id = #{material.id}
-			</otherwise>
-		</choose>
-	</update>
-	
-	
-	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
-	<select id="findUniqueByProperty" resultType="TpMaterialPart" statementType="STATEMENT">
+
+
+    <!--物理删除-->
+    <update id="delete">
+        DELETE FROM tp_material_part
+        <choose>
+            <when test="id !=null and id != ''">
+                WHERE id = #{id}
+            </when>
+            <otherwise>
+                WHERE material_id = #{material.id}
+            </otherwise>
+        </choose>
+    </update>
+
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
+        UPDATE tp_material_part SET
+        del_flag = #{DEL_FLAG_DELETE}
+        <choose>
+            <when test="id !=null and id != ''">
+                WHERE id = #{id}
+            </when>
+            <otherwise>
+                WHERE material_id = #{material.id}
+            </otherwise>
+        </choose>
+    </update>
+
+
+    <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+    <select id="findUniqueByProperty" resultType="TpMaterialPart" statementType="STATEMENT">
 		select * FROM tp_material_part  where ${propertyName} = '${value}'
 	</select>
-	
+
+    <select id="autocomplete" resultType="java.util.Map" parameterType="string">
+		select a.id AS "code", concat(a.name, ' - ',b.name) AS "name" from tp_material_part AS a LEFT JOIN tp_material b ON b.id = a.material_id where a.name_py like concat('%',#{query},'%') or a.name like concat('%',#{query},'%')
+	</select>
+
 </mapper>

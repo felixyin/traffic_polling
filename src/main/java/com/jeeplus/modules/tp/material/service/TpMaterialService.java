@@ -5,6 +5,8 @@ package com.jeeplus.modules.tp.material.service;
 
 import java.util.List;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,7 @@ import com.jeeplus.modules.tp.material.mapper.TpMaterialPartMapper;
 /**
  * 物料Service
  * @author 尹彬
- * @version 2018-12-22
+ * @version 2018-12-23
  */
 @Service
 @Transactional(readOnly = true)
@@ -45,12 +47,24 @@ public class TpMaterialService extends CrudService<TpMaterialMapper, TpMaterial>
 	
 	@Transactional(readOnly = false)
 	public void save(TpMaterial tpMaterial) {
+		try {
+			HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+			tpMaterial.setName_py(PinyinHelper.toHanYuPinyinString(tpMaterial.getName(), format, " ", true));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		super.save(tpMaterial);
 		for (TpMaterialPart tpMaterialPart : tpMaterial.getTpMaterialPartList()){
 			if (tpMaterialPart.getId() == null){
 				continue;
 			}
 			if (TpMaterialPart.DEL_FLAG_NORMAL.equals(tpMaterialPart.getDelFlag())){
+				try {
+					HanyuPinyinOutputFormat format = new HanyuPinyinOutputFormat();
+					tpMaterialPart.setName_py(PinyinHelper.toHanYuPinyinString(tpMaterialPart.getName(), format, " ", true));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				if (StringUtils.isBlank(tpMaterialPart.getId())){
 					tpMaterialPart.setMaterial(tpMaterial);
 					tpMaterialPart.preInsert();

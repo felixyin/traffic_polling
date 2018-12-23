@@ -14,7 +14,8 @@
 		a.company AS "company",
 		a.pic AS "pic",
 		a.standards AS "standards",
-		a.remarks AS "remarks"
+		a.remarks AS "remarks",
+		a.name_py AS "name_py"
 	</sql>
 	
 	<sql id="tpMaterialJoins">
@@ -105,7 +106,8 @@
 			company,
 			pic,
 			standards,
-			remarks
+			remarks,
+			name_py
 		) VALUES (
 			#{id},
 			#{createBy.id},
@@ -118,7 +120,8 @@
 			#{company},
 			#{pic},
 			#{standards},
-			#{remarks}
+			#{remarks},
+			#{name_py}
 		)
 	</insert>
 	
@@ -131,7 +134,8 @@
 			company = #{company},
 			pic = #{pic},
 			standards = #{standards},
-			remarks = #{remarks}
+			remarks = #{remarks},
+			name_py = #{name_py}
 		WHERE id = #{id}
 	</update>
 	

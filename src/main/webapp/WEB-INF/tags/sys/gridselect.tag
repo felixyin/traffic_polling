@@ -80,10 +80,26 @@
                     }
                     top.layer.close(index);//关闭对话框。
                 },
-                cancel: function (index) {
+                btn2: function (index, layero) {
+                    try {
+                        // 增加取消回调函数
+                        if (gridselectCancel) {
+                            gridselectCancel()(index);
+                        }
+                    } catch (e) {
+                    }
+                },
+                cancel: function (index, layero) {
+                    try {
+                        // 增加取消回调函数
+                        if (gridselectCancel) {
+                            gridselectCancel()(index);
+                        }
+                    } catch (e) {
+                    }
                 }
             });
-        })
+        });
         $("#${id}DelButton").click(function () {
             // 是否限制选择，如果限制，设置为disabled
             if ($("#${id}Button").hasClass("disabled")) {

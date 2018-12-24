@@ -54,6 +54,9 @@
                     return result.name;
                 },
                 list: {
+                    onSelectItemEvent:function(){
+                        return false;
+                    },
                     onChooseEvent: function () {
                         // 验证是否已经存在
                         var size = $('#tpMaintenanceItemList').find(':hidden').filter(function () {
@@ -172,6 +175,16 @@
             }
         }
 
+        // 选择施工物料时，点击取消，清理空行
+        function gridselectCancel() {
+            return function (index) {
+                var preAddRow = $('#tpMaintenanceItemList').children().last();
+                if (!$(preAddRow).find('.my-category-name').val()) {
+                    $(preAddRow).find('.close').trigger('click');
+                }
+            }
+        }
+
         // 地址选择，保存成功后，显示到施工管理表单控件中
         function postionSelectCallback(param) {
             // console.log(param);
@@ -225,8 +238,8 @@
             height: 120px;
         }
 
-        .error {
-            background-color: palevioletred!important;
+        .error > td:last-child {
+            background-color: palevioletred !important;
         }
     </style>
 </head>
@@ -448,10 +461,13 @@
                                     <div class="form-inline" style="height: 42px;line-height: 38px;">
                                         <a class="btn btn-white btn-large"
                                            onclick="addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl);tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;"
-                                           title="新增"><i class="fa fa-plus"></i> 新增物料</a>
+                                           title="新增"><i class="fa fa-plus"></i> 添加物料</a>
                                         <input type="text" class="form-control "
                                                style="width: 450px;display: inline-block!important;"
                                                placeholder="关键词搜索后回车(快速添加方式)" id="my-mp-autocomplete">
+                                        <a class="btn btn-white btn-mini"
+                                           onclick="jp.openViewDialog('物料基础数据管理', '${ctx}/tp/material/tpMaterial', '1000px', '550px');"
+                                           title="新增"><i class="fa fa-plus"></i> 没有找到，去添加基础数据</a>
                                     </div>
                                     <table class="table table-striped table-bordered table-condensed">
                                         <thead>

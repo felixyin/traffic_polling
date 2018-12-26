@@ -199,14 +199,14 @@
         },
 
         /**用户选择框**/
-        openUserSelectDialog: function (isMultiSelect, yesFuc) {
+        openUserSelectDialog: function (isMultiSelect, yesFuc, officeId) {
             top.layer.open({
                 type: 2,
                 area: ['900px', '560px'],
                 title: "选择用户",
                 auto: true,
                 maxmin: true, //开启最大化最小化按钮
-                content: ctx + "/sys/user/userSelect?isMultiSelect=" + isMultiSelect,
+                content: ctx + "/sys/user/userSelect?isMultiSelect=" + isMultiSelect + '&officeId=' + officeId,
                 btn: ['确定', '关闭'],
                 yes: function (index, layero) {
                     var ids = layero.find("iframe")[0].contentWindow.getIdSelections();
@@ -516,12 +516,12 @@
                 btn: ['确定', '关闭'],
                 yes: function (index, layero) {
                     var iframeWin = layero.find('iframe')[0]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
-                    try{
+                    try {
 
-                    if (iframeWin.contentWindow.save)
-                        iframeWin.contentWindow.save(parentObj);//在子窗口定义save方法，负责实际业务逻辑的执行
-                    }catch (e) {
-                       console.error(e);
+                        if (iframeWin.contentWindow.save)
+                            iframeWin.contentWindow.save(parentObj);//在子窗口定义save方法，负责实际业务逻辑的执行
+                    } catch (e) {
+                        console.error(e);
                     }
                 },
                 cancel: function (index, layero) {

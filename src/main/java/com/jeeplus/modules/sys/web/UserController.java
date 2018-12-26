@@ -81,8 +81,9 @@ public class UserController extends BaseController {
 	
 	@RequiresPermissions("sys:user:index")
 	@RequestMapping(value = "userSelect")
-	public String userSelect(boolean isMultiSelect, Model model) {
+	public String userSelect(boolean isMultiSelect,String officeId, Model model) {
 		model.addAttribute("isMultiSelect", isMultiSelect);
+		model.addAttribute("officeId", officeId);
 		return "modules/common/userSelect";
 	}
 

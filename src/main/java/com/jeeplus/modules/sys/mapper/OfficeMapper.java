@@ -7,6 +7,8 @@ import com.jeeplus.core.persistence.TreeMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.sys.entity.Office;
 
+import java.util.List;
+
 /**
  * 机构MAPPER接口
  * @author jeeplus
@@ -16,4 +18,6 @@ import com.jeeplus.modules.sys.entity.Office;
 public interface OfficeMapper extends TreeMapper<Office> {
 	
 	public Office getByCode(String code);
+
+	public List<Office> findBy(Office office);
 }

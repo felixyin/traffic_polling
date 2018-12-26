@@ -15,7 +15,7 @@
 					"animation" : 0,
 					"themes" : { "variant" : "large", "icons":true , "stripes":true},
 					'data' : {
-						"url" : "${ctx}/sys/office/treeData",
+						"url" : "${ctx}/sys/office/treeData?officeId=${officeId}",
 						"dataType" : "json" // needed only if you do not supply JSON headers
 					}
 				},
@@ -79,6 +79,8 @@
 	                ////查询参数,每次调用是会带上这个参数，可自定义                         
 	                queryParams : function(params) {
 	                	var searchParam = $("#searchForm").serializeJSON();
+	                	// searchParam.office={};
+						searchParam['office.id']= '${officeId}';
 	                	searchParam.pageNo = params.limit === undefined? "1" :params.offset/params.limit+1;
 	                	searchParam.pageSize = params.limit === undefined? -1 : params.limit;
 	                	searchParam.orderBy = params.sort === undefined? "" : params.sort+ " "+  params.order;

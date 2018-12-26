@@ -5,10 +5,7 @@ package com.jeeplus.modules.tp.maintenance.web;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -18,6 +15,8 @@ import javax.validation.ConstraintViolationException;
 import com.jeeplus.common.utils.JsonUtils;
 import com.jeeplus.common.utils.text.Charsets;
 import com.jeeplus.modules.iim.entity.LayGroup;
+import com.jeeplus.modules.sys.entity.User;
+import com.jeeplus.modules.sys.utils.UserUtils;
 import com.jeeplus.modules.tp.road.entity.SysArea;
 import com.jeeplus.modules.tp.road.service.SysAreaService;
 import com.jeeplus.modules.tp.road.service.TpRoadService;
@@ -26,6 +25,7 @@ import jsonscn.json2bean.Addresscomponent;
 import jsonscn.json2bean.PositionRootBean;
 import jsonscn.json2bean.Regeocode;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,6 @@ import com.jeeplus.common.config.Global;
 import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
-import com.jeeplus.common.utils.StringUtils;
 import com.jeeplus.common.utils.excel.ExportExcel;
 import com.jeeplus.common.utils.excel.ImportExcel;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
@@ -83,6 +82,9 @@ public class TpMaintenanceController extends BaseController {
     @RequiresPermissions("tp:maintenance:tpMaintenance:list")
     @RequestMapping(value = {"list", ""})
     public String list(TpMaintenance tpMaintenance, Model model) {
+        logger.info("-------------------------------------------info");
+        logger.warn("-------------------------------------------warn");
+        logger.debug("------------------------------------------debug");
         model.addAttribute("tpMaintenance", tpMaintenance);
         return "modules/tp/maintenance/tpMaintenanceList";
     }
@@ -104,6 +106,13 @@ public class TpMaintenanceController extends BaseController {
     @RequiresPermissions(value = {"tp:maintenance:tpMaintenance:view", "tp:maintenance:tpMaintenance:add", "tp:maintenance:tpMaintenance:edit"}, logical = Logical.OR)
     @RequestMapping(value = "form/{mode}")
     public String form(@PathVariable String mode, TpMaintenance tpMaintenance, Model model) {
+        User currentUser = UserUtils.getUser();
+        if (null == tpMaintenance.getSendBy()) {
+            tpMaintenance.setSendBy(currentUser);
+        }
+        if(null == tpMaintenance.getSendDate()){
+            tpMaintenance.setSendDate(new Date());
+        }
         model.addAttribute("tpMaintenance", tpMaintenance);
         model.addAttribute("mode", mode);
         return "modules/tp/maintenance/tpMaintenanceForm";
@@ -251,7 +260,7 @@ public class TpMaintenanceController extends BaseController {
      */
 //	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
     @RequestMapping(value = {"selectPostion"})
-    public String selectPosition(String roadcrossName,String location, Model model) {
+    public String selectPosition(String roadcrossName, String location, Model model) {
         model.addAttribute("roadcrossName", roadcrossName);
         model.addAttribute("location", location);
         return "modules/tp/maintenance/tpSelectPostion";

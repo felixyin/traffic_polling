@@ -23,7 +23,7 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
  * @version 2018-12-22
  */
 public class TpMaintenance extends DataEntity<TpMaintenance> {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String num;		// 任务编号
 	private String jobType;		// 任务类型
@@ -38,9 +38,10 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	private User sendBy;		// 派单人
 	private Date sendDate;		// 派单时间
 	private Office office;		// 施工单位
+	private User leaderBy;		// 施工负责人
 	private Date jobBeginDate;		// 施工开始时间
 	private Date jobEndDate;		// 施工结束时间
-	private Double money;		// 总费用
+	private Double money = 0.0D;		// 总费用
 	private String process;		// 施工过程
 	private String prePic;		// 施工前照片
 	private String middlePic;		// 施工中照片
@@ -54,7 +55,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	private Date beginJobEndDate;		// 开始 施工结束时间
 	private Date endJobEndDate;		// 结束 施工结束时间
 	private List<TpMaintenanceItem> tpMaintenanceItemList = Lists.newArrayList();		// 子表列表
-	
+
 	public TpMaintenance() {
 		super();
 	}
@@ -71,7 +72,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setNum(String num) {
 		this.num = num;
 	}
-	
+
 	@ExcelField(title="任务类型", dictType="job_type", align=2, sort=8)
 	public String getJobType() {
 		return jobType;
@@ -80,7 +81,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setJobType(String jobType) {
 		this.jobType = jobType;
 	}
-	
+
 	@ExcelField(title="任务来源", dictType="job_source", align=2, sort=9)
 	public String getSource() {
 		return source;
@@ -89,7 +90,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	
+
 	@ExcelField(title="经纬度", align=2, sort=10)
 	public String getLocation() {
 		return location;
@@ -98,7 +99,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+
 	@NotNull(message="所属区域不能为空")
 	@ExcelField(title="所属区域", fieldType=SysArea.class, value="area.name", align=2, sort=11)
 	public SysArea getArea() {
@@ -108,7 +109,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setArea(SysArea area) {
 		this.area = area;
 	}
-	
+
 	@NotNull(message="所属路口不能为空")
 	@ExcelField(title="所属路口", fieldType=TpRoadCrossing.class, value="roadcross.name", align=2, sort=12)
 	public TpRoadCrossing getRoadcross() {
@@ -118,7 +119,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setRoadcross(TpRoadCrossing roadcross) {
 		this.roadcross = roadcross;
 	}
-	
+
 	@ExcelField(title="所属路口相对位置", align=2, sort=13)
 	public String getNearestJunction() {
 		return nearestJunction;
@@ -127,7 +128,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setNearestJunction(String nearestJunction) {
 		this.nearestJunction = nearestJunction;
 	}
-	
+
 	@ExcelField(title="所属道路", fieldType=TpRoad.class, value="road.name", align=2, sort=14)
 	public TpRoad getRoad() {
 		return road;
@@ -136,7 +137,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setRoad(TpRoad road) {
 		this.road = road;
 	}
-	
+
 	@ExcelField(title="搜索用地址", align=2, sort=15)
 	public String getAddress() {
 		return address;
@@ -145,7 +146,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	@ExcelField(title="搜索地址相对位置", align=2, sort=16)
 	public String getNearestPoi() {
 		return nearestPoi;
@@ -154,7 +155,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setNearestPoi(String nearestPoi) {
 		this.nearestPoi = nearestPoi;
 	}
-	
+
 	@ExcelField(title="派单人", fieldType=User.class, value="sendBy.name", align=2, sort=17)
 	public User getSendBy() {
 		return sendBy;
@@ -163,7 +164,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setSendBy(User sendBy) {
 		this.sendBy = sendBy;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@ExcelField(title="派单时间", align=2, sort=18)
 	public Date getSendDate() {
@@ -173,17 +174,28 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setSendDate(Date sendDate) {
 		this.sendDate = sendDate;
 	}
-	
+
 	@NotNull(message="施工单位不能为空")
 	@ExcelField(title="施工单位", fieldType=Office.class, value="office.name", align=2, sort=19)
 	public Office getOffice() {
 		return office;
 	}
 
-	public void setOffice(Office office) {
+	public void setOffice(Office office)
+	{
 		this.office = office;
 	}
-	
+
+	@NotNull(message="施工负责人不能为空")
+	@ExcelField(title="施工负责人", fieldType=User.class, value="leaderBy.name", align=2, sort=20)
+	public User getLeaderBy() {
+		return leaderBy;
+	}
+
+	public void setLeaderBy(User leaderBy) {
+		this.leaderBy = leaderBy;
+	}
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="施工开始时间不能为空")
 	@ExcelField(title="施工开始时间", align=2, sort=20)
@@ -194,7 +206,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setJobBeginDate(Date jobBeginDate) {
 		this.jobBeginDate = jobBeginDate;
 	}
-	
+
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@NotNull(message="施工结束时间不能为空")
 	@ExcelField(title="施工结束时间", align=2, sort=21)
@@ -205,7 +217,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setJobEndDate(Date jobEndDate) {
 		this.jobEndDate = jobEndDate;
 	}
-	
+
 	@ExcelField(title="总费用", align=2, sort=22)
 	public Double getMoney() {
 		return money;
@@ -214,7 +226,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setMoney(Double money) {
 		this.money = money;
 	}
-	
+
 	@ExcelField(title="施工过程", align=2, sort=23)
 	public String getProcess() {
 		return process;
@@ -223,7 +235,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setProcess(String process) {
 		this.process = process;
 	}
-	
+
 	@ExcelField(title="施工前照片", align=2, sort=24)
 	public String getPrePic() {
 		return prePic;
@@ -232,7 +244,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setPrePic(String prePic) {
 		this.prePic = prePic;
 	}
-	
+
 	@ExcelField(title="施工中照片", align=2, sort=25)
 	public String getMiddlePic() {
 		return middlePic;
@@ -241,7 +253,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setMiddlePic(String middlePic) {
 		this.middlePic = middlePic;
 	}
-	
+
 	@ExcelField(title="施工后照片", align=2, sort=26)
 	public String getAfterPic() {
 		return afterPic;
@@ -250,7 +262,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setAfterPic(String afterPic) {
 		this.afterPic = afterPic;
 	}
-	
+
 	@ExcelField(title="审批意见", align=2, sort=27)
 	public String getApprove() {
 		return approve;
@@ -259,7 +271,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setApprove(String approve) {
 		this.approve = approve;
 	}
-	
+
 	@ExcelField(title="任务状态", dictType="job_status", align=2, sort=28)
 	public String getStatus() {
 		return status;
@@ -268,7 +280,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	
+
 	public Date getBeginSendDate() {
 		return beginSendDate;
 	}
@@ -276,7 +288,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setBeginSendDate(Date beginSendDate) {
 		this.beginSendDate = beginSendDate;
 	}
-	
+
 	public Date getEndSendDate() {
 		return endSendDate;
 	}
@@ -284,7 +296,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setEndSendDate(Date endSendDate) {
 		this.endSendDate = endSendDate;
 	}
-		
+
 	public Date getBeginJobBeginDate() {
 		return beginJobBeginDate;
 	}
@@ -292,7 +304,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setBeginJobBeginDate(Date beginJobBeginDate) {
 		this.beginJobBeginDate = beginJobBeginDate;
 	}
-	
+
 	public Date getEndJobBeginDate() {
 		return endJobBeginDate;
 	}
@@ -300,7 +312,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setEndJobBeginDate(Date endJobBeginDate) {
 		this.endJobBeginDate = endJobBeginDate;
 	}
-		
+
 	public Date getBeginJobEndDate() {
 		return beginJobEndDate;
 	}
@@ -308,7 +320,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setBeginJobEndDate(Date beginJobEndDate) {
 		this.beginJobEndDate = beginJobEndDate;
 	}
-	
+
 	public Date getEndJobEndDate() {
 		return endJobEndDate;
 	}
@@ -316,7 +328,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setEndJobEndDate(Date endJobEndDate) {
 		this.endJobEndDate = endJobEndDate;
 	}
-		
+
 	public List<TpMaintenanceItem> getTpMaintenanceItemList() {
 		return tpMaintenanceItemList;
 	}
@@ -324,4 +336,6 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	public void setTpMaintenanceItemList(List<TpMaintenanceItem> tpMaintenanceItemList) {
 		this.tpMaintenanceItemList = tpMaintenanceItemList;
 	}
+
+
 }

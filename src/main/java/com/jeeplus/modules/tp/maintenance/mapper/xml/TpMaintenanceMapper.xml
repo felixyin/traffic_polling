@@ -23,6 +23,7 @@
 		a.send_by AS "sendBy.id",
 		a.send_date AS "sendDate",
 		a.office AS "office.id",
+		a.leader_by AS "leaderBy.id",
 		a.job_begin_date AS "jobBeginDate",
 		a.job_end_date AS "jobEndDate",
 		a.money AS "money",
@@ -49,13 +50,16 @@
 				
 				
 		road.name AS "road.name",
+		road.road_type AS "road.roadType",
 				
 				
 				
 		sendBy.name AS "sendBy.name",
 				
 				
-		office.name AS "office.name"
+		office.name AS "office.name",
+
+		leaderBy.name AS "leaderBy.name"
 	</sql>
 	
 	<sql id="tpMaintenanceJoins">
@@ -66,6 +70,7 @@
 		LEFT JOIN tp_road road ON road.id = a.road_id
 		LEFT JOIN sys_user sendBy ON sendBy.id = a.send_by
 		LEFT JOIN sys_office office ON office.id = a.office
+		LEFT JOIN sys_user leaderBy ON leaderBy.id = a.leader_by
 	</sql>
 	
     <resultMap type="TpMaintenance" id="TpMaintenanceResult" autoMapping="true">
@@ -126,6 +131,9 @@
 			</if>
 			<if test="office != null and office.id != null and office.id != ''">
 				AND a.office = #{office.id}
+			</if>
+			<if test="leaderBy != null and leaderBy.id != null and leaderBy.id != ''">
+				AND a.leader_by = #{leaderBy.id}
 			</if>
 			<if test="beginJobBeginDate != null and endJobBeginDate != null ">
 				AND a.job_begin_date BETWEEN #{beginJobBeginDate} AND #{endJobBeginDate}
@@ -188,6 +196,7 @@
 			send_by,
 			send_date,
 			office,
+			leader_by,
 			job_begin_date,
 			job_end_date,
 			money,
@@ -218,6 +227,7 @@
 			#{sendBy.id},
 			#{sendDate},
 			#{office.id},
+			#{leaderBy.id},
 			#{jobBeginDate},
 			#{jobEndDate},
 			#{money},
@@ -248,6 +258,7 @@
 			send_by = #{sendBy.id},
 			send_date = #{sendDate},
 			office = #{office.id},
+			leader_by = #{leaderBy.id},
 			job_begin_date = #{jobBeginDate},
 			job_end_date = #{jobEndDate},
 			money = #{money},

@@ -123,7 +123,29 @@
 		WHERE a.del_flag = #{DEL_FLAG_NORMAL} AND a.parent_ids LIKE #{parentIds}
 		ORDER BY a.code
 	</select>
-	
+
+
+	<select id="findBy" resultType="Office">
+		SELECT
+		<include refid="officeColumns"/>
+		FROM sys_office a
+		<include refid="officeJoins"/>
+		WHERE a.del_flag = #{DEL_FLAG_NORMAL}
+		<if test="id != null and id != ''">
+			AND(
+                a.id = #{id} OR a.parent_ids LIKE
+                <if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+                <if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+                <if test="dbName == 'mssql'">'%'+#{id}+'%'</if>
+			)
+		</if>
+        <if test="type != null and type != ''">
+			AND a.type = #{type}
+        </if>
+		ORDER BY a.code
+	</select>
+
+
 	<insert id="insert">
 		INSERT INTO sys_office(
 			id, 

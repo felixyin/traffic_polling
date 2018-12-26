@@ -7,226 +7,10 @@
     <!-- SUMMERNOTE -->
     <%@include file="/webpage/include/summernote.jsp" %>
     <link href="${ctxStatic}/plugin/jquery-autocomplete/easy-autocomplete.min.css" rel="stylesheet">
-    <script src="${ctxStatic}/plugin/jquery-autocomplete/jquery.easy-autocomplete.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            jp.ajaxForm("#inputForm", function (data) {
-                if (data.success) {
-                    jp.success(data.msg);
-                    jp.go("${ctx}/tp/maintenance/tpMaintenance");
-                } else {
-                    jp.error(data.msg);
-                    $("#inputForm").find("button:submit").button("reset");
-                }
-            });
 
-            $('#sendDate').datetimepicker({
-                format: "YYYY-MM-DD HH:mm:ss"
-            });
-            $('#jobBeginDate').datetimepicker({
-                format: "YYYY-MM-DD HH:mm:ss"
-            });
-            $('#jobEndDate').datetimepicker({
-                format: "YYYY-MM-DD HH:mm:ss"
-            });
-            //富文本初始化
-            $('#process').summernote({
-                height: 300,
-                lang: 'zh-CN',
-                callbacks: {
-                    onChange: function (contents, $editable) {
-                        $("input[name='process']").val($('#process').summernote('code'));//取富文本的值
-                    }
-                }
-            });
-
-
-            $(document).on("keyup", ".my-count,.my-price", calMoney);
-
-            // 自动完成物料零件，回车自动创建一行
-            var _mp_id;
-            $("#my-mp-autocomplete").easyAutocomplete({
-                url: function (query) {
-                    return '${ctx}/tp/material/tpMaterialPart/autocomplete?query=' + query;
-                },
-                getValue: function (result) {
-                    _mp_id = result.code;
-                    return result.name;
-                },
-                list: {
-                    onSelectItemEvent:function(){
-                        return false;
-                    },
-                    onChooseEvent: function () {
-                        // 验证是否已经存在
-                        var size = $('#tpMaintenanceItemList').find(':hidden').filter(function () {
-                            return $(this).val() == _mp_id;
-                        }).size();
-                        if (size > 0) {
-                            jp.warning('您已经添加过这个物料!');
-                            $('#my-mp-autocomplete').select();
-                            return false;
-                        }
-
-                        // 获取物料信息，自动填写表单
-                        jp.get("${ctx}/tp/material/tpMaterialPart/getById?id=" + _mp_id, function (dataRow) {
-                            if (dataRow) {
-                                addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl, {}, true);
-                                var domRowId = '#tpMaintenanceItemList' + tpMaintenanceItemRowIdx;
-                                var smp = $(domRowId).find('.my-select-material-part');
-                                smp.val(dataRow['name']);
-                                smp.parent().prev(':hidden').val(dataRow['id']);
-                                $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
-                                $(domRowId).find('.my-unit').val(dataRow['unit']);
-                                $(domRowId).find('.my-price').val(dataRow['price']);
-                                tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;
-
-                                jp.success('增加成功，您可以快速变换输入，增加下一个物料');
-                                var st = setTimeout(function () {
-                                    $('#my-mp-autocomplete').val('').focus();
-                                    clearTimeout(st);
-                                }, 300)
-                            } else {
-                                jp.error('服务器发生错误，快速添加方式不可用,请使用左侧新增物料按钮');
-                            }
-                        });
-                    }
-                }
-            });
-        });
-
-        function addRow(list, idx, tpl, row, notAutoOpen) {
-            var $row = $(Mustache.render(tpl, {
-                idx: idx, delBtn: true, row: row
-            }));
-            $(list).append($row);
-            $(list + idx).find("select").each(function () {
-                $(this).val($(this).attr("data-value"));
-            });
-            $(list + idx).find("input[type='checkbox'], input[type='radio']").each(function () {
-                var ss = $(this).attr("data-value").split(',');
-                for (var i = 0; i < ss.length; i++) {
-                    if ($(this).val() == ss[i]) {
-                        $(this).attr("checked", "checked");
-                    }
-                }
-            });
-            $(list + idx).find(".form_datetime").each(function () {
-                $(this).datetimepicker({
-                    format: "YYYY-MM-DD HH:mm:ss"
-                });
-            });
-            // 自动打开选择物料零件窗口
-            if (!notAutoOpen) $row.find('.my-select-material-part').trigger('click');
-            // $row.find('.my-select-material-part').click();
-        }
-
-        function delRow(obj, prefix) {
-            var id = $(prefix + "_id");
-            var delFlag = $(prefix + "_delFlag");
-            if (id.val() == "") {
-                $(obj).parent().parent().remove();
-            } else if (delFlag.val() == "0") {
-                delFlag.val("1");
-                $(obj).html("&divide;").attr("title", "撤销删除");
-                $(obj).parent().parent().addClass("error");
-            } else if (delFlag.val() == "1") {
-                delFlag.val("0");
-                $(obj).html("&times;").attr("title", "删除");
-                $(obj).parent().parent().removeClass("error");
-            }
-            calMoney();
-        }
-
-
-        // 合计金额方法
-        function calMoney() {
-            var allMoney = 0;
-            var context = $('.close').filter(function () {
-                return $(this).attr('title') == '删除';
-            }).parents('tr');
-            $('.my-count', context).each(function (idx, ele) {
-                var count = $(ele).val();
-                var row = $(ele).parents('tr');
-                var price = row.find('.my-price').val();
-                if (count && price) {
-                    var result = parseInt(count) * parseInt(price);
-                    row.find('.my-money').val(result);
-                    allMoney += result;
-                } else {
-                    row.find('.my-money').val(0);
-                }
-            });
-            $('#money').val(allMoney);
-        }
-
-        // 施工物料选择回调函数
-        function gridselectChange() { // 必须采用闭包的方式
-            return function (id, items) {
-                var domRowId = $('#' + id.split('_')[0]).get(0);
-                var dataRow = items[0]; //单选
-                if (domRowId && dataRow) {
-                    $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
-                    $(domRowId).find('.my-unit').val(dataRow['unit']);
-                    $(domRowId).find('.my-price').val(dataRow['price']);
-                    // 修改零件，可能会引起金额变化，需要重新计算
-                    calMoney();
-                }
-            }
-        }
-
-        // 选择施工物料时，点击取消，清理空行
-        function gridselectCancel() {
-            return function (index) {
-                var preAddRow = $('#tpMaintenanceItemList').children().last();
-                if (!$(preAddRow).find('.my-category-name').val()) {
-                    $(preAddRow).find('.close').trigger('click');
-                }
-            }
-        }
-
-        // 地址选择，保存成功后，显示到施工管理表单控件中
-        function postionSelectCallback(param) {
-            // console.log(param);
-            if (param && param.tpMaintenance) {
-                var tm = param.tpMaintenance;
-
-                var location = tm.location;
-                $('#location').val(location);
-
-                var area = tm.area;
-                $('#areaName').val(area.name);
-                $('#areaId').val(area.id);
-
-                var roadcross = tm.roadcross;
-                $('#roadcrossName').val(roadcross.name);
-                $('#roadcrossId').val(roadcross.id);
-
-                var nearestJunction = tm.nearestJunction;
-                $('#nearestJunction').val(nearestJunction);
-
-                var road = tm.road;
-                $('#roadName').val(road.name);
-                $('#roadId').val(road.id);
-
-                var address = tm.address;
-                $('#address').val(address);
-
-                var nearestPoi = tm.nearestPoi;
-                $('#nearestPoi').val(nearestPoi);
-            }
-        }
-
-        // 打开选择详细地址对话框
-        function openSelectPostionDialog() {
-            var location = $('#location').val();
-            var roadcrossName = $('#roadcrossName').val();
-            jp.openChildDialog("编辑位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
-        }
-    </script>
     <style type="text/css">
         .panel-body {
-            width: 95% !important;
+            width: 97% !important;
         }
 
         .easy-autocomplete {
@@ -259,24 +43,16 @@
                                action="${ctx}/tp/maintenance/tpMaintenance/save" method="post" class="form-horizontal">
                         <form:hidden path="id"/>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>任务编号：</label>
-                            <div class="col-sm-10">
-                                <form:input path="num" htmlEscape="false" class="form-control required"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务类型：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <form:select path="jobType" class="form-control required">
                                     <form:option value="" label=""/>
                                     <form:options items="${fns:getDictList('job_type')}" itemLabel="label"
                                                   itemValue="value" htmlEscape="false"/>
                                 </form:select>
                             </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务来源：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <form:select path="source" class="form-control required">
                                     <form:option value="" label=""/>
                                     <form:options items="${fns:getDictList('job_source')}" itemLabel="label"
@@ -286,114 +62,128 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>选择位置：</label>
-                            <div class="col-sm-10">
-                                <input type="button" class="btn btn-primary btn-block  btn-parsley"
-                                       data-loading-text="正在计算..." value="选择地点"
-                                       onclick="openSelectPostionDialog();"/>
+                            <div class="col-sm-4">
+                                <button type="button" class="btn btn-primary btn-block  btn-parsley"
+                                        data-loading-text="正在计算..."
+                                        onclick="openSelectPostionDialog();"/>
+                                <i class="fa fa-map-marker "></i>
+                                    ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
+                                </button>
+                            </div>
+                            <label class="col-sm-2 control-label">详细位置信息：</label>
+                            <div class="col-sm-4">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-primary active">
+                                        <input type="radio" id="_addressDetail_hide" name="_addressDetail" autocomplete="off" value="0"
+                                               checked
+                                               onchange="$('#my-address-detail').slideUp();"> 合 起
+                                    </label>
+                                    <label class="btn btn-primary">
+                                        <input type="radio" id="_addressDetail_show" name="_addressDetail" autocomplete="off" value="1"
+                                               onchange="$('#my-address-detail').slideDown();"> 展 开
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>经纬度：</label>
-                            <div class="col-sm-10">
-                                <form:input path="location" htmlEscape="false" class="form-control required"/>
+
+                        <div id="my-address-detail" style="display: none;">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><font color="red">*</font>所属区域：</label>
+                                <div class="col-sm-4">
+                                    <sys:treeselect id="area" name="area.id" value="${tpMaintenance.area.id}"
+                                                    labelName="area.name" labelValue="${tpMaintenance.area.name}"
+                                                    title="区域" url="/sys/area/treeData" cssClass="form-control required"
+                                                    allowClear="true" notAllowSelectParent="true"/>
+                                </div>
+                                <label class="col-sm-2 control-label"><font color="red">*</font>经纬度：</label>
+                                <div class="col-sm-4">
+                                    <form:input path="location" readonly="true" htmlEscape="false"
+                                                class="form-control required"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>所属区域：</label>
-                            <div class="col-sm-10">
-                                <sys:treeselect id="area" name="area.id" value="${tpMaintenance.area.id}"
-                                                labelName="area.name" labelValue="${tpMaintenance.area.name}"
-                                                title="区域" url="/sys/area/treeData" cssClass="form-control required"
-                                                allowClear="true" notAllowSelectParent="true"/>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"><font color="red">*</font>所属路口：</label>
+                                <div class="col-sm-4">
+                                    <sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross"
+                                                    name="roadcross.id" value="${tpMaintenance.roadcross.id}"
+                                                    labelName="roadcross.name"
+                                                    labelValue="${tpMaintenance.roadcross.name}"
+                                                    title="选择所属路口" cssClass="form-control required"
+                                                    fieldLabels="路口名称|所属区域|所属街道" fieldKeys="name|sarea.name|township"
+                                                    searchLabels="路口名称|所属区域"
+                                                    searchKeys="name|sarea.name"></sys:gridselect>
+                                </div>
+                                <label class="col-sm-2 control-label"><font color="red">*</font>所属路口相对位置：</label>
+                                <div class="col-sm-4">
+                                    <form:input path="nearestJunction" htmlEscape="false"
+                                                class="form-control required"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>所属路口：</label>
-                            <div class="col-sm-10">
-                                <sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross"
-                                                name="roadcross.id" value="${tpMaintenance.roadcross.id}"
-                                                labelName="roadcross.name" labelValue="${tpMaintenance.roadcross.name}"
-                                                title="选择所属路口" cssClass="form-control required"
-                                                fieldLabels="路口名称|所属区域|所属街道" fieldKeys="name|sarea.name|township"
-                                                searchLabels="路口名称|所属区域" searchKeys="name|sarea.name"></sys:gridselect>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">附近道路：</label>
+                                <div class="col-sm-4">
+                                    <sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id"
+                                                    value="${tpMaintenance.road.id}" labelName="road.name"
+                                                    labelValue="${tpMaintenance.road.name}"
+                                                    title="选择附近道路" cssClass="form-control " fieldLabels="道路名称|所属区域"
+                                                    fieldKeys="name|sarea.name" searchLabels="道路名称|所属区域"
+                                                    searchKeys="name|sarea.name"></sys:gridselect>
+                                </div>
+                                <label class="col-sm-2 control-label">道路等级<font color="#b8860b">(尽量填写)</font>：</label>
+                                <div class="col-sm-4">
+                                    <form:select path="road.roadType" class="form-control">
+                                        <form:option value="" label=""/>
+                                        <form:options items="${fns:getDictList('road_type')}" itemLabel="label"
+                                                      itemValue="value" htmlEscape="false"/>
+                                    </form:select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>所属路口相对位置：</label>
-                            <div class="col-sm-10">
-                                <form:input path="nearestJunction" htmlEscape="false" class="form-control required"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">所属道路：</label>
-                            <div class="col-sm-10">
-                                <sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id"
-                                                value="${tpMaintenance.road.id}" labelName="road.name"
-                                                labelValue="${tpMaintenance.road.name}"
-                                                title="选择所属道路" cssClass="form-control " fieldLabels="道路名称|所属区域"
-                                                fieldKeys="name|sarea.name" searchLabels="道路名称|所属区域"
-                                                searchKeys="name|sarea.name"></sys:gridselect>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">搜索用地址：</label>
-                            <div class="col-sm-10">
-                                <form:input path="address" htmlEscape="false" class="form-control "/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">搜索地址相对位置：</label>
-                            <div class="col-sm-10">
-                                <form:input path="nearestPoi" htmlEscape="false" class="form-control "/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">派单人：</label>
-                            <div class="col-sm-10">
-                                <sys:userselect id="sendBy" name="sendBy.id" value="${tpMaintenance.sendBy.id}"
-                                                labelName="sendBy.name" labelValue="${tpMaintenance.sendBy.name}"
-                                                cssClass="form-control "/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">派单时间：</label>
-                            <div class="col-sm-10">
-                                <div class='input-group form_datetime' id='sendDate'>
-                                    <input type='text' name="sendDate" class="form-control "
-                                           value="<fmt:formatDate value="${tpMaintenance.sendDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
-                                    <span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">详细地址：</label>
+                                <div class="col-sm-4">
+                                    <form:input path="address" htmlEscape="false" class="form-control "/>
+                                </div>
+
+                                <label class="col-sm-2 control-label">详细地址相对位置：</label>
+                                <div class="col-sm-4">
+                                    <form:input path="nearestPoi" htmlEscape="false" class="form-control "/>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>施工单位：</label>
-                            <div class="col-sm-10">
-                                <sys:treeselect id="office" name="office.id" value="${tpMaintenance.office.id}"
-                                                labelName="office.name" labelValue="${tpMaintenance.office.name}"
-                                                title="部门" url="/sys/office/treeData?type=2"
-                                                cssClass="form-control required" allowClear="true"
-                                                notAllowSelectParent="true"/>
+                            <label class="col-sm-2 control-label">派单人：</label>
+                            <div class="col-sm-4">
+                                <sys:userselect id="sendBy" name="sendBy.id" value="${tpMaintenance.sendBy.id}"
+                                                labelName="sendBy.name" labelValue="${tpMaintenance.sendBy.name}"
+                                                cssClass="form-control "/>
+                            </div>
+                            <label class="col-sm-2 control-label">派单时间：</label>
+                            <div class="col-sm-4">
+                                <div class='input-group form_datetime' id='sendDate'>
+                                    <input type='text' name="sendDate" class="form-control " autocomplete="off"
+                                           value="<fmt:formatDate value="${tpMaintenance.sendDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工开始时间：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <div class='input-group form_datetime' id='jobBeginDate'>
-                                    <input type='text' name="jobBeginDate" class="form-control required"
+                                    <input type='text' name="jobBeginDate" class="form-control required" autocomplete="off"
                                            value="<fmt:formatDate value="${tpMaintenance.jobBeginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
                                     <span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
 							</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工结束时间：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <div class='input-group form_datetime' id='jobEndDate'>
-                                    <input type='text' name="jobEndDate" class="form-control required"
+                                    <input type='text' name="jobEndDate" class="form-control required" autocomplete="off"
                                            value="<fmt:formatDate value="${tpMaintenance.jobEndDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
                                     <span class="input-group-addon">
 								<span class="glyphicon glyphicon-calendar"></span>
@@ -402,9 +192,19 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">总费用：</label>
-                            <div class="col-sm-10">
-                                <form:input path="money" htmlEscape="false" class="form-control  isFloatGtZero"/>
+                            <label class="col-sm-2 control-label"><font color="red">*</font>施工单位：</label>
+                            <div class="col-sm-4">
+                                <sys:treeselect id="office" name="office.id" value="${tpMaintenance.office.id}"
+                                                labelName="office.name" labelValue="${tpMaintenance.office.name}"
+                                                title="施工单位" url="/sys/office/myTreeData?type=3"
+                                                cssClass="form-control required"  allowClear="true"
+                                                notAllowSelectParent="true"/>
+                            </div>
+                            <label class="col-sm-2 control-label"><font color="red">*</font>施工负责人：</label>
+                            <div class="col-sm-4">
+                                <sys:userselect id="leaderBy" name="leaderBy.id" value="${tpMaintenance.leaderBy.id}"
+                                                labelName="leaderBy.name" labelValue="${tpMaintenance.leaderBy.name}"
+                                                cssClass="form-control required" officeIptId="officeId"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -418,43 +218,49 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">施工前照片：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-2">
                                 <sys:fileUpload path="prePic" value="${tpMaintenance.prePic}" type="file"
                                                 uploadPath="/tp/maintenance/tpMaintenance"/>
                             </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label">施工中照片：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-2">
                                 <sys:fileUpload path="middlePic" value="${tpMaintenance.middlePic}" type="file"
                                                 uploadPath="/tp/maintenance/tpMaintenance"/>
                             </div>
-                        </div>
-                        <div class="form-group">
                             <label class="col-sm-2 control-label">施工后照片：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-2">
                                 <sys:fileUpload path="afterPic" value="${tpMaintenance.afterPic}" type="file"
                                                 uploadPath="/tp/maintenance/tpMaintenance"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">审批意见：</label>
-                            <div class="col-sm-10">
+                            <div class="col-sm-4">
                                 <form:textarea path="approve" htmlEscape="false" rows="4" class="form-control "/>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">任务状态：</label>
-                            <div class="col-sm-10">
-                                <form:radiobuttons path="status" items="${fns:getDictList('job_status')}"
-                                                   itemLabel="label" itemValue="value" htmlEscape="false"
-                                                   class="i-checks "/>
-                            </div>
+                                <%--<label class="col-sm-2 control-label">物料总成本：</label>--%>
+                                <%--<div class="col-sm-4">--%>
+                                <%--<input id="money" name="tpMaintenance.money" value="${tpMaintenance.money}" type="number" disabled="disabled"  readonly="readonly" htmlEscape="false" class="form-control  isFloatGtZero"/>--%>
+                                <%--</div>--%>
+                                <%--<br>--%>
+                                <%--<br>--%>
+                                <%--<label class="col-sm-2 control-label">任务状态：</label>--%>
+                                <%--<div class="col-sm-4">--%>
+                                <%--<form:radiobuttons path="status" items="${fns:getDictList('job_status')}"--%>
+                                <%--itemLabel="label" itemValue="value" htmlEscape="false"--%>
+                                <%--class="i-checks "/>--%>
+                                <%--</div>--%>
                         </div>
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">施工物料明细：</a>
                                 </li>
+                                <div style="float:right;padding-top:2px;padding-right:15px;line-height: 40px;">
+                                    <label style="display:inline">物料总成本：</label>
+                                    <span id="my-money-span">${tpMaintenance.money}元</span>
+                                    <input id="money" name="tpMaintenance.money" value="0" type="hidden"
+                                           class="form-control  isFloatGtZero">
+                                </div>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane fade in  active">
@@ -467,7 +273,14 @@
                                                placeholder="关键词搜索后回车(快速添加方式)" id="my-mp-autocomplete">
                                         <a class="btn btn-white btn-mini"
                                            onclick="jp.openViewDialog('物料基础数据管理', '${ctx}/tp/material/tpMaterial', '1000px', '550px');"
-                                           title="新增"><i class="fa fa-plus"></i> 没有找到，去添加基础数据</a>
+                                           title="新增"><i class="fa fa-plus"></i> 先去添加基础数据</a>
+                                            <%--<textarea id="___mptext___" style="display: none;"></textarea>--%>
+                                        <button id="my-copy-btn" class="btn btn-primary btn-mini" type="button"
+                                                style="float: right;margin-top: 5px;" data-clipboard-text="#___mptext___">
+                                            复制物料明细为文本
+                                        </button>
+                                            <%--<button id="my-copy-btn-work" type="button" style="display: none"--%>
+                                            <%--></button>--%>
                                     </div>
                                     <table class="table table-striped table-bordered table-condensed">
                                         <thead>
@@ -503,11 +316,11 @@
 					</td>
 
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_category" name="tpMaintenanceItemList[{{idx}}].category" type="text" value="{{row.category}}"    class="form-control my-category-name"/>
+						<input id="tpMaintenanceItemList{{idx}}_category" readonly="readonly" name="tpMaintenanceItemList[{{idx}}].category" type="text" value="{{row.category}}"    class="form-control my-category-name"/>
 					</td>
 
 					<td>
-						<select id="tpMaintenanceItemList{{idx}}_unit" name="tpMaintenanceItemList[{{idx}}].unit" data-value="{{row.unit}}" class="form-control m-b  required my-unit">
+						<select id="tpMaintenanceItemList{{idx}}_unit" readonly="readonly" name="tpMaintenanceItemList[{{idx}}].unit" data-value="{{row.unit}}" class="form-control m-b  required my-unit">
 							<option value=""></option>
 							<c:forEach items="${fns:getDictList('material_unit')}" var="dict">
 								<option value="${dict.value}">${dict.label}</option>
@@ -516,26 +329,26 @@
 					</td>
 
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_price" name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"    class="form-control my-price"/>
+						<input id="tpMaintenanceItemList{{idx}}_price" type="number" autocomplete="off" name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"    class="form-control my-price"/>
 					</td>
 					
 					
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_count" name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"    class="form-control required isIntGtZero my-count"/>
+						<input id="tpMaintenanceItemList{{idx}}_count"  type="number" autocomplete="off" name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"    class="form-control required isIntGtZero my-count"/>
 					</td>
 					
 					
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_money" name="tpMaintenanceItemList[{{idx}}].money" type="text" value="{{row.money}}"    class="form-control my-money"/>
+						<input id="tpMaintenanceItemList{{idx}}_money" readonly="readonly" name="tpMaintenanceItemList[{{idx}}].money" type="text" value="{{row.money}}"    class="form-control my-money"/>
 					</td>
 					
 					
 					<td>
-						<input id="tpMaintenanceItemList{{idx}}_remarks" name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
+						<input id="tpMaintenanceItemList{{idx}}_remarks" autocomplete="off" name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
 					</td>
 					
 					<td class="text-center" width="10">
-						{{#delBtn}}<span class="close" onclick="delRow(this, '#tpMaintenanceItemList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
+						{{#delBtn}}<span class="close btn my-close" data-toggle="tooltip" data-placement="right"  onclick="delRow(this, '#tpMaintenanceItemList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
 					</td>
 				</tr>//-->
                                     </script>
@@ -571,5 +384,278 @@
         </div>
     </div>
 </div>
+<script src="${ctxStatic}/plugin/clipboard/clipboard.min.js"></script>
+<script src="${ctxStatic}/plugin/jquery-autocomplete/jquery.easy-autocomplete.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        jp.ajaxForm("#inputForm", function (data) {
+            if (data.success) {
+                jp.success(data.msg);
+                jp.go("${ctx}/tp/maintenance/tpMaintenance");
+            } else {
+                jp.error(data.msg);
+                $("#inputForm").find("button:submit").button("reset");
+            }
+        });
+
+        // 日期显示和，时间前后比较验证
+        var sendDateDP = $('#sendDate').datetimepicker({format: "YYYY-MM-DD HH:mm:ss"});
+        var jobBeginDateDP = $('#jobBeginDate').datetimepicker({format: "YYYY-MM-DD HH:mm:ss"});
+        var jobEndDateDP = $('#jobEndDate').datetimepicker({format: "YYYY-MM-DD HH:mm:ss"});
+
+        //动态设置最小值和最大值
+        sendDateDP.on('dp.change', function (e) {
+            jobBeginDateDP.data('DateTimePicker').minDate(e.date);
+        });
+        jobBeginDateDP.on('dp.change', function (e) {
+            jobEndDateDP.data('DateTimePicker').minDate(e.date);
+            sendDateDP.data('DateTimePicker').maxDate(e.date);
+        });
+        jobEndDateDP.on('dp.change', function (e) {
+            jobBeginDateDP.data('DateTimePicker').maxDate(e.date);
+        });
+
+        //富文本初始化
+        $('#process').summernote({
+            height: 300,
+            lang: 'zh-CN',
+            callbacks: {
+                onChange: function (contents, $editable) {
+                    $("input[name='process']").val($('#process').summernote('code'));//取富文本的值
+                }
+            }
+        });
+
+        // 价格计算
+        $(document).on("keyup", ".my-count,.my-price", calMoney);
+
+        // 自动完成物料零件，回车自动创建一行
+        var _mp_id;
+        $("#my-mp-autocomplete").easyAutocomplete({
+            url: function (query) {
+                return '${ctx}/tp/material/tpMaterialPart/autocomplete?query=' + query;
+            },
+            getValue: function (result) {
+                _mp_id = result.code;
+                return result.name;
+            },
+            list: {
+                onSelectItemEvent: function () {
+                    return false;
+                },
+                onChooseEvent: function () {
+                    // 验证是否已经存在
+                    var size = $('#tpMaintenanceItemList').find(':hidden').filter(function () {
+                        return $(this).val() == _mp_id;
+                    }).size();
+                    if (size > 0) {
+                        jp.warning('您已经添加过这个物料!');
+                        $('#my-mp-autocomplete').select();
+                        return false;
+                    }
+
+                    // 获取物料信息，自动填写表单
+                    jp.get("${ctx}/tp/material/tpMaterialPart/getById?id=" + _mp_id, function (dataRow) {
+                        if (dataRow) {
+                            addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl, {}, true);
+                            var domRowId = '#tpMaintenanceItemList' + tpMaintenanceItemRowIdx;
+                            var smp = $(domRowId).find('.my-select-material-part');
+                            smp.val(dataRow['name']);
+                            smp.parent().prev(':hidden').val(dataRow['id']);
+                            $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
+                            $(domRowId).find('.my-unit').val(dataRow['unit']);
+                            $(domRowId).find('.my-price').val(dataRow['price']);
+                            tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;
+
+                            jp.success('增加成功，您可以快速变换输入，增加下一个物料');
+                            var st = setTimeout(function () {
+                                $('#my-mp-autocomplete').val('').focus();
+                                clearTimeout(st);
+                            }, 300)
+                        } else {
+                            jp.error('服务器发生错误，快速添加方式不可用,请使用左侧新增物料按钮');
+                        }
+                    });
+                }
+            }
+        });
+
+        // $('#jobType').change(function () {
+        //     var v = $(this).val();
+        //     if (v === '1') { // 信号灯
+        //         $('#roadName').parents('.col-sm-4').prev().text('附近道路：');
+        //     } else {
+        //         $('#roadName').parents('.col-sm-4').prev().text('所属道路：');
+        //
+        //     }
+        // });
+
+
+        // 生成文本，复制到剪贴板
+        var clipboard = new ClipboardJS('#my-copy-btn');
+        clipboard.on('success', function (e) {
+            console.info('Action:', e.action);
+            console.info('Text:', e.text);
+            console.info('Trigger:', e.trigger);
+            if (e.text) {
+                jp.success('已经复制到剪贴板：<br/>' + e.text);
+            }
+            // e.clearSelection();
+            // clipboard.destroy();
+        });
+        $('#my-copy-btn').click(function () {
+            var rows = $('#tpMaintenanceItemList').children('tr').filter(function (i, n) {
+                return $(n).find('.my-close').attr('title') === '删除';
+            });
+            var text = $.map(rows, function (n, i) {
+                var row = $(n);
+                var name = row.find('.my-select-material-part').val();
+                var count = row.find('.my-count').val();
+                var unit = row.find('.my-unit').find("option:selected").text();
+                return name + '用了' + count + unit;
+            }).join('，');
+            $(this).attr('data-clipboard-text', '使用物料如下：\n' + text + '。'); // 设置要复制的文本
+        });
+
+
+    });
+
+    function addRow(list, idx, tpl, row, notAutoOpen) {
+        var $row = $(Mustache.render(tpl, {
+            idx: idx, delBtn: true, row: row
+        }));
+        $(list).append($row);
+        $(list + idx).find("select").each(function () {
+            $(this).val($(this).attr("data-value"));
+        });
+        $(list + idx).find("input[type='checkbox'], input[type='radio']").each(function () {
+            var ss = $(this).attr("data-value").split(',');
+            for (var i = 0; i < ss.length; i++) {
+                if ($(this).val() == ss[i]) {
+                    $(this).attr("checked", "checked");
+                }
+            }
+        });
+        $(list + idx).find(".form_datetime").each(function () {
+            $(this).datetimepicker({
+                format: "YYYY-MM-DD HH:mm:ss"
+            });
+        });
+        // 自动打开选择物料零件窗口
+        if (!notAutoOpen) $row.find('.my-select-material-part').trigger('click');
+        // $row.find('.my-select-material-part').click();
+    }
+
+    function delRow(obj, prefix) {
+        var id = $(prefix + "_id");
+        var delFlag = $(prefix + "_delFlag");
+        if (id.val() == "") {
+            $(obj).parent().parent().remove();
+        } else if (delFlag.val() == "0") {
+            delFlag.val("1");
+            $(obj).html("&divide;").attr("title", "撤销删除");
+            $(obj).parent().parent().addClass("error");
+        } else if (delFlag.val() == "1") {
+            delFlag.val("0");
+            $(obj).html("&times;").attr("title", "删除");
+            $(obj).parent().parent().removeClass("error");
+        }
+        calMoney();
+    }
+
+
+    // 合计金额方法
+    function calMoney() {
+        var allMoney = 0;
+        var context = $('.close').filter(function () {
+            return $(this).attr('title') == '删除';
+        }).parents('tr');
+        $('.my-count', context).each(function (idx, ele) {
+            var count = $(ele).val();
+            var row = $(ele).parents('tr');
+            var price = row.find('.my-price').val();
+            if (count && price) {
+                var result = parseInt(count) * parseInt(price);
+                row.find('.my-money').val(result);
+                allMoney += result;
+            } else {
+                row.find('.my-money').val(0);
+            }
+        });
+        $('#money').val(allMoney);
+        $('#my-money-span').text(allMoney + "¥");
+    }
+
+    // 施工物料选择回调函数
+    function gridselectChange() { // 必须采用闭包的方式
+        return function (id, items) {
+            var domRowId = $('#' + id.split('_')[0]).get(0);
+            var dataRow = items[0]; //单选
+            if (domRowId && dataRow) {
+                $(domRowId).find('.my-category-name').val(dataRow['material']['name']);
+                $(domRowId).find('.my-unit').val(dataRow['unit']);
+                $(domRowId).find('.my-price').val(dataRow['price']);
+                // 修改零件，可能会引起金额变化，需要重新计算
+                calMoney();
+            }
+        }
+    }
+
+    // 选择施工物料时，点击取消，清理空行
+    function gridselectCancel() {
+        return function (index) {
+            var preAddRow = $('#tpMaintenanceItemList').children().last();
+            if (!$(preAddRow).find('.my-category-name').val()) {
+                $(preAddRow).find('.close').trigger('click');
+            }
+        }
+    }
+
+    // 地址选择，保存成功后，显示到施工管理表单控件中
+    function postionSelectCallback(param) {
+        // console.log(param);
+        if (param && param.tpMaintenance) {
+            var tm = param.tpMaintenance;
+
+            var location = tm.location;
+            $('#location').val(location);
+
+            var area = tm.area;
+            $('#areaName').val(area.name);
+            $('#areaId').val(area.id);
+
+            var roadcross = tm.roadcross;
+            $('#roadcrossName').val(roadcross.name);
+            $('#roadcrossId').val(roadcross.id);
+
+            var nearestJunction = tm.nearestJunction;
+            $('#nearestJunction').val(nearestJunction);
+
+            var road = tm.road;
+            $('#roadName').val(road.name);
+            $('#roadId').val(road.id);
+
+            $('#road\\.roadType').val(road.roadType);
+
+            var address = tm.address;
+            $('#address').val(address);
+
+            var nearestPoi = tm.nearestPoi;
+            $('#nearestPoi').val(nearestPoi);
+
+            //    打开详细地址信息
+            $('#_addressDetail_show').trigger('click');
+        }
+    }
+
+    // 打开选择详细地址对话框
+    function openSelectPostionDialog() {
+        var location = $('#location').val();
+        var roadcrossName = $('#roadcrossName').val();
+        jp.openChildDialog("编辑位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
+    }
+
+
+</script>
 </body>
 </html>

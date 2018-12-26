@@ -186,7 +186,11 @@
 	</select>
 
     <select id="autocomplete" resultType="java.util.Map" parameterType="string">
-		select a.id AS "code", concat(a.name, ' - ',b.name) AS "name" from tp_material_part AS a LEFT JOIN tp_material b ON b.id = a.material_id where a.name_py like concat('%',#{query},'%') or a.name like concat('%',#{query},'%')
+		select a.id AS "code", concat(a.name, ' - ',b.name) AS "name"
+		from tp_material_part AS a LEFT JOIN tp_material b ON b.id = a.material_id
+		where a.name_py like concat('%',#{query},'%')
+		or a.name like concat('%',#{query},'%')
+		or b.name_py like concat('%',#{query},'%')
 	</select>
 
 </mapper>

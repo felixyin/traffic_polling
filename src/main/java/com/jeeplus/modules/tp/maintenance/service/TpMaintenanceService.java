@@ -3,14 +3,14 @@
  */
 package com.jeeplus.modules.tp.maintenance.service;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.collection.CollectionUtil;
+import com.jeeplus.modules.sys.utils.DictUtils;
 import com.jeeplus.modules.tp.road.entity.SysArea;
 import com.jeeplus.modules.tp.road.entity.TpRoad;
+import com.jeeplus.modules.tp.road.mapper.TpRoadMapper;
 import com.jeeplus.modules.tp.road.service.SysAreaService;
 import com.jeeplus.modules.tp.road.service.TpRoadService;
 import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
@@ -42,12 +42,11 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
     @Autowired
     private TpMaintenanceItemMapper tpMaintenanceItemMapper;
 
+    @Autowired
+    private TpRoadService tpRoadService;
 
     @Autowired
     private SysAreaService sysAreaService;
-
-    @Autowired
-    private TpRoadService tpRoadService;
 
     @Autowired
     private TpRoadCrossingService tpRoadCrossingService;
@@ -69,6 +68,41 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
 
     @Transactional(readOnly = false)
     public void save(TpMaintenance tpMaintenance) {
+
+//        按照规则生成施工单号
+        if (StringUtils.isEmpty(tpMaintenance.getNum())) {
+            StringBuilder num = new StringBuilder();
+            /*
+                信号灯	1
+                护栏	    2
+                标线	    3
+                标识标牌	4
+             */
+            switch (tpMaintenance.getJobType()) {
+                case "1":
+                    num.append("XHD");
+                    break;
+                case "2":
+                    num.append("HL");
+                    break;
+                case "3":
+                    num.append("BX");
+                    break;
+                case "4":
+                    num.append("BZBP");
+                    break;
+            }
+            num.append(DateUtils.getDate("-yyMMdd-HHmmss-"));
+            num.append(new Random().nextInt(10));
+            tpMaintenance.setNum(num.toString());
+        }
+
+//        更新 道路级别
+        TpRoad tpRoad = tpMaintenance.getRoad();
+        if (tpRoad != null && StringUtils.isNoneBlank(tpRoad.getRoadType())) {
+            tpRoadService.save(tpRoad); // update
+        }
+
         super.save(tpMaintenance);
         for (TpMaintenanceItem tpMaintenanceItem : tpMaintenance.getTpMaintenanceItemList()) {
             if (tpMaintenanceItem.getId() == null) {

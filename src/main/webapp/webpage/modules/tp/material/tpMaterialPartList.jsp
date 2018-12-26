@@ -12,9 +12,9 @@
 <body>
 	<div class="wrapper wrapper-content">
 	<div class="panel panel-primary">
-	<div class="panel-heading">
-		<h3 class="panel-title">零件列表</h3>
-	</div>
+	<%--<div class="panel-heading">--%>
+		<%--<h3 class="panel-title">零件列表</h3>--%>
+	<%--</div>--%>
 	<div class="panel-body">
 	
 	<!-- 搜索 -->

@@ -1,13 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <script>
     $(document).ready(function () {
-        $('#tpMaintenanceTable').bootstrapTable({
+        var $tpMaintenanceTable = $('#tpMaintenanceTable');
+        $tpMaintenanceTable.bootstrapTable({
 
             //请求方法
             method: 'post',
             //类型json
             dataType: "json",
             contentType: "application/x-www-form-urlencoded",
+
+            showFullscreen: true,
             //显示检索按钮
             showSearch: true,
             //显示刷新按钮
@@ -27,7 +30,7 @@
             //最低显示2行
             minimumCountColumns: 2,
             //是否显示行间隔色
-            striped: true,
+            striped: false,
             //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             cache: false,
             //是否显示分页（*）
@@ -217,6 +220,21 @@
 
         });
 
+
+        // 长久的记住用户隐藏的列
+        var hiddenColumnCacheKey = '__hidden_columns_maintenance_table';
+        var cacheFields = localStorage.getItem(hiddenColumnCacheKey);
+        cacheFields && cacheFields.split(',').forEach(function (v, i) {
+            $tpMaintenanceTable.bootstrapTable('hideColumn', v);
+        });
+        $('.keep-open :checkbox').change(function () {
+            var hiddenColumns = $tpMaintenanceTable.bootstrapTable('getHiddenColumns').map(function (v,i) {
+                return v.field;
+            }).join(',');
+            console.log(hiddenColumns);
+            localStorage.setItem('__hidden_columns_maintenance_table', hiddenColumns);
+        });
+
         // 鼠标划过自动切换选项卡 TODO
         // $(document).on('mouseover', '.nav-tabs a', function () {
         //     var nowTab = $(this);
@@ -226,9 +244,9 @@
         // });
 
         /*解决滚动条和图片弹窗冲突问题*/
-        $(document).on('click', '.layui-layer-shade', function () {
-            $('.fixed-table-body').css('overflow-x', 'auto')
-        });
+        // $(document.body).on('click', '.layui-layer-shade', function () {
+            // $('.fixed-table-body').css('overflow-x', 'auto')
+        // });
 
         if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {//如果是移动端
 
@@ -376,7 +394,8 @@
                     labelArray[i] = "<a href=\"" + valueArray[i] + "\" url=\"" + valueArray[i] + "\" target=\"_blank\">" + decodeURIComponent(valueArray[i].substring(valueArray[i].lastIndexOf("/") + 1)) + "</a>"
                 }
             } else {
-                labelArray[i] = '<img   onclick="jp.showPic(\'' + valueArray[i] + '\');$(\'.fixed-table-body\').css(\'overflowX\',\'hidden\')"' + ' height="150px" src="' + valueArray[i] + '">';
+                // $('.fixed-table-body').css('overflowX','hidden')
+                labelArray[i] = '<img   onclick="jp.showPic(\'' + valueArray[i] + '\');"' + ' height="150px" src="' + valueArray[i] + '">';
             }
         }
         return labelArray.join(" ");

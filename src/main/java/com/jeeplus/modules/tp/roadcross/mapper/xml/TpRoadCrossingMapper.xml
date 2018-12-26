@@ -46,17 +46,29 @@
 	<select id="findList" resultType="TpRoadCrossing" >
 		SELECT 
 			<include refid="tpRoadCrossingColumns"/>
-		FROM tp_road_crossing a
+		FROM tp_road_crossing  a
 		<include refid="tpRoadCrossingJoins"/>
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
-                    <if test="sarea != null  and sarea.id != null and sarea.id != ''">
-                        AND (b.id = #{sarea.id} OR b.parent_ids LIKE
-                        <if test="dbName == 'oracle'">'%,'||#{sarea.id}||',%')</if>
-                        <if test="dbName == 'mysql'">CONCAT('%,', #{sarea.id}, ',%'))</if>
-                        <if test="dbName == 'mssql'">'%'+#{sarea.id}+'%')</if>
-                    </if>
+			<if test="name != null and name != ''">
+				AND a.`name` LIKE
+				<if test="dbName == 'oracle'">'%'||#{name}||'%')</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{name}, '%')</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%')</if>
+			</if>
+			<if test="sarea != null  and sarea.name != null and sarea.name != ''">
+				AND b.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{sarea.name}||'%')</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{sarea.name}, '%')</if>
+				<if test="dbName == 'mssql'">'%'+#{sarea.name}+'%')</if>
+			</if>
+            <if test="sarea != null  and sarea.id != null and sarea.id != ''">
+                AND b.id = #{sarea.id} OR b.parent_ids LIKE
+                <if test="dbName == 'oracle'">'%,'||#{sarea.id}||',%')</if>
+                <if test="dbName == 'mysql'">CONCAT('%,', #{sarea.id}, ',%')</if>
+                <if test="dbName == 'mssql'">'%'+#{sarea.id}+'%')</if>
+            </if>
 			<if test="township != null and township != ''">
 				AND a.township LIKE 
 					<if test="dbName == 'oracle'">'%'||#{township}||'%'</if>

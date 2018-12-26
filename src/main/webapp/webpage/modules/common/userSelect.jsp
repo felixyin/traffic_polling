@@ -48,8 +48,14 @@
 			}).on('loaded.jstree', function() {
 				$("#jstree").jstree('open_all');
 			});
-			
-			
+
+			// 回车搜索
+			$('input').keypress(function(e){
+				if(e.keyCode === 13){
+					$('#table').bootstrapTable('refresh');
+				}
+			});
+
 			//初始化表格
 			  $('#table').bootstrapTable({
 
@@ -191,11 +197,11 @@
 					     <input type="hidden" id="officeId" name="office.id"/>
 					    <div class="col-sm-4">
 					    	<label class="label-item single-overflow pull-left" title="登录名：">登录名：</label>
-					   		<input type="text" name="loginName" maxlength="100"  class=" form-control"/>
+					   		<input type="text" name="loginName" autocomplete="off" maxlength="100"  class=" form-control"/>
 					    </div>
 				    	<div class="col-sm-4">
 					    	<label class="label-item single-overflow pull-left" title="姓名：">姓名：</label>
-					   		<input type="text" name="name" maxlength="100"  class=" form-control"/>
+					   		<input type="text" name="name" maxlength="100"  autocomplete="off" class=" form-control"/>
 					    </div>
 					    <div class="col-sm-4">
 							 <div style="margin-top:26px">

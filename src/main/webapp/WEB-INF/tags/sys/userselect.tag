@@ -31,7 +31,7 @@
 			return true;
 		}
 		// 正常打开
-		var officeId = $('#${officeIptId}').val();
+		var officeId = $('#${officeIptId}').val() || '';
 
 		jp.openUserSelectDialog(${isMultiSelected? true:false},function(ids, names){
 			$("#${id}Id").val(ids.replace(/u_/ig,""));

@@ -27,9 +27,9 @@
 <body>
 <div class="wrapper wrapper-content">
     <div class="panel panel-primary">
-        <div class="panel-heading">
-            <h3 class="panel-title">施工列表</h3>
-        </div>
+        <%--<div class="panel-heading">--%>
+            <%--<h3 class="panel-title">施工列表</h3>--%>
+        <%--</div>--%>
         <div class="panel-body">
 
             <!-- 搜索 -->
@@ -79,8 +79,8 @@
                                             value="${tpMaintenance.road.id}" labelName="road.name"
                                             labelValue="${tpMaintenance.road.name}"
                                             title="选择所属道路" cssClass="form-control " fieldLabels="道路名称|所属区域"
-                                            fieldKeys="name|sarea.name" searchLabels="道路名称|所属区域"
-                                            searchKeys="name|sarea.name"></sys:gridselect>
+                                            fieldKeys="name|area.name" searchLabels="道路名称|所属区域"
+                                            searchKeys="name|area.name"></sys:gridselect>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <label class="label-item single-overflow pull-left" title="搜索用地址：">搜索用地址：</label>
@@ -124,6 +124,12 @@
                                             labelName="office.name" labelValue="${tpMaintenance.office.name}"
                                             title="部门" url="/sys/office/treeData?type=2" cssClass="form-control"
                                             allowClear="true" notAllowSelectParent="true"/>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4">
+                            <label class="label-item single-overflow pull-left" title="施工负责人：">施工负责人：</label>
+                            <sys:userselect id="leaderBy" name="leaderBy.id" value="${tpMaintenance.leaderBy.id}"
+                                            labelName="leaderBy.name" labelValue="${tpMaintenance.leaderBy.name}"
+                                            cssClass="form-control required" officeIptId="officeId"/>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <div class="form-group">
@@ -233,8 +239,10 @@
                 </shiro:hasPermission>
             </div>
 
-            <!-- 表格 -->
-            <table id="tpMaintenanceTable" data-toolbar="#toolbar"></table>
+            <!-- 表格 套用overflow，是为了解决chrome下滚动条，和图片弹框一起存在，滚在上的bug-->
+            <div style="overflow: hidden">
+            <table id="tpMaintenanceTable" data-toolbar="#toolbar" style="display: inline-block;"></table>
+            </div>
 
             <!-- context menu -->
             <ul id="context-menu" class="dropdown-menu">

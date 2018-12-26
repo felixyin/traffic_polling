@@ -62,11 +62,13 @@
 <div class="row">
 	<div class="col-md-12">
 	<div class="panel panel-primary">
-		<div class="panel-heading">
-			<h3 class="panel-title"> 
-				<a class="panelButton" href="${ctx}/tp/material/tpMaterial"><i class="ti-angle-left"></i> 返回</a>
-			</h3>
-		</div>
+		<%--<div class="panel-heading">--%>
+			<%--<h3 class="panel-title"> --%>
+				<%--<a class="panelButton" href="${ctx}/tp/material/tpMaterial"><i class="ti-angle-left"></i> 返回</a>--%>
+			<%--</h3>--%>
+		<%--</div>--%>
+		<a class="panelButton btn btn-primary" href="${ctx}/tp/material/tpMaterial"><i class="fa fa-reply"></i>
+			返回</a>
 		<div class="panel-body">
 		<form:form id="inputForm" modelAttribute="tpMaterial" action="${ctx}/tp/material/tpMaterial/save" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
@@ -149,7 +151,7 @@
 					
 					
 					<td>
-						<select id="tpMaterialPartList{{idx}}_unit" name="tpMaterialPartList[{{idx}}].unit" data-value="{{row.unit}}" class="form-control m-b  required">
+						<select id="tpMaterialPartList{{idx}}_unit" name="tpMaterialPartList[{{idx}}].unit" data-value="{{row.unit}}" class="form-control m-b  required" >
 							<option value=""></option>
 							<c:forEach items="${fns:getDictList('material_unit')}" var="dict">
 								<option value="${dict.value}">${dict.label}</option>
@@ -198,11 +200,10 @@
 		<c:if test="${mode == 'add' || mode=='edit'}">
 				<div class="col-lg-3"></div>
 		        <div class="col-lg-6">
-		             <div class="form-group text-center">
-		                 <div>
-		                     <button class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="正在提交...">提 交</button>
-		                 </div>
-		             </div>
+					<center>
+		                     <button class="btn btn-primary btn-block btn-lg btn-parsley" style="width: 150px" data-loading-text="正在提交...">
+								 <i class="fa fa-save"></i>  保存</button>
+					</center>
 		        </div>
 		</c:if>
 		</form:form>

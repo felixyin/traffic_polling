@@ -40,12 +40,12 @@
     <div class="row">
         <div class="col-md-12">
             <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        <a class="panelButton" href="${ctx}/tp/maintenance/tpMaintenance"><i class="ti-angle-left"></i>
+                <%--<div class="panel-heading">--%>
+                    <%--<h3 class="panel-title">--%>
+                        <a class="panelButton btn btn-primary" href="${ctx}/tp/maintenance/tpMaintenance"><i class="fa fa-reply"></i>
                             返回</a>
-                    </h3>
-                </div>
+                    <%--</h3>--%>
+                <%--</div>--%>
                 <div class="panel-body">
                     <form:form id="inputForm" modelAttribute="tpMaintenance"
                                action="${ctx}/tp/maintenance/tpMaintenance/save" method="post" class="form-horizontal">
@@ -85,19 +85,17 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>选择位置：</label>
                             <div class="col-sm-4">
-                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:selectPostion">
-                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
-                                        <button type="button" class="btn btn-primary btn-block  btn-parsley"
-                                                data-loading-text="正在计算..."
-                                                onclick="openSelectPostionDialog();"/>
-                                        <i class="fa fa-map-marker "></i>
-                                        ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
-                                        </button>
-                                    </shiro:hasPermission>
-                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
-                                        ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
-                                    </shiro:lacksPermission>
-                                </shiro:hasPermission>
+                                <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <button type="button" class="btn btn-primary btn-block  btn-parsley"
+                                            data-loading-text="正在计算..."
+                                            onclick="openSelectPostionDialog();"/>
+                                    <i class="fa fa-map-marker "></i>
+                                    ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
+                                    </button>
+                                </shiro:hasAnyPermissions>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
+                                </shiro:lacksPermission>
                             </div>
                             <label class="col-sm-2 control-label">详细位置信息：</label>
                             <div class="col-sm-4">
@@ -359,7 +357,7 @@
                                                 System.out.println(imgSrc);
                                                 if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
                                     %>
-                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflowX','hidden')"
+                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflow-x','hidden')"
                                          width="80%" src="<%=imgSrc%>">
                                     <%
                                     } else {
@@ -395,7 +393,7 @@
                                                 System.out.println(imgSrc);
                                                 if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
                                     %>
-                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflowX','hidden')"
+                                    <img onclick="jp.showPic('<%=imgSrc%>');"
                                          width="80%" src="<%=imgSrc%>">
                                     <%
                                     } else {
@@ -432,7 +430,7 @@
                                                 System.out.println(imgSrc);
                                                 if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
                                     %>
-                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflowX','hidden')"
+                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflow-x','hidden')"
                                          width="80%" src="<%=imgSrc%>">
                                     <%
                                     } else {
@@ -505,6 +503,7 @@
                                                 <%--<textarea id="___mptext___" style="display: none;"></textarea>--%>
                                             <button id="my-copy-btn" class="btn btn-primary btn-mini" type="button"
                                                     style="float: right;margin-top: 5px;" data-clipboard-text="#___mptext___">
+                                                <i class="fa fa-copy"></i>
                                                 复制物料明细为文本
                                             </button>
                                                 <%--<button id="my-copy-btn-work" type="button" style="display: none"--%>
@@ -583,7 +582,7 @@
                                                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
                                                     <select id="tpMaintenanceItemList{{idx}}_unit" readonly="readonly"
                                                             name="tpMaintenanceItemList[{{idx}}].unit" data-value="{{row.unit}}"
-                                                            class="form-control m-b  required my-unit">
+                                                            class="form-control m-b  required my-unit" style="min-width:45px;">
                                                         <option value=""></option>
                                                         <c:forEach items="${fns:getDictList('material_unit')}" var="dict">
                                                             <option value="${dict.value}">${dict.label}</option>
@@ -686,7 +685,9 @@
                                     <c:choose>
                                         <c:when test="${fns:getUser().admin}">
                                             <button class="btn btn-primary btn-lg btn-parsley" style="width: 200px;"
-                                                    data-loading-text="正在提交...">保存
+                                                    data-loading-text="正在提交...">
+                                                <i class="fa fa-save"></i>
+                                                保存
                                             </button>
                                             <p class="text-danger" style="display: inline-block;margin-left: 20px;">注意：管理员修改数据要小心</p>
                                         </c:when>

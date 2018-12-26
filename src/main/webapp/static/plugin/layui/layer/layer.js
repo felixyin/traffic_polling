@@ -1176,9 +1176,15 @@ layer.photos = function(options, loop, key){
   //一些动作
   dict.event = function(){
     dict.bigimg.hover(function(){
-      dict.imgsee.show();
+      try{
+      if(dict.imgsee)dict.imgsee.show();
+      }catch (e) {
+      }
     }, function(){
-      dict.imgsee.hide();
+      try{
+      if(dict.imgsee)dict.imgsee.hide();
+      }catch (e) {
+      }
     });
     
     dict.bigimg.find('.layui-layer-imgprev').on('click', function(event){

@@ -46,12 +46,18 @@
 					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
 			</if>
-                    <if test="area != null  and area.id != null and area.id != ''">
-                        AND (b.id = #{area.id} OR b.parent_ids LIKE
-                        <if test="dbName == 'oracle'">'%,'||#{area.id}||',%')</if>
-                        <if test="dbName == 'mysql'">CONCAT('%,', #{area.id}, ',%'))</if>
-                        <if test="dbName == 'mssql'">'%'+#{area.id}+'%')</if>
-                    </if>
+            <if test="area != null  and area.name != null and area.name != ''">
+                AND b.name LIKE
+                <if test="dbName == 'oracle'">'%'||#{area.name}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{area.name}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{area.name},'%')</if>
+            </if>
+            <if test="area != null  and area.id != null and area.id != ''">
+                AND (b.id = #{area.id} OR b.parent_ids LIKE
+                <if test="dbName == 'oracle'">'%,'||#{area.id}||',%')</if>
+                <if test="dbName == 'mysql'">CONCAT('%,', #{area.id}, ',%')</if>
+                <if test="dbName == 'mssql'">'%'+#{area.id}+'%')</if>
+            </if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">

@@ -58,7 +58,7 @@
 			 <div class="input-search" style="margin: 5px 20px 0px 20px">
 				 <button type="submit" class="input-search-btn">
 					 <i class="fa fa-search" aria-hidden="true"></i></button>
-				 <input   id="search_q" type="text" class="form-control input-sm" name="" placeholder="请输入关键词...">
+				 <input   id="search_q" type="text" class="form-control input-sm" autocomplete="off" name="" placeholder="请输入关键词...">
 
 			 </div>
 		</c:if>

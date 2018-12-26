@@ -52,7 +52,7 @@
 				<li>
 					<a href="${ctx}/home"  class="J_menuItem"><i class="fa fa-home" style="font-size:14px;"></i></a>
 				</li>
-				<li class="hidden-xs">
+				<li class="hidden-xs hidden">
 					<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-language"></i></a>
 					<ul class="dropdown-menu">
 						<li class="${cookie.tab.value!=false?'active':''}">
@@ -64,7 +64,7 @@
 					</ul>
 				</li>
 
-				<li class="dropdown">
+				<li class="dropdown hidden">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="fa fa-envelope-o"></i>
 						<span class="label label-info">${noReadCount }</span>
@@ -98,7 +98,7 @@
 						</li>
 					</ul>
 				</li>
-				<li class="dropdown">
+				<li class="dropdown hidden">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 						<i class="fa fa-bell-o"></i>
 						<span class="label label-info">${count }</span>

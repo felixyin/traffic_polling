@@ -194,6 +194,7 @@
                     sortName: 'jobEndDate'
 
                 }
+                <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
                 , {
                     field: 'money',
                     title: '总费用',
@@ -201,7 +202,7 @@
                     sortName: 'money'
 
                 }
-
+                </shiro:hasPermission>
                 , {
                     field: 'status',
                     title: '任务状态',
@@ -435,7 +436,9 @@
                 <li><a data-toggle="tab" href="#tab-{{idx}}-3" aria-expanded="true">施工中照片</a></li>
                 <li><a data-toggle="tab" href="#tab-{{idx}}-4" aria-expanded="true">施工后照片</a></li>
                 <li><a data-toggle="tab" href="#tab-{{idx}}-6" aria-expanded="true">参考地址</a></li>
-                <li><a data-toggle="tab" href="#tab-{{idx}}-7" aria-expanded="true">审批意见</a></li>
+                <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveEnabled">
+                    <li><a data-toggle="tab" href="#tab-{{idx}}-7" aria-expanded="true">审批意见</a></li>
+                </shiro:hasPermission>
             </ul>
             <div class="tab-content" style="padding: 6px 6px 6px 6px;">
                 <div id="tab-{{idx}}-1" class="tab-pane fade in active">
@@ -445,9 +448,13 @@
                             <th>零件名称</th>
                             <th>所属品类</th>
                             <th>单位</th>
-                            <th>单价</th>
+                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
+                                <th>单价</th>
+                            </shiro:hasPermission>
                             <th>数量</th>
-                            <th>金额</th>
+                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
+                                <th>金额</th>
+                            </shiro:hasPermission>
                             <th>备注信息</th>
                         </tr>
                         </thead>
@@ -472,9 +479,11 @@
                         经纬度：{{location}}
                     </p>
                 </div>
-                <div id="tab-{{idx}}-7" class="tab-pane fade ">
-                    {{approve}}
-                </div>
+                <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveEnabled">
+                    <div id="tab-{{idx}}-7" class="tab-pane fade ">
+                        {{approve}}
+                    </div>
+                </shiro:hasPermission>
             </div>
         </div>
     </div>
@@ -490,15 +499,19 @@
 					<td>
 						{{row.unit}}
 					</td>
+                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
 					<td>
 						{{row.price}}
 					</td>
+                    </shiro:hasPermission>
 					<td>
 						{{row.count}}
 					</td>
+                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
 					<td>
 						{{row.money}}
 					</td>
+                    </shiro:hasPermission>
 					<td>
 						{{row.remarks}}
 					</td>

@@ -87,10 +87,6 @@
                             <form:input path="address" htmlEscape="false" maxlength="100" class=" form-control"/>
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4">
-                            <label class="label-item single-overflow pull-left" title="搜索地址相对位置：">搜索地址相对位置：</label>
-                            <form:input path="nearestPoi" htmlEscape="false" maxlength="64" class=" form-control"/>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4">
                             <label class="label-item single-overflow pull-left" title="派单人：">派单人：</label>
                             <sys:userselect id="sendBy" name="sendBy.id" value="${tpMaintenance.sendBy.id}"
                                             labelName="sendBy.name" labelValue="${tpMaintenance.sendBy.name}"

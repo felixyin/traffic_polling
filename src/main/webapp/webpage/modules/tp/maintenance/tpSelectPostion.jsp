@@ -1,3 +1,4 @@
+<%@ page import="com.jeeplus.common.config.Global" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/webpage/include/taglib.jsp" %>
 <html>
@@ -165,8 +166,7 @@
     }
 
 
-    // TODO ------------------
-    var city = '青岛市';
+    var city = '<%= Global.getConfig("city")%>';
     AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
         var map = new AMap.Map('container', {
             mapStyle: 'amap://styles/light', //设置地图的显示样式

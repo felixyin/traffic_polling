@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.jeeplus.common.utils.JsonUtils;
+import com.jeeplus.common.utils.base.PropertiesUtil;
 import com.jeeplus.common.utils.text.Charsets;
 import com.jeeplus.modules.iim.entity.LayGroup;
 import com.jeeplus.modules.sys.entity.User;
@@ -82,9 +83,6 @@ public class TpMaintenanceController extends BaseController {
     @RequiresPermissions("tp:maintenance:tpMaintenance:list")
     @RequestMapping(value = {"list", ""})
     public String list(TpMaintenance tpMaintenance, Model model) {
-        logger.info("-------------------------------------------info");
-        logger.warn("-------------------------------------------warn");
-        logger.debug("------------------------------------------debug");
         model.addAttribute("tpMaintenance", tpMaintenance);
         return "modules/tp/maintenance/tpMaintenanceList";
     }

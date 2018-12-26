@@ -1,3 +1,11 @@
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="com.jeeplus.modules.tp.maintenance.entity.TpMaintenance" %>
+<%@ page import="java.util.regex.Matcher" %>
+<%@ page import="java.net.URLDecoder" %>
+<%@ page import="com.jeeplus.common.utils.text.Charsets" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ include file="/webpage/include/taglib.jsp" %>
 <html>
@@ -42,33 +50,54 @@
                     <form:form id="inputForm" modelAttribute="tpMaintenance"
                                action="${ctx}/tp/maintenance/tpMaintenance/save" method="post" class="form-horizontal">
                         <form:hidden path="id"/>
+
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务类型：</label>
                             <div class="col-sm-4">
-                                <form:select path="jobType" class="form-control required">
-                                    <form:option value="" label=""/>
-                                    <form:options items="${fns:getDictList('job_type')}" itemLabel="label"
-                                                  itemValue="value" htmlEscape="false"/>
-                                </form:select>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <form:select path="jobType" class="form-control required readonly">
+                                        <form:option value="" label=""/>
+                                        <form:options items="${fns:getDictList('job_type')}" itemLabel="label"
+                                                      itemValue="value" htmlEscape="false"/>
+                                    </form:select>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <input type="hidden" name="jobType" value="${tpMaintenance.jobType}">
+                                    ${fns:getDictLabel(tpMaintenance.jobType,'job_type','')}
+                                </shiro:lacksPermission>
                             </div>
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务来源：</label>
                             <div class="col-sm-4">
-                                <form:select path="source" class="form-control required">
-                                    <form:option value="" label=""/>
-                                    <form:options items="${fns:getDictList('job_source')}" itemLabel="label"
-                                                  itemValue="value" htmlEscape="false"/>
-                                </form:select>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <form:select path="source" class="form-control required">
+                                        <form:option value="" label=""/>
+                                        <form:options items="${fns:getDictList('job_source')}" itemLabel="label"
+                                                      itemValue="value" htmlEscape="false"/>
+                                    </form:select>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <input type="hidden" name="source" value="${tpMaintenance.source}">
+                                    ${fns:getDictLabel(tpMaintenance.source,'job_source','')}
+                                </shiro:lacksPermission>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>选择位置：</label>
                             <div class="col-sm-4">
-                                <button type="button" class="btn btn-primary btn-block  btn-parsley"
-                                        data-loading-text="正在计算..."
-                                        onclick="openSelectPostionDialog();"/>
-                                <i class="fa fa-map-marker "></i>
-                                    ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
-                                </button>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:selectPostion">
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <button type="button" class="btn btn-primary btn-block  btn-parsley"
+                                                data-loading-text="正在计算..."
+                                                onclick="openSelectPostionDialog();"/>
+                                        <i class="fa fa-map-marker "></i>
+                                        ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
+                                        </button>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
+                                    </shiro:lacksPermission>
+                                </shiro:hasPermission>
                             </div>
                             <label class="col-sm-2 control-label">详细位置信息：</label>
                             <div class="col-sm-4">
@@ -90,52 +119,88 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"><font color="red">*</font>所属区域：</label>
                                 <div class="col-sm-4">
-                                    <sys:treeselect id="area" name="area.id" value="${tpMaintenance.area.id}"
-                                                    labelName="area.name" labelValue="${tpMaintenance.area.name}"
-                                                    title="区域" url="/sys/area/treeData" cssClass="form-control required"
-                                                    allowClear="true" notAllowSelectParent="true"/>
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <sys:treeselect id="area" name="area.id" value="${tpMaintenance.area.id}"
+                                                        labelName="area.name" labelValue="${tpMaintenance.area.name}"
+                                                        title="区域" url="/sys/area/treeData" cssClass="form-control required"
+                                                        allowClear="true" notAllowSelectParent="true"/>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <input type="hidden" name="area.id" value="${tpMaintenance.area.id}">
+                                        ${tpMaintenance.area.name}
+                                    </shiro:lacksPermission>
                                 </div>
                                 <label class="col-sm-2 control-label"><font color="red">*</font>经纬度：</label>
                                 <div class="col-sm-4">
-                                    <form:input path="location" readonly="true" htmlEscape="false"
-                                                class="form-control required"/>
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <form:input path="location" readonly="true" htmlEscape="false"
+                                                    class="form-control required"/>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <input type="hidden" name="location" value="${tpMaintenance.location}">
+                                        ${tpMaintenance.location}
+                                    </shiro:lacksPermission>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"><font color="red">*</font>所属路口：</label>
                                 <div class="col-sm-4">
-                                    <sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross"
-                                                    name="roadcross.id" value="${tpMaintenance.roadcross.id}"
-                                                    labelName="roadcross.name"
-                                                    labelValue="${tpMaintenance.roadcross.name}"
-                                                    title="选择所属路口" cssClass="form-control required"
-                                                    fieldLabels="路口名称|所属区域|所属街道" fieldKeys="name|sarea.name|township"
-                                                    searchLabels="路口名称|所属区域"
-                                                    searchKeys="name|sarea.name"></sys:gridselect>
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross"
+                                                        name="roadcross.id" value="${tpMaintenance.roadcross.id}"
+                                                        labelName="roadcross.name"
+                                                        labelValue="${tpMaintenance.roadcross.name}"
+                                                        title="选择所属路口" cssClass="form-control required"
+                                                        fieldLabels="路口名称|所属区域|所属街道" fieldKeys="name|sarea.name|township"
+                                                        searchLabels="路口名称|所属区域"
+                                                        searchKeys="name|sarea.name"></sys:gridselect>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <input type="hidden" name="roadcross.id" value="${tpMaintenance.roadcross.id}">
+                                        ${tpMaintenance.roadcross.name}
+                                    </shiro:lacksPermission>
                                 </div>
                                 <label class="col-sm-2 control-label"><font color="red">*</font>所属路口相对位置：</label>
                                 <div class="col-sm-4">
-                                    <form:input path="nearestJunction" htmlEscape="false"
-                                                class="form-control required"/>
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <form:input path="nearestJunction" htmlEscape="false"
+                                                    class="form-control required"/>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <input type="hidden" name="nearestJunction" value="${tpMaintenance.nearestJunction}">
+                                        ${tpMaintenance.nearestJunction}
+                                    </shiro:lacksPermission>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">附近道路：</label>
                                 <div class="col-sm-4">
-                                    <sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id"
-                                                    value="${tpMaintenance.road.id}" labelName="road.name"
-                                                    labelValue="${tpMaintenance.road.name}"
-                                                    title="选择附近道路" cssClass="form-control " fieldLabels="道路名称|所属区域"
-                                                    fieldKeys="name|sarea.name" searchLabels="道路名称|所属区域"
-                                                    searchKeys="name|sarea.name"></sys:gridselect>
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id"
+                                                        value="${tpMaintenance.road.id}" labelName="road.name"
+                                                        labelValue="${tpMaintenance.road.name}"
+                                                        title="选择附近道路" cssClass="form-control " fieldLabels="道路名称|所属区域"
+                                                        fieldKeys="name|sarea.name" searchLabels="道路名称|所属区域"
+                                                        searchKeys="name|sarea.name"></sys:gridselect>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <input type="hidden" name="road.id" value="${tpMaintenance.road.id}">
+                                        ${tpMaintenance.road.name}
+                                    </shiro:lacksPermission>
                                 </div>
                                 <label class="col-sm-2 control-label">道路等级<font color="#b8860b">(尽量填写)</font>：</label>
                                 <div class="col-sm-4">
-                                    <form:select path="road.roadType" class="form-control">
-                                        <form:option value="" label=""/>
-                                        <form:options items="${fns:getDictList('road_type')}" itemLabel="label"
-                                                      itemValue="value" htmlEscape="false"/>
-                                    </form:select>
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <form:select path="road.roadType" class="form-control">
+                                            <form:option value="" label=""/>
+                                            <form:options items="${fns:getDictList('road_type')}" itemLabel="label"
+                                                          itemValue="value" htmlEscape="false"/>
+                                        </form:select>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <input type="hidden" name="road.roadType" value="${tpMaintenance.road.roadType}">
+                                        ${fns:getDictLabel(tpMaintenance.road.roadType,'road_type','')}
+                                    </shiro:lacksPermission>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -153,135 +218,299 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">派单人：</label>
                             <div class="col-sm-4">
-                                <sys:userselect id="sendBy" name="sendBy.id" value="${tpMaintenance.sendBy.id}"
-                                                labelName="sendBy.name" labelValue="${tpMaintenance.sendBy.name}"
-                                                cssClass="form-control "/>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <sys:userselect id="sendBy" name="sendBy.id" value="${tpMaintenance.sendBy.id}"
+                                                    labelName="sendBy.name" labelValue="${tpMaintenance.sendBy.name}"
+                                                    cssClass="form-control "/>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="sendBy.id" value="${tpMaintenance.sendBy.id}">
+                                    ${tpMaintenance.sendBy.name}
+                                </shiro:lacksPermission>
                             </div>
                             <label class="col-sm-2 control-label">派单时间：</label>
                             <div class="col-sm-4">
-                                <div class='input-group form_datetime' id='sendDate'>
-                                    <input type='text' name="sendDate" class="form-control " autocomplete="off"
-                                           value="<fmt:formatDate value="${tpMaintenance.sendDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"><font color="red">*</font>施工开始时间：</label>
-                            <div class="col-sm-4">
-                                <div class='input-group form_datetime' id='jobBeginDate'>
-                                    <input type='text' name="jobBeginDate" class="form-control required" autocomplete="off"
-                                           value="<fmt:formatDate value="${tpMaintenance.jobBeginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
-                                    <span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-                                </div>
-                            </div>
-                            <label class="col-sm-2 control-label"><font color="red">*</font>施工结束时间：</label>
-                            <div class="col-sm-4">
-                                <div class='input-group form_datetime' id='jobEndDate'>
-                                    <input type='text' name="jobEndDate" class="form-control required" autocomplete="off"
-                                           value="<fmt:formatDate value="${tpMaintenance.jobEndDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
-                                    <span class="input-group-addon">
-								<span class="glyphicon glyphicon-calendar"></span>
-							</span>
-                                </div>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <div class='input-group form_datetime' id='sendDate'>
+                                        <input type='text' name="sendDate" class="form-control " autocomplete="off"
+                                               value="<fmt:formatDate value="${tpMaintenance.sendDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="sendDate" value="${fns:formatDateTime(tpMaintenance.sendDate)}">
+                                    ${fns:formatDateTime(tpMaintenance.sendDate)}
+                                </shiro:lacksPermission>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工单位：</label>
                             <div class="col-sm-4">
-                                <sys:treeselect id="office" name="office.id" value="${tpMaintenance.office.id}"
-                                                labelName="office.name" labelValue="${tpMaintenance.office.name}"
-                                                title="施工单位" url="/sys/office/myTreeData?type=3"
-                                                cssClass="form-control required"  allowClear="true"
-                                                notAllowSelectParent="true"/>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <sys:treeselect id="office" name="office.id" value="${tpMaintenance.office.id}"
+                                                    labelName="office.name" labelValue="${tpMaintenance.office.name}"
+                                                    title="施工单位" url="/sys/office/myTreeData?type=3"
+                                                    cssClass="form-control required" allowClear="true"
+                                                    notAllowSelectParent="true"/>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="office.id" value="${tpMaintenance.office.id}">
+                                    ${tpMaintenance.office.name}
+                                </shiro:lacksPermission>
                             </div>
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工负责人：</label>
                             <div class="col-sm-4">
-                                <sys:userselect id="leaderBy" name="leaderBy.id" value="${tpMaintenance.leaderBy.id}"
-                                                labelName="leaderBy.name" labelValue="${tpMaintenance.leaderBy.name}"
-                                                cssClass="form-control required" officeIptId="officeId"/>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <sys:userselect id="leaderBy" name="leaderBy.id" value="${tpMaintenance.leaderBy.id}"
+                                                    labelName="leaderBy.name" labelValue="${tpMaintenance.leaderBy.name}"
+                                                    cssClass="form-control required" officeIptId="officeId"/>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="leaderBy.id" value="${tpMaintenance.leaderBy.id}">
+                                    ${tpMaintenance.leaderBy.name}
+                                </shiro:lacksPermission>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"><font color="red">*</font>施工开始时间：</label>
+                            <div class="col-sm-4">
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <div class='input-group form_datetime' id='jobBeginDate'>
+                                        <input type='text' name="jobBeginDate" class="form-control required" autocomplete="off"
+                                               value="<fmt:formatDate value="${tpMaintenance.jobBeginDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+                                        <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    </div>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="jobBeginDate" value="${fns:formatDateTime(tpMaintenance.jobBeginDate)}">
+                                    ${fns:formatDateTime(tpMaintenance.jobBeginDate)}
+                                </shiro:lacksPermission>
+
+                            </div>
+                            <label class="col-sm-2 control-label"><font color="red">*</font>施工结束时间：</label>
+                            <div class="col-sm-4">
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <div class='input-group form_datetime' id='jobEndDate'>
+                                        <input type='text' name="jobEndDate" class="form-control required" autocomplete="off"
+                                               value="<fmt:formatDate value="${tpMaintenance.jobEndDate}" pattern="yyyy-MM-dd HH:mm:ss"/>"/>
+                                        <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    </div>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="jobEndDate" value="${fns:formatDateTime(tpMaintenance.jobEndDate)}">
+                                    ${fns:formatDateTime(tpMaintenance.jobEndDate)}
+                                </shiro:lacksPermission>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">施工过程：</label>
                             <div class="col-sm-10">
-                                <input type="hidden" name="process" value=" ${tpMaintenance.process}"/>
-                                <div id="process">
-                                        ${fns:unescapeHtml(tpMaintenance.process)}
-                                </div>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="process" value=" ${tpMaintenance.process}"/>
+                                    <div id="process">
+                                            ${fns:unescapeHtml(tpMaintenance.process)}
+                                    </div>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="process" value="${tpMaintenance.process}">
+                                    ${fns:unescapeHtml(tpMaintenance.process)}
+                                </shiro:lacksPermission>
+
                             </div>
                         </div>
+                        <%!
+                            // 匹配正则表达式方法
+                            public static boolean matcherRegularExpression(String regEx, String str) {
+                                Pattern pattern = Pattern.compile(regEx);
+                                Matcher matcher = pattern.matcher(str);
+                                boolean found = false;
+                                while (matcher.find()) {
+                                    //System.out.println("发现 \"" + matcher.group() + "\" 开始于 "
+                                    //+ matcher.start() + " 结束于 " + matcher.end());
+                                    found = true;
+                                }
+                                return found;
+                            }
+                        %>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">施工前照片：</label>
                             <div class="col-sm-2">
-                                <sys:fileUpload path="prePic" value="${tpMaintenance.prePic}" type="file"
-                                                uploadPath="/tp/maintenance/tpMaintenance"/>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <sys:fileUpload path="prePic" value="${tpMaintenance.prePic}" type="file"
+                                                    uploadPath="/tp/maintenance/tpMaintenance"/>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="prePic" value="${tpMaintenance.prePic}">
+                                    <%
+                                        TpMaintenance tpMaintenance = (TpMaintenance) request.getAttribute("tpMaintenance");
+                                        String mpStr = tpMaintenance.getPrePic();
+                                        if (StringUtils.isBlank(mpStr)) {
+                                            out.print("无");
+                                        } else {
+                                            String[] mpList = mpStr.split("\\|");
+                                            for (String imgSrc : mpList) {
+                                                System.out.println(imgSrc);
+                                                if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
+                                    %>
+                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflowX','hidden')"
+                                         width="80%" src="<%=imgSrc%>">
+                                    <%
+                                    } else {
+                                        String fileName = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+                                        fileName = URLDecoder.decode(fileName, Charsets.UTF_8_NAME);
+                                    %>
+                                    <br>
+                                    <a href="<%=imgSrc%>" target="_blank" title="点击下载<%=fileName%>"><%=fileName%>
+                                    </a>
+                                    <%
+                                                }
+                                            }
+                                        }
+                                    %>
+                                </shiro:lacksPermission>
                             </div>
                             <label class="col-sm-2 control-label">施工中照片：</label>
                             <div class="col-sm-2">
-                                <sys:fileUpload path="middlePic" value="${tpMaintenance.middlePic}" type="file"
-                                                uploadPath="/tp/maintenance/tpMaintenance"/>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <sys:fileUpload path="middlePic" value="${tpMaintenance.middlePic}" type="file"
+                                                    uploadPath="/tp/maintenance/tpMaintenance"/>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="middlePic" value="${tpMaintenance.middlePic}">
+                                    <%
+                                        TpMaintenance tpMaintenance = (TpMaintenance) request.getAttribute("tpMaintenance");
+                                        String mpStr = tpMaintenance.getMiddlePic();
+                                        if (StringUtils.isBlank(mpStr)) {
+                                            out.print("无");
+                                        } else {
+                                            String[] mpList = mpStr.split("\\|");
+                                            for (String imgSrc : mpList) {
+                                                System.out.println(imgSrc);
+                                                if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
+                                    %>
+                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflowX','hidden')"
+                                         width="80%" src="<%=imgSrc%>">
+                                    <%
+                                    } else {
+                                        String fileName = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+                                        fileName = URLDecoder.decode(fileName, Charsets.UTF_8_NAME);
+                                    %>
+                                    <br>
+                                    <a href="<%=imgSrc%>" target="_blank" title="点击下载<%=fileName%>"><%=fileName%>
+                                    </a>
+                                    <%
+                                                }
+                                            }
+                                        }
+                                    %>
+                                </shiro:lacksPermission>
+
                             </div>
                             <label class="col-sm-2 control-label">施工后照片：</label>
                             <div class="col-sm-2">
-                                <sys:fileUpload path="afterPic" value="${tpMaintenance.afterPic}" type="file"
-                                                uploadPath="/tp/maintenance/tpMaintenance"/>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <sys:fileUpload path="afterPic" value="${tpMaintenance.afterPic}" type="file"
+                                                    uploadPath="/tp/maintenance/tpMaintenance"/>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                    <input type="hidden" name="afterPic" value="${tpMaintenance.afterPic}">
+                                    <%
+                                        TpMaintenance tpMaintenance = (TpMaintenance) request.getAttribute("tpMaintenance");
+                                        String mpStr = tpMaintenance.getAfterPic();
+                                        if (StringUtils.isBlank(mpStr)) {
+                                            out.print("无");
+                                        } else {
+                                            String[] mpList = mpStr.split("\\|");
+                                            for (String imgSrc : mpList) {
+                                                System.out.println(imgSrc);
+                                                if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
+                                    %>
+                                    <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflowX','hidden')"
+                                         width="80%" src="<%=imgSrc%>">
+                                    <%
+                                    } else {
+                                        String fileName = imgSrc.substring(imgSrc.lastIndexOf("/") + 1);
+                                        fileName = URLDecoder.decode(fileName, Charsets.UTF_8_NAME);
+                                    %>
+                                    <br>
+                                    <a href="<%=imgSrc%>" target="_blank" title="点击下载<%=fileName%>"><%=fileName%>
+                                    </a>
+                                    <%
+                                                }
+                                            }
+                                        }
+                                    %>
+                                </shiro:lacksPermission>
+
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">审批意见：</label>
-                            <div class="col-sm-4">
-                                <form:textarea path="approve" htmlEscape="false" rows="4" class="form-control "/>
-                            </div>
-                                <%--<label class="col-sm-2 control-label">物料总成本：</label>--%>
-                                <%--<div class="col-sm-4">--%>
-                                <%--<input id="money" name="tpMaintenance.money" value="${tpMaintenance.money}" type="number" disabled="disabled"  readonly="readonly" htmlEscape="false" class="form-control  isFloatGtZero"/>--%>
-                                <%--</div>--%>
-                                <%--<br>--%>
-                                <%--<br>--%>
-                                <%--<label class="col-sm-2 control-label">任务状态：</label>--%>
-                                <%--<div class="col-sm-4">--%>
-                                <%--<form:radiobuttons path="status" items="${fns:getDictList('job_status')}"--%>
-                                <%--itemLabel="label" itemValue="value" htmlEscape="false"--%>
-                                <%--class="i-checks "/>--%>
-                                <%--</div>--%>
+                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveEnabled">
+                                <label class="col-sm-2 control-label">审批意见：</label>
+                                <div class="col-sm-4">
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                        <form:textarea path="approve" htmlEscape="false" rows="4" class="form-control "/>
+                                    </shiro:hasPermission>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                        <input type="hidden" name="approve" value="${tpMaintenance.approve}">
+                                        ${tpMaintenance.approve}
+                                    </shiro:lacksPermission>
+                                </div>
+                            </shiro:hasPermission>
+                            <c:if test="${fns:getUser().admin}">
+                                <label class="col-sm-2 control-label">任务状态：</label>
+                                <div class="col-sm-4">
+                                    <form:select path="status" class="form-control required">
+                                        <form:option value="" label=""/>
+                                        <form:options items="${fns:getDictList('job_status')}" itemLabel="label"
+                                                      itemValue="value" htmlEscape="false"/>
+                                    </form:select>
+                                </div>
+                            </c:if>
                         </div>
                         <div class="tabs-container">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">施工物料明细：</a>
                                 </li>
-                                <div style="float:right;padding-top:2px;padding-right:15px;line-height: 40px;">
-                                    <label style="display:inline">物料总成本：</label>
-                                    <span id="my-money-span">${tpMaintenance.money}元</span>
-                                    <input id="money" name="tpMaintenance.money" value="0" type="hidden"
-                                           class="form-control  isFloatGtZero">
-                                </div>
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
+                                    <div style="float:right;padding-top:2px;padding-right:15px;line-height: 40px;">
+                                        <label style="display:inline">物料总成本：</label>
+                                        <span id="my-money-span">${tpMaintenance.money}元</span>
+                                        <input id="money" name="tpMaintenance.money" value="0" type="hidden"
+                                               class="form-control  isFloatGtZero">
+                                    </div>
+                                </shiro:hasPermission>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane fade in  active">
-                                    <div class="form-inline" style="height: 42px;line-height: 38px;">
-                                        <a class="btn btn-white btn-large"
-                                           onclick="addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl);tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;"
-                                           title="新增"><i class="fa fa-plus"></i> 添加物料</a>
-                                        <input type="text" class="form-control "
-                                               style="width: 450px;display: inline-block!important;"
-                                               placeholder="关键词搜索后回车(快速添加方式)" id="my-mp-autocomplete">
-                                        <a class="btn btn-white btn-mini"
-                                           onclick="jp.openViewDialog('物料基础数据管理', '${ctx}/tp/material/tpMaterial', '1000px', '550px');"
-                                           title="新增"><i class="fa fa-plus"></i> 先去添加基础数据</a>
-                                            <%--<textarea id="___mptext___" style="display: none;"></textarea>--%>
-                                        <button id="my-copy-btn" class="btn btn-primary btn-mini" type="button"
-                                                style="float: right;margin-top: 5px;" data-clipboard-text="#___mptext___">
-                                            复制物料明细为文本
-                                        </button>
-                                            <%--<button id="my-copy-btn-work" type="button" style="display: none"--%>
-                                            <%--></button>--%>
-                                    </div>
+
+                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                        <div class="form-inline" style="height: 42px;line-height: 38px;">
+                                            <a class="btn btn-white btn-large"
+                                               onclick="addRow('#tpMaintenanceItemList', tpMaintenanceItemRowIdx, tpMaintenanceItemTpl);tpMaintenanceItemRowIdx = tpMaintenanceItemRowIdx + 1;"
+                                               title="新增"><i class="fa fa-plus"></i> 添加物料</a>
+                                            <input type="text" class="form-control "
+                                                   style="width: 450px;display: inline-block!important;"
+                                                   placeholder="关键词搜索后回车(快速添加方式)" id="my-mp-autocomplete">
+                                            <a class="btn btn-white btn-mini"
+                                               onclick="jp.openViewDialog('物料基础数据管理', '${ctx}/tp/material/tpMaterial', '1000px', '550px');"
+                                               title="新增"><i class="fa fa-plus"></i> 先去添加基础数据</a>
+                                                <%--<textarea id="___mptext___" style="display: none;"></textarea>--%>
+                                            <button id="my-copy-btn" class="btn btn-primary btn-mini" type="button"
+                                                    style="float: right;margin-top: 5px;" data-clipboard-text="#___mptext___">
+                                                复制物料明细为文本
+                                            </button>
+                                                <%--<button id="my-copy-btn-work" type="button" style="display: none"--%>
+                                                <%--></button>--%>
+                                        </div>
+                                    </shiro:hasPermission>
                                     <table class="table table-striped table-bordered table-condensed">
                                         <thead>
                                         <tr>
@@ -289,68 +518,150 @@
                                             <th><font color="red">*</font>零件名称</th>
                                             <th>所属品类</th>
                                             <th>单位</th>
-                                            <th>单价</th>
+                                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
+                                                <th>单价</th>
+                                            </shiro:hasPermission>
                                             <th><font color="red">*</font>数量</th>
-                                            <th>金额</th>
+                                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
+                                                <th>金额</th>
+                                            </shiro:hasPermission>
                                             <th>备注信息</th>
-                                            <th width="10">&nbsp;</th>
+                                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                <th width="10">&nbsp;</th>
+                                            </shiro:hasPermission>
                                         </tr>
                                         </thead>
                                         <tbody id="tpMaintenanceItemList">
                                         </tbody>
                                     </table>
-                                    <script type="text/template" id="tpMaintenanceItemTpl">//<!--
-				<tr id="tpMaintenanceItemList{{idx}}">
-					<td class="hide">
-						<input id="tpMaintenanceItemList{{idx}}_id" name="tpMaintenanceItemList[{{idx}}].id" type="hidden" value="{{row.id}}"/>
-						<input id="tpMaintenanceItemList{{idx}}_delFlag" name="tpMaintenanceItemList[{{idx}}].delFlag" type="hidden" value="0"/>
-					</td>
-					
-					<td>
-						<sys:gridselect url="${ctx}/tp/material/tpMaterialPart/data" id="tpMaintenanceItemList{{idx}}_materialPart"
-                            name="tpMaintenanceItemList[{{idx}}].materialPart.id" value="{{row.materialPart.id}}"
-                            labelName="tpMaintenanceItemList{{idx}}.materialPart.name" labelValue="{{row.materialPart.name}}"
-                            title="选择零件名称" cssClass="form-control required my-select-material-part" fieldLabels="零件名称|零件单位|零件单价|所属品类"
-                            fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类" searchKeys="name|material.name" >
-                        </sys:gridselect>
-					</td>
+                                    <script type="text/html" id="tpMaintenanceItemTpl">//<!--
+                                        <tr id="tpMaintenanceItemList{{idx}}">
+                                            <td class="hide">
+                                                <input id="tpMaintenanceItemList{{idx}}_id" name="tpMaintenanceItemList[{{idx}}].id"
+                                                       type="hidden" value="{{row.id}}"/>
+                                                <input id="tpMaintenanceItemList{{idx}}_delFlag"
+                                                       name="tpMaintenanceItemList[{{idx}}].delFlag" type="hidden" value="0"/>
+                                            </td>
 
-					<td>
-						<input id="tpMaintenanceItemList{{idx}}_category" readonly="readonly" name="tpMaintenanceItemList[{{idx}}].category" type="text" value="{{row.category}}"    class="form-control my-category-name"/>
-					</td>
+                                            <td>
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <sys:gridselect url="${ctx}/tp/material/tpMaterialPart/data"
+                                                                    id="tpMaintenanceItemList{{idx}}_materialPart"
+                                                                    name="tpMaintenanceItemList[{{idx}}].materialPart.id"
+                                                                    value="{{row.materialPart.id}}"
+                                                                    labelName="tpMaintenanceItemList{{idx}}.materialPart.name"
+                                                                    labelValue="{{row.materialPart.name}}"
+                                                                    title="选择零件名称" cssClass="form-control required my-select-material-part"
+                                                                    fieldLabels="零件名称|零件单位|零件单价|所属品类"
+                                                                    fieldKeys="name|unit|price|material.name" searchLabels="零件名称|所属品类"
+                                                                    searchKeys="name|material.name">
+                                                    </sys:gridselect>
+                                                </shiro:hasPermission>
+                                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input type="hidden" name="tpMaintenanceItemList[{{idx}}].materialPart.id"
+                                                           value="{{row.materialPart.id}}">
+                                                    {{row.materialPart.name}}
+                                                </shiro:lacksPermission>
+                                            </td>
 
-					<td>
-						<select id="tpMaintenanceItemList{{idx}}_unit" readonly="readonly" name="tpMaintenanceItemList[{{idx}}].unit" data-value="{{row.unit}}" class="form-control m-b  required my-unit">
-							<option value=""></option>
-							<c:forEach items="${fns:getDictList('material_unit')}" var="dict">
-								<option value="${dict.value}">${dict.label}</option>
-							</c:forEach>
-						</select>
-					</td>
+                                            <td>
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input id="tpMaintenanceItemList{{idx}}_category" readonly="readonly"
+                                                           name="tpMaintenanceItemList[{{idx}}].category" type="text"
+                                                           value="{{row.category}}"
+                                                           class="form-control my-category-name"/>
+                                                </shiro:hasPermission>
+                                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input type="hidden" name="tpMaintenanceItemList[{{idx}}].category"
+                                                           value="{{row.category}}">
+                                                    {{row.category}}
+                                                </shiro:lacksPermission>
+                                            </td>
 
-					<td>
-						<input id="tpMaintenanceItemList{{idx}}_price" type="number" autocomplete="off" name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"    class="form-control my-price"/>
-					</td>
-					
-					
-					<td>
-						<input id="tpMaintenanceItemList{{idx}}_count"  type="number" autocomplete="off" name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"    class="form-control required isIntGtZero my-count"/>
-					</td>
-					
-					
-					<td>
-						<input id="tpMaintenanceItemList{{idx}}_money" readonly="readonly" name="tpMaintenanceItemList[{{idx}}].money" type="text" value="{{row.money}}"    class="form-control my-money"/>
-					</td>
-					
-					
-					<td>
-						<input id="tpMaintenanceItemList{{idx}}_remarks" autocomplete="off" name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"    class="form-control "/>
-					</td>
-					
-					<td class="text-center" width="10">
-						{{#delBtn}}<span class="close btn my-close" data-toggle="tooltip" data-placement="right"  onclick="delRow(this, '#tpMaintenanceItemList{{idx}}')" title="删除">&times;</span>{{/delBtn}}
-					</td>
-				</tr>//-->
+                                            <td>
+
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <select id="tpMaintenanceItemList{{idx}}_unit" readonly="readonly"
+                                                            name="tpMaintenanceItemList[{{idx}}].unit" data-value="{{row.unit}}"
+                                                            class="form-control m-b  required my-unit">
+                                                        <option value=""></option>
+                                                        <c:forEach items="${fns:getDictList('material_unit')}" var="dict">
+                                                            <option value="${dict.value}">${dict.label}</option>
+                                                        </c:forEach>
+                                                    </select>
+                                                </shiro:hasPermission>
+                                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input type="hidden" name="tpMaintenanceItemList[{{idx}}].unit" value="{{row.unit}}">
+                                                    {{row.unitName}}
+                                                    <%--<span id="unit_{{idx}}">{{row.unitName}}</span>--%>
+                                                    <%--<span id="unit_{{idx}}" class="my-unit-dict" unit="{{row.unit}}"></span>--%>
+                                                </shiro:lacksPermission>
+                                            </td>
+
+                                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
+                                                <td>
+                                                    <input id="tpMaintenanceItemList{{idx}}_price" type="number" autocomplete="off"
+                                                           name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"
+                                                           class="form-control my-price"/>
+                                                </td>
+                                            </shiro:hasPermission>
+                                            <shiro:lacksPermission name="tp:maintenance:tpMaintenance:money">
+                                                <input id="tpMaintenanceItemList{{idx}}_price" type="hidden" autocomplete="off"
+                                                       name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"
+                                                       class="form-control my-price"/>
+                                            </shiro:lacksPermission>
+
+                                            <td>
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input id="tpMaintenanceItemList{{idx}}_count" type="number" autocomplete="off"
+                                                           name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"
+                                                           class="form-control required isIntGtZero my-count"/>
+                                                </shiro:hasPermission>
+                                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input type="hidden" name="tpMaintenanceItemList[{{idx}}].count"
+                                                           value="{{row.count}}">
+                                                    {{row.count}}
+                                                </shiro:lacksPermission>
+
+                                            </td>
+
+                                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
+                                                <td>
+                                                    <input id="tpMaintenanceItemList{{idx}}_money" readonly="readonly"
+                                                           name="tpMaintenanceItemList[{{idx}}].money" type="text" value="{{row.money}}"
+                                                           class="form-control my-money"/>
+                                                </td>
+                                            </shiro:hasPermission>
+                                            <shiro:lacksPermission name="tp:maintenance:tpMaintenance:money">
+                                                <input id="tpMaintenanceItemList{{idx}}_money" readonly="readonly"
+                                                       name="tpMaintenanceItemList[{{idx}}].money" type="hidden" value="{{row.money}}"
+                                                       class="form-control my-money"/>
+                                            </shiro:lacksPermission>
+
+                                            <td>
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input id="tpMaintenanceItemList{{idx}}_remarks" autocomplete="off"
+                                                           name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"
+                                                           class="form-control "/>
+                                                </shiro:hasPermission>
+                                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <input type="hidden" name="tpMaintenanceItemList[{{idx}}].remarks"
+                                                           value="{{row.remarks}}">
+                                                    {{row.remarks}}
+                                                </shiro:lacksPermission>
+
+                                            </td>
+
+                                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                <td class="text-center" width="10">
+                                                    {{#delBtn}}<span class="close btn my-close" data-toggle="tooltip" data-placement="right"
+                                                                     onclick="delRow(this, '#tpMaintenanceItemList{{idx}}')"
+                                                                     title="删除">&times;</span>{{/delBtn}}
+                                                </td>
+                                            </shiro:hasPermission>
+
+
+                                        </tr>//-->
                                     </script>
                                     <script type="text/javascript">
                                         var tpMaintenanceItemRowIdx = 0,
@@ -363,18 +674,73 @@
                                             }
                                         });
                                     </script>
+
                                 </div>
+
                             </div>
                         </div>
                         <c:if test="${mode == 'add' || mode=='edit'}">
                             <div class="col-lg-3"></div>
                             <div class="col-lg-6">
-                                <div class="form-group text-center">
-                                    <div>
-                                        <button class="btn btn-primary btn-block btn-lg btn-parsley"
-                                                data-loading-text="正在提交...">提 交
-                                        </button>
-                                    </div>
+                                <div class="text-center">
+                                    <c:choose>
+                                        <c:when test="${fns:getUser().admin}">
+                                            <button class="btn btn-primary btn-lg btn-parsley" style="width: 200px;"
+                                                    data-loading-text="正在提交...">保存
+                                            </button>
+                                            <p class="text-danger" style="display: inline-block;margin-left: 20px;">注意：管理员修改数据要小心</p>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <input id="my-status" type="hidden" name="status" value="">
+                                            <c:if test="${status == null || status == ''}">
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:paiDan">
+                                                    <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
+                                                            onclick="document.getElementById('my-status').val(1);">派单
+                                                    </button>
+                                                </shiro:hasPermission>
+                                            </c:if>
+                                            <c:if test="${ status == '1'}">
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:save">
+                                                    <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
+                                                            onclick="document.getElementById('my-status').val(2);">保存草稿
+                                                    </button>
+                                                </shiro:hasPermission>
+                                            </c:if>
+                                            <c:if test="${ status == '2'}">
+                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:done">
+                                                    <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
+                                                            onclick="document.getElementById('my-status').val(3);"
+                                                            title="完成派单后，除管理员外不可再次修改!!">
+                                                        完成派单
+                                                    </button>
+                                                </shiro:hasPermission>
+                                            </c:if>
+                                            <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveEnabled">
+
+                                                <c:if test="${ status == '3'}">
+                                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveSubmit">
+                                                        <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
+                                                                onclick="document.getElementById('my-status').val(4);">提交审核
+                                                        </button>
+                                                    </shiro:hasPermission>
+                                                </c:if>
+                                                <c:if test="${ status == '4'}">
+                                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveYes">
+                                                        <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
+                                                                onclick="document.getElementById('my-status').val(5);">审批通过
+                                                        </button>
+                                                    </shiro:hasPermission>
+                                                </c:if>
+                                                <c:if test="${ status == '5'}">
+                                                    <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveNo">
+                                                        <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
+                                                                onclick="document.getElementById('my-status').val(6);">审批不予通过
+                                                        </button>
+                                                    </shiro:hasPermission>
+                                                </c:if>
+                                            </shiro:hasPermission>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </div>
                             </div>
                         </c:if>
@@ -397,6 +763,7 @@
                 $("#inputForm").find("button:submit").button("reset");
             }
         });
+
 
         // 日期显示和，时间前后比较验证
         var sendDateDP = $('#sendDate').datetimepicker({format: "YYYY-MM-DD HH:mm:ss"});
@@ -521,6 +888,9 @@
     });
 
     function addRow(list, idx, tpl, row, notAutoOpen) {
+        <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
+        row.unitName = jp.getDictLabel(${fns:toJson(fns:getDictList('material_unit'))}, row.unit, '');
+        </shiro:lacksPermission>
         var $row = $(Mustache.render(tpl, {
             idx: idx, delBtn: true, row: row
         }));

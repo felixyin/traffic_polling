@@ -175,7 +175,7 @@ public class OfficeController extends BaseController {
                                               @RequestParam(required = false) Long grade, @RequestParam(required = false) Boolean isAll, String officeId, HttpServletResponse response) {
         List<Map<String, Object>> mapList = Lists.newArrayList();
         List<Office> list = new ArrayList<>();
-        if (org.apache.commons.lang3.StringUtils.isNotBlank(officeId)) {
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(officeId)) { // 施工录入，施工单位和施工负责人及联选择情况
             Office offic = new Office();
             offic.setId(officeId);
             offic.setType(null); // 特殊处理

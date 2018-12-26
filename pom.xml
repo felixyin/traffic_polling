@@ -55,95 +55,95 @@
         <downloadSources>true</downloadSources>
 
     </properties>
-	
-	<!-- 设定仓库 -->
-	<repositories>
-		<repository>
-			<id>central-repos</id>
-			<name>Central Repository</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
 
-		<repository>
-			<id>central-repos2</id>
-			<name>Central Repository 2</name>
-			<url>http://mvnrepo.code.taobao.org/nexus/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
+    <!-- 设定仓库 -->
+    <repositories>
+        <repository>
+            <id>central-repos</id>
+            <name>Central Repository</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
 
-		<repository>
-			<id>springsource-repos</id>
-			<name>SpringSource Repository</name>
-			<url>http://mvnrepo.code.taobao.org/nexus/content/repositories/releases/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	
-		<repository>
-			<id>bitwalker.user-agent-utils.mvn.repo</id>
-			<url>https://nexus.jackpinetech.com/nexus/content/groups/public</url>
-			<!-- use snapshot version -->
-			<snapshots>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
+        <repository>
+            <id>central-repos2</id>
+            <name>Central Repository 2</name>
+            <url>http://mvnrepo.code.taobao.org/nexus/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>springsource-repos</id>
+            <name>SpringSource Repository</name>
+            <url>http://mvnrepo.code.taobao.org/nexus/content/repositories/releases/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>bitwalker.user-agent-utils.mvn.repo</id>
+            <url>https://nexus.jackpinetech.com/nexus/content/groups/public</url>
+            <!-- use snapshot version -->
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
 
     <build>
         <finalName>traffic_polling</finalName>
         <resources>
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.xml</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <plugins>
-           
-           <!-- tomcat6插件 -->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat6-maven-plugin</artifactId>
-				<version>${tomcat.version}</version> 
-				<configuration>
-					<port>${webserver.port}</port>
-					<path>/${project.artifactId}</path>
-					<uriEncoding>${project.build.sourceEncoding}</uriEncoding>
-				</configuration>
-			</plugin>
-			
-			<!-- tomcat7插件 -->
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>${tomcat.version}</version> 
-				<configuration>
-					<port>${webserver.port}</port>
-					<path>/${project.artifactId}</path>
-					<uriEncoding>${project.build.sourceEncoding}</uriEncoding>
-				</configuration>
-			</plugin>
-           
+
+            <!-- tomcat6插件 -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat6-maven-plugin</artifactId>
+                <version>${tomcat.version}</version>
+                <configuration>
+                    <port>${webserver.port}</port>
+                    <path>/${project.artifactId}</path>
+                    <uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+                </configuration>
+            </plugin>
+
+            <!-- tomcat7插件 -->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>${tomcat.version}</version>
+                <configuration>
+                    <port>${webserver.port}</port>
+                    <path>/${project.artifactId}</path>
+                    <uriEncoding>${project.build.sourceEncoding}</uriEncoding>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -179,6 +179,8 @@
     </build>
     <!-- 依赖项定义 -->
     <dependencies>
+
+
         <!-- SPRING begin -->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -234,17 +236,17 @@
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-        
-        <!-- spring websocket--> 
-		<dependency>  
-           <groupId>org.springframework</groupId>  
-           <artifactId>spring-websocket</artifactId>  
-           <version>${spring.version}</version>  
-        </dependency>  
-        <dependency>  
-           <groupId>org.springframework</groupId>  
-           <artifactId>spring-messaging</artifactId>  
-           <version>${spring.version}</version>  
+
+        <!-- spring websocket-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
         <!-- bean validate -->
@@ -301,9 +303,9 @@
             <version>${mysql.driver.version}</version>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>ojdbc14</groupId>-->
-            <!--<artifactId>ojdbc14</artifactId>-->
-            <!--<version>10.2.0.3.0</version>-->
+        <!--<groupId>ojdbc14</groupId>-->
+        <!--<artifactId>ojdbc14</artifactId>-->
+        <!--<version>10.2.0.3.0</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>ojdbc14</groupId>
@@ -311,7 +313,7 @@
             <version>10.2.0.3.0</version>
             <systemPath>${lib.path}/ojdbc14-10.2.0.3.0.jar</systemPath>
             <scope>system</scope>
-	</dependency>
+        </dependency>
         <dependency>
             <groupId>net.sourceforge.jtds</groupId>
             <artifactId>jtds</artifactId>
@@ -352,7 +354,7 @@
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
-             <scope>provided</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -373,18 +375,18 @@
             <version>2.1</version>
             <scope>provided</scope>
         </dependency>
-       <!--  <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>jsp-api</artifactId>
-            <version>2.2</version>
-            <scope>provided</scope>
-        </dependency>--> 
+        <!--  <dependency>
+             <groupId>javax.servlet</groupId>
+             <artifactId>javax.servlet-api</artifactId>
+             <version>3.0.1</version>
+             <scope>provided</scope>
+         </dependency>
+         <dependency>
+             <groupId>javax.servlet.jsp</groupId>
+             <artifactId>jsp-api</artifactId>
+             <version>2.2</version>
+             <scope>provided</scope>
+         </dependency>-->
 
 
         <!-- J2CACHE begin -->
@@ -484,11 +486,11 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-simple</artifactId>-->
+            <!--<version>${slf4j.version}</version>-->
+        <!--</dependency>-->
         <!-- common-logging 实际调用slf4j -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -563,7 +565,7 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>${fastjson.version}</version>
-        </dependency> 
+        </dependency>
 
         <!-- xstream xml -->
         <dependency>
@@ -641,18 +643,18 @@
             <systemPath>${lib.path}/batik-util-1.7.jar</systemPath>
             <scope>system</scope>
         </dependency>
-        
+
         <!-- quartz -->
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>${quartz.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz-jobs</artifactId>
-			<version>${quartz.version}</version>
-		</dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>${quartz.version}</version>
+        </dependency>
 
         <!-- 中文分词 -->
         <dependency>
@@ -672,20 +674,20 @@
             <systemPath>${lib.path}/org.jeeframework.gencode-2.0-tomcat8.5.jar</systemPath>
             <scope>system</scope>
         </dependency>
-	 <!-- Echarts图表依赖包开始 -->
+        <!-- Echarts图表依赖包开始 -->
         <!-- https://mvnrepository.com/artifact/com.github.abel533/ECharts -->
         <dependency>
             <groupId>com.github.abel533</groupId>
             <artifactId>ECharts</artifactId>
             <version>3.0.0.2</version>
         </dependency>
-	    <dependency>
-	        <groupId>com.google.code.gson</groupId>
-	        <artifactId>gson</artifactId>
-	        <version>2.6.2</version>
-	    </dependency>
-	    <!-- Echarts图表依赖包结束 -->
-		
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.6.2</version>
+        </dependency>
+        <!-- Echarts图表依赖包结束 -->
+
         <!-- TEST begin -->
         <dependency>
             <groupId>junit</groupId>
@@ -711,7 +713,7 @@
             <version>4.4.4</version>
         </dependency>
 
-	<!-- swagger-springmvc -->
+        <!-- swagger-springmvc -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
@@ -722,7 +724,7 @@
             <artifactId>springfox-swagger-ui</artifactId>
             <version>2.5.0</version>
         </dependency>
-	    <!-- swagger-springmvc dependencies -->
+        <!-- swagger-springmvc dependencies -->
         <!--httpclient -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -736,7 +738,7 @@
             <systemPath>${lib.path}/QRCode.jar</systemPath>
             <scope>system</scope>
         </dependency>
-       
+
         <!-- UTILS begin -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -755,13 +757,6 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.1.1</version>
-        </dependency>
-
-        <dependency>
-            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.11.3</version>
         </dependency>
 
         <!--jackson-->

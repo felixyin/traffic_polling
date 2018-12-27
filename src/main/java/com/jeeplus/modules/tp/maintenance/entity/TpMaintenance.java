@@ -175,7 +175,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.sendDate = sendDate;
 	}
 
-	@NotNull(message="施工单位不能为空")
+//	@NotNull(message="施工单位不能为空")
 	@ExcelField(title="施工单位", fieldType=Office.class, value="office.name", align=2, sort=19)
 	public Office getOffice() {
 		return office;
@@ -186,7 +186,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.office = office;
 	}
 
-	@NotNull(message="施工负责人不能为空")
+//	@NotNull(message="施工负责人不能为空")
 	@ExcelField(title="施工负责人", fieldType=User.class, value="leaderBy.name", align=2, sort=20)
 	public User getLeaderBy() {
 		return leaderBy;
@@ -197,7 +197,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@NotNull(message="施工开始时间不能为空")
+//	@NotNull(message="施工开始时间不能为空")
 	@ExcelField(title="施工开始时间", align=2, sort=20)
 	public Date getJobBeginDate() {
 		return jobBeginDate;
@@ -208,7 +208,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	}
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	@NotNull(message="施工结束时间不能为空")
+//	@NotNull(message="施工结束时间不能为空")
 	@ExcelField(title="施工结束时间", align=2, sort=21)
 	public Date getJobEndDate() {
 		return jobEndDate;

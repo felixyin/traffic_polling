@@ -246,15 +246,15 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>施工单位：</label>
                             <div class="col-sm-4">
-                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
                                     <sys:treeselect id="office" name="office.id" value="${tpMaintenance.office.id}"
                                                     labelName="office.name" labelValue="${tpMaintenance.office.name}"
                                                     title="施工单位" url="/sys/office/myTreeData?type=3"
                                                     cssClass="form-control required" allowClear="true"
                                                     notAllowSelectParent="true"/>
                                 </shiro:hasPermission>
-                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
-                                    <input type="hidden" name="office.id" value="${tpMaintenance.office.id}">
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <input type="hidden" id="officeId" name="office.id" value="${tpMaintenance.office.id}">
                                     ${tpMaintenance.office.name}
                                 </shiro:lacksPermission>
                             </div>
@@ -692,24 +692,24 @@
                                         </c:when>
                                         <c:otherwise>
                                             <input id="my-status" type="hidden" name="status" value="">
-                                            <c:if test="${status == null || status == ''}">
+
+                                            <%--<h2>${tpMaintenance.status}</h2>--%>
+                                            <c:if test="${tpMaintenance.status == null || tpMaintenance.status == ''}">
                                                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:paiDan">
                                                     <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
-                                                            onclick="document.getElementById('my-status').val(1);">派单
+                                                            onclick="document.getElementById('my-status').value=1;">派单
                                                     </button>
                                                 </shiro:hasPermission>
                                             </c:if>
-                                            <c:if test="${ status == '1'}">
+                                            <c:if test="${ tpMaintenance.status == '1' || tpMaintenance.status == '2'}">
                                                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:save">
                                                     <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
-                                                            onclick="document.getElementById('my-status').val(2);">保存草稿
+                                                            onclick="document.getElementById('my-status').value=2;">保存草稿
                                                     </button>
                                                 </shiro:hasPermission>
-                                            </c:if>
-                                            <c:if test="${ status == '2'}">
                                                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:done">
                                                     <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
-                                                            onclick="document.getElementById('my-status').val(3);"
+                                                            onclick="document.getElementById('my-status').value=3;"
                                                             title="完成派单后，除管理员外不可再次修改!!">
                                                         完成派单
                                                     </button>
@@ -717,24 +717,22 @@
                                             </c:if>
                                             <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveEnabled">
 
-                                                <c:if test="${ status == '3'}">
+                                                <c:if test="${ tpMaintenance.status == '3'}">
                                                     <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveSubmit">
                                                         <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
-                                                                onclick="document.getElementById('my-status').val(4);">提交审核
+                                                                onclick="document.getElementById('my-status').value=4;">提交审核
                                                         </button>
                                                     </shiro:hasPermission>
                                                 </c:if>
-                                                <c:if test="${ status == '4'}">
+                                                <c:if test="${ tpMaintenance.status == '4' ||  tpMaintenance.status == '5'}">
                                                     <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveYes">
                                                         <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
-                                                                onclick="document.getElementById('my-status').val(5);">审批通过
+                                                                onclick="document.getElementById('my-status').value=5;">审批通过
                                                         </button>
                                                     </shiro:hasPermission>
-                                                </c:if>
-                                                <c:if test="${ status == '5'}">
                                                     <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveNo">
                                                         <button class="btn btn-primary btn-lg btn-parsley" data-loading-text="正在提交..."
-                                                                onclick="document.getElementById('my-status').val(6);">审批不予通过
+                                                                onclick="document.getElementById('my-status').value=6;">审批不予通过
                                                         </button>
                                                     </shiro:hasPermission>
                                                 </c:if>

@@ -17,10 +17,10 @@
 	</div>
 	<div class="panel-body">
 	<div class="row">
-		<div class="col-sm-3 col-md-2" >
+		<div class="col-sm-4 col-md-3" >
 			<div id="jstree"></div> 
 		</div>
-		<div  class="col-sm-9 col-md-10 animated fadeInRight">
+		<div  class="col-sm-8 col-md-9 animated fadeInRight">
 			<!-- 搜索框-->
 			<div id="search-collapse" class="collapse">
 				<div class="accordion-inner">

@@ -41,10 +41,10 @@
         <div class="col-md-12">
             <div class="panel panel-primary">
                 <%--<div class="panel-heading">--%>
-                    <%--<h3 class="panel-title">--%>
-                        <a class="panelButton btn btn-primary" href="${ctx}/tp/maintenance/tpMaintenance"><i class="fa fa-reply"></i>
-                            返回</a>
-                    <%--</h3>--%>
+                <%--<h3 class="panel-title">--%>
+                <a class="panelButton btn btn-primary" href="${ctx}/tp/maintenance/tpMaintenance"><i class="fa fa-reply"></i>
+                    返回</a>
+                <%--</h3>--%>
                 <%--</div>--%>
                 <div class="panel-body">
                     <form:form id="inputForm" modelAttribute="tpMaintenance"
@@ -462,7 +462,7 @@
                                     </shiro:lacksPermission>
                                 </div>
                             </shiro:hasPermission>
-                            <c:if test="${fns:getUser().admin}">
+                            <c:if test="${fns:getUser().admin or fns:getUser().admin or fns:getUser().roleNames.contains('系统管理员')}">
                                 <label class="col-sm-2 control-label">任务状态：</label>
                                 <div class="col-sm-4">
                                     <form:select path="status" class="form-control required">
@@ -592,28 +592,26 @@
                                                 <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
                                                     <input type="hidden" name="tpMaintenanceItemList[{{idx}}].unit" value="{{row.unit}}">
                                                     {{row.unitName}}
-                                                    <%--<span id="unit_{{idx}}">{{row.unitName}}</span>--%>
-                                                    <%--<span id="unit_{{idx}}" class="my-unit-dict" unit="{{row.unit}}"></span>--%>
                                                 </shiro:lacksPermission>
                                             </td>
 
                                             <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
                                                 <td>
-                                                    <input id="tpMaintenanceItemList{{idx}}_price" type="number" autocomplete="off"
-                                                           name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"
-                                                           class="form-control my-price"/>
+                                                    <input id="tpMaintenanceItemList{{idx}}_price" type="text" autocomplete="off"
+                                                           name="tpMaintenanceItemList[{{idx}}].price" value="{{row.price}}"
+                                                           class="form-control isFloatGteZero my-price "/>
                                                 </td>
                                             </shiro:hasPermission>
                                             <shiro:lacksPermission name="tp:maintenance:tpMaintenance:money">
                                                 <input id="tpMaintenanceItemList{{idx}}_price" type="hidden" autocomplete="off"
-                                                       name="tpMaintenanceItemList[{{idx}}].price" type="text" value="{{row.price}}"
+                                                       name="tpMaintenanceItemList[{{idx}}].price"  value="{{row.price}}"
                                                        class="form-control my-price"/>
                                             </shiro:lacksPermission>
 
                                             <td>
                                                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
                                                     <input id="tpMaintenanceItemList{{idx}}_count" type="number" autocomplete="off"
-                                                           name="tpMaintenanceItemList[{{idx}}].count" type="text" value="{{row.count}}"
+                                                           name="tpMaintenanceItemList[{{idx}}].count"  value="{{row.count}}"
                                                            class="form-control required isIntGtZero my-count"/>
                                                 </shiro:hasPermission>
                                                 <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
@@ -683,7 +681,8 @@
                             <div class="col-lg-6">
                                 <div class="text-center">
                                     <c:choose>
-                                        <c:when test="${fns:getUser().admin}">
+                                        <%-- 超级管理员和系统管理员都具有直接保存权限 --%>
+                                        <c:when test="${fns:getUser().admin or fns:getUser().roleNames.contains('系统管理员')}">
                                             <button class="btn btn-primary btn-lg btn-parsley" style="width: 200px;"
                                                     data-loading-text="正在提交...">
                                                 <i class="fa fa-save"></i>
@@ -791,6 +790,18 @@
                 onChange: function (contents, $editable) {
                     $("input[name='process']").val($('#process').summernote('code'));//取富文本的值
                 }
+            }
+        });
+
+        // 零件单价，不允许输入非数字
+        $(document).on("change", ".my-price", function () {
+            var v = $(this).val();
+            v = parseFloat(v);
+            if (v >= 0) {
+                v = v.toFixed(2);
+                $(this).val(v);
+            } else {
+                $(this).val(0);
             }
         });
 
@@ -937,7 +948,7 @@
 
     // 合计金额方法
     function calMoney() {
-        var allMoney = 0;
+        var allMoney = 0.0;
         var context = $('.close').filter(function () {
             return $(this).attr('title') == '删除';
         }).parents('tr');
@@ -946,13 +957,15 @@
             var row = $(ele).parents('tr');
             var price = row.find('.my-price').val();
             if (count && price) {
-                var result = parseInt(count) * parseInt(price);
+                var result = parseFloat(count) * parseFloat(price);
+                result = result.toFixed(2);
                 row.find('.my-money').val(result);
-                allMoney += result;
+                allMoney += parseFloat(result);
             } else {
                 row.find('.my-money').val(0);
             }
         });
+        allMoney = allMoney.toFixed(2);
         $('#money').val(allMoney);
         $('#my-money-span').text(allMoney + "¥");
     }

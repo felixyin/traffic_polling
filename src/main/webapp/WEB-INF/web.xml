@@ -61,7 +61,7 @@
   </filter>
   <filter-mapping>
     <filter-name>sitemeshFilter</filter-name>
-    <url-pattern>/a/*</url-pattern>
+    <url-pattern>/tp/*</url-pattern>
   </filter-mapping>
   <filter-mapping>
     <filter-name>sitemeshFilter</filter-name>

@@ -166,7 +166,7 @@
 					
 					
 					<td>
-						<sys:fileUpload path="tpMaterialPartList{{idx}}_pic"  value="{{row.pic}}" type="file" uploadPath="/tp/material/tpMaterial"/>
+						<sys:fileUpload path="tpMaterialPartList[{{idx}}].pic" value="{{row.pic}}" type="file" uploadPath="/tp/material/tpMaterialPart"/>
 					</td>
 					
 					

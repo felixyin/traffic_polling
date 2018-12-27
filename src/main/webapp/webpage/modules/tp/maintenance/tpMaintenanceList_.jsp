@@ -432,6 +432,10 @@
         var processHtml = jp.unescapeHTML(row.process);
         $resultHtml.find('#tab-' + row.id + '-5').append(processHtml);
 
+        // 问题描述
+        var jobDescriptionHtml = jp.unescapeHTML(row.jobDescription);
+        $resultHtml.find('#tab-' + row.id + '-8').append(jobDescriptionHtml);
+
         // 审批意见
         row.approve = row.approve ? row.approve : '无意见';
 
@@ -455,6 +459,7 @@
                 <li><a data-toggle="tab" href="#tab-{{idx}}-3" aria-expanded="true">施工中照片</a></li>
                 <li><a data-toggle="tab" href="#tab-{{idx}}-4" aria-expanded="true">施工后照片</a></li>
                 <li><a data-toggle="tab" href="#tab-{{idx}}-6" aria-expanded="true">参考地址</a></li>
+                <li><a data-toggle="tab" href="#tab-{{idx}}-8" aria-expanded="true">问题描述</a></li>
                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveEnabled">
                     <li><a data-toggle="tab" href="#tab-{{idx}}-7" aria-expanded="true">审批意见</a></li>
                 </shiro:hasPermission>
@@ -498,6 +503,7 @@
                         经纬度：{{location}}
                     </p>
                 </div>
+                <div id="tab-{{idx}}-8" class="tab-pane fade "></div>
                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:approveEnabled">
                     <div id="tab-{{idx}}-7" class="tab-pane fade ">
                         {{approve}}

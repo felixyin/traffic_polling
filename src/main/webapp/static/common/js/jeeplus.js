@@ -8,6 +8,15 @@
 (function () {
 
     jp = {
+        getLabelValue: function (values) {
+            var valueAttr = values.split('|');
+            var labels = '';
+            for (var i = 0; i < valueAttr.length; i++) {
+                var value = valueAttr[i];
+                labels += value.substring(value.lastIndexOf('/') + 1) + ',';
+            }
+            return labels.substring(0, labels.lastIndexOf(','));
+        },
 
         /**使用jp.open代替top.layer.open，参数使用完全一致，请参照layer官网, 不在直接暴露layer在，jeeplus对layer进行统一封装**/
         open: top.layer.open,

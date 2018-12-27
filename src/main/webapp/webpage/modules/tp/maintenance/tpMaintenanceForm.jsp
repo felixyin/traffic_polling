@@ -83,6 +83,22 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label">问题描述：</label>
+                            <div class="col-sm-10">
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <input type="hidden" name="jobDescription" class="required" value=" ${tpMaintenance.jobDescription}"/>
+                                    <div id="jobDescription">
+                                            ${fns:unescapeHtml(tpMaintenance.jobDescription)}
+                                    </div>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <input type="hidden" name="jobDescription" value="${tpMaintenance.jobDescription}">
+                                    ${fns:unescapeHtml(tpMaintenance.jobDescription)}
+                                </shiro:lacksPermission>
+
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-sm-2 control-label"><font color="red">*</font>选择位置：</label>
                             <div class="col-sm-4">
                                 <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:jiaoJing">
@@ -787,6 +803,17 @@
             callbacks: {
                 onChange: function (contents, $editable) {
                     $("input[name='process']").val($('#process').summernote('code'));//取富文本的值
+                }
+            }
+        });
+
+        //富文本初始化
+        $('#jobDescription').summernote({
+            height: 300,
+            lang: 'zh-CN',
+            callbacks: {
+                onChange: function (contents, $editable) {
+                    $("input[name='jobDescription']").val($('#jobDescription').summernote('code'));//取富文本的值
                 }
             }
         });

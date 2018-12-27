@@ -13,6 +13,7 @@
 		a.num AS "num",
 		a.job_type AS "jobType",
 		a.job_source AS "source",
+		a.job_description AS "jobDescription",
 		a.location AS "location",
 		a.area_id AS "area.id",
 		a.roadcross_id AS "roadcross.id",
@@ -98,6 +99,9 @@
 			</if>
 			<if test="jobType != null and jobType != ''">
 				AND a.job_type = #{jobType}
+			</if>
+			<if test="jobDescription != null and jobDescription != ''">
+				AND a.job_description = #{jobDescription}
 			</if>
 			<if test="source != null and source != ''">
 				AND a.job_source = #{source}
@@ -186,6 +190,7 @@
 			num,
 			job_type,
 			job_source,
+			job_description,
 			location,
 			area_id,
 			roadcross_id,
@@ -217,6 +222,7 @@
 			#{num},
 			#{jobType},
 			#{source},
+			#{jobDescription},
 			#{location},
 			#{area.id},
 			#{roadcross.id},
@@ -248,6 +254,7 @@
 			num = #{num},
 			job_type = #{jobType},
 			job_source = #{source},
+			job_description = #{jobDescription},
 			location = #{location},
 			area_id = #{area.id},
 			roadcross_id = #{roadcross.id},

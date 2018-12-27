@@ -28,6 +28,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	private String num;		// 任务编号
 	private String jobType;		// 任务类型
 	private String source;		// 任务来源
+    private String jobDescription; //任务描述
 	private String location;		// 经纬度
 	private SysArea area;		// 所属区域
 	private TpRoadCrossing roadcross;		// 所属路口
@@ -89,6 +90,16 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 
 	public void setSource(String source) {
 		this.source = source;
+	}
+
+	@NotNull(message="问题描述不能为空")
+	@ExcelField(title="问题描述",align=2, sort=29)
+	public String getJobDescription() {
+		return jobDescription;
+	}
+
+	public void setJobDescription(String jobDescription) {
+		this.jobDescription = jobDescription;
 	}
 
 	@ExcelField(title="经纬度", align=2, sort=10)

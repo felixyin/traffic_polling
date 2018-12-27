@@ -334,6 +334,7 @@
 				</div>
 
 				<div class="J_mainContent"  id="content-main" style="${cookie.tab.value!=false?'height:calc(100% - 40px)':'height:calc(100%)'}">
+				<%--<div class="J_mainContent"  id="content-main">--%>
 					<iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="${ctx}/home" frameborder="0" data-id="${ctx}/home" seamless></iframe>
 				</div>
 			</div>
@@ -342,9 +343,9 @@
 		</div>
 	</div>
 
-	<div class="footer">
-		<div class="pull-left"><a href="http://www.yinbin.ink">http://www.yinbin.ink</a> &copy; 2018-2019</div>
-	</div>
+	<%--<div class="footer">--%>
+		<%--<div class="pull-left"><a href="http://www.yinbin.ink">http://www.yinbin.ink</a> &copy; 2018-2019</div>--%>
+	<%--</div>--%>
 
 </section>
 

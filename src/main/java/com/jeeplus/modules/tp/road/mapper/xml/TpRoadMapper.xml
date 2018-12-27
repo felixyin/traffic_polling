@@ -57,6 +57,7 @@
                 <if test="dbName == 'oracle'">'%,'||#{area.id}||',%')</if>
                 <if test="dbName == 'mysql'">CONCAT('%,', #{area.id}, ',%')</if>
                 <if test="dbName == 'mssql'">'%'+#{area.id}+'%')</if>
+				)
             </if>
 		</where>
 		<choose>

@@ -294,9 +294,9 @@
         </div>
     </div>
 
-    <div class="footer">
-        <div class="pull-left"><a href="http://www.yinbin.ink">http://www.yinbin.ink</a> &copy; 2018-2019</div>
-    </div>
+    <%--<div class="footer">--%>
+        <%--<div class="pull-left"><a href="http://www.yinbin.ink">http://www.yinbin.ink</a> &copy; 2018-2019</div>--%>
+    <%--</div>--%>
 
 </section>
 

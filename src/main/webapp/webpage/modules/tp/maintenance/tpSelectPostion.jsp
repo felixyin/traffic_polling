@@ -165,58 +165,61 @@
         }
     }
 
+    var city = "<%= Global.getConfig("city")%>".trim();
+    var location2 = '${location}'.trim();
 
-    var city = '<%= Global.getConfig("city")%>';
+    var map = new AMap.Map('container', {
+        mapStyle: 'amap://styles/light', //设置地图的显示样式
+        /*
+        bg 区域面
+        point 兴趣点
+        road 道路及道路标注
+        building 建筑物
+         */
+        features: [
+            // 'bg',
+            'road',
+            // 'point',
+            // 'building'
+        ],// 多个种类要素显示
+        // resizeEnable: true,
+        zoom: 17,
+        scrollWheel: true,
+        city: city
+    });
+
+    var auto = new AMap.Autocomplete({
+        input: "tipinput",
+        citylimit: true,
+        city: city // 兴趣点城市
+    });
+
+    if (location2) {
+        var list = location2.split(',');
+        var lng = list[0];
+        var lat = list[1];
+        // 传入经纬度，设置地图中心点
+        var position = new AMap.LngLat(lng, lat);
+        // 简写 var position = [116, 39];
+        map.setCenter(position);
+    } else {
+        console.log(city);
+        map.setCity(city);
+        auto.setCity(city);
+        auto.setCityLimit(city);
+    }
+
+    // ----------------------------------- 选中自动完成行，地图定位
+    AMap.event.addListener(auto, "select", function (e) {
+        // console.log(e);
+        // 传入经纬度，设置地图中心点
+        var position = new AMap.LngLat(e.poi.location.lng, e.poi.location.lat);  // 标准写法
+        // 简写 var position = [116, 39];
+        map.setCenter(position);
+        positionPicker.start();
+    });//注册监听，当选中某条记录时会触发
+
     AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
-        var map = new AMap.Map('container', {
-            mapStyle: 'amap://styles/light', //设置地图的显示样式
-            /*
-            bg 区域面
-            point 兴趣点
-            road 道路及道路标注
-            building 建筑物
-             */
-            features: [
-                // 'bg',
-                'road',
-                // 'point',
-                // 'building'
-            ],// 多个种类要素显示
-            // resizeEnable: true,
-            zoom: 17,
-            scrollWheel: true,
-            city: city
-        });
-
-        var location = '${location}';
-        if (location) {
-            var list = location.split(',');
-            var lng = list[0];
-            var lat = list[1];
-            // 传入经纬度，设置地图中心点
-            var position = new AMap.LngLat(lng, lat);  // 标准写法
-            // 简写 var position = [116, 39];
-            map.setCenter(position);
-        }
-
-        // ----------------------------------- 输入提示
-        var auto = new AMap.Autocomplete({
-            input: "tipinput",
-            citylimit: true,
-            city: city // 兴趣点城市
-        });
-
-        // ----------------------------------- 选中自动完成行，地图定位
-        AMap.event.addListener(auto, "select", function (e) {
-            // console.log(e);
-            // 传入经纬度，设置地图中心点
-            var position = new AMap.LngLat(e.poi.location.lng, e.poi.location.lat);  // 标准写法
-            // 简写 var position = [116, 39];
-            map.setCenter(position);
-            positionPicker.start();
-        });//注册监听，当选中某条记录时会触发
-
-
         // ----------------------------------- 拖拽定位后，显示数据
         var positionPicker = new PositionPicker({
             mode: 'dragMap',

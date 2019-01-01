@@ -497,7 +497,7 @@
                                     <div style="float:right;padding-top:2px;padding-right:15px;line-height: 40px;">
                                         <label style="display:inline">物料总成本：</label>
                                         <span id="my-money-span">${tpMaintenance.money}元</span>
-                                        <input id="money" name="tpMaintenance.money" value="0" type="hidden"
+                                        <input id="money" name="money" value="0" type="hidden"
                                                class="form-control  isFloatGtZero">
                                     </div>
                                 </shiro:hasPermission>
@@ -828,6 +828,19 @@
             } else {
                 $(this).val(0);
             }
+            // calMoney();
+        });
+
+        // 零件数量，不允许输入非整数
+        $(document).on("keyup", ".my-count", function () {
+            var v = $(this).val();
+            v = parseInt(v);
+            if (v >= 0) {
+                $(this).val(v);
+            } else {
+                $(this).val(0);
+            }
+            // calMoney();
         });
 
         // 价格计算
@@ -990,7 +1003,7 @@
                 row.find('.my-money').val(0);
             }
         });
-        allMoney = allMoney.toFixed(2);
+        allMoney = parseFloat(allMoney).toFixed(2);
         $('#money').val(allMoney);
         $('#my-money-span').text(allMoney + "¥");
     }

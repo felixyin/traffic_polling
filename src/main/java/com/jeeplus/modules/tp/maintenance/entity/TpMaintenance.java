@@ -229,7 +229,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 		this.jobEndDate = jobEndDate;
 	}
 
-	@ExcelField(title="总费用", align=2, sort=22)
+	@ExcelField(title="物料总成本", align=2, sort=22)
 	public Double getMoney() {
 		return money;
 	}

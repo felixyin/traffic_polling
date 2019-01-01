@@ -200,7 +200,7 @@
                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
                 , {
                     field: 'money',
-                    title: '总费用',
+                    title: '物料总成本',
                     sortable: true,
                     sortName: 'money'
 

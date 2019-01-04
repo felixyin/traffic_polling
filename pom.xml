@@ -248,6 +248,30 @@
             <artifactId>spring-messaging</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!-- spring整合mqtt 开始-->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-mqtt</artifactId>
+            <version>${spring.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.paho</groupId>
+                    <artifactId>mqtt-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- spring整合mqtt 结束-->
+        <!-- mqtt依赖 开始 -->
+        <dependency>
+            <groupId>org.fusesource.mqtt-client</groupId>
+            <artifactId>mqtt-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.paho</groupId>
+            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+        </dependency>
+        <!-- mqtt依赖 结束 -->
+
 
         <!-- bean validate -->
         <dependency>
@@ -778,7 +802,7 @@
             <version>2.5.1</version>
         </dependency>
 
-        <!-- UTILS end -->
+
     </dependencies>
 
 </project>

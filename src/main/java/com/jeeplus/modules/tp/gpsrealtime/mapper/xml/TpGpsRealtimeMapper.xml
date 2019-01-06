@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.tp.gpsrealtime.mapper.TpGpsRealtimeMapper">
+    
+	<sql id="tpGpsRealtimeColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.remarks AS "remarks",
+		a.del_flag AS "delFlag",
+		a.car_id AS "car.id",
+		a.device_id AS "deviceId",
+		a.up_time AS "upTime",
+		a.location_status AS "locationStatus",
+		a.lat_gps AS "latGps",
+		a.lat_hemisphere AS "latHemisphere",
+		a.lon_gps AS "lonGps",
+		a.lon_hemisphere AS "lonHemisphere",
+		a.ground_rate AS "groundRate",
+		a.ground_direction AS "groundDirection",
+		a.declination AS "declination",
+		a.declination_direction AS "declinationDirection",
+		a.model AS "model",
+		a.lat_cal AS "latCal",
+		a.lon_cal AS "lonCal",
+		a.lat_gd AS "latGD",
+		a.lon_gd AS "lonGD"
+	</sql>
+	
+	<sql id="tpGpsRealtimeJoins">
+		
+	</sql>
+	
+    
+	<select id="get" resultType="TpGpsRealtime" >
+		SELECT 
+			<include refid="tpGpsRealtimeColumns"/>
+		FROM tp_gps_realtime a
+		<include refid="tpGpsRealtimeJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TpGpsRealtime" >
+		SELECT 
+			<include refid="tpGpsRealtimeColumns"/>
+		FROM tp_gps_realtime a
+		<include refid="tpGpsRealtimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="car != null and car.id != null and car.id != ''">
+				AND a.car_id = #{car.id}
+			</if>
+			<if test="deviceId != null and deviceId != ''">
+				AND a.device_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{deviceId}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{deviceId}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{deviceId},'%')</if>
+			</if>
+			<if test="beginUpTime != null and endUpTime != null ">
+				AND a.up_time BETWEEN #{beginUpTime} AND #{endUpTime}
+			</if>
+			<if test="locationStatus != null and locationStatus != ''">
+				AND a.location_status = #{locationStatus}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TpGpsRealtime" >
+		SELECT 
+			<include refid="tpGpsRealtimeColumns"/>
+		FROM tp_gps_realtime a
+		<include refid="tpGpsRealtimeJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tp_gps_realtime(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			remarks,
+			del_flag,
+			car_id,
+			device_id,
+			up_time,
+			location_status,
+			lat_gps,
+			lat_hemisphere,
+			lon_gps,
+			lon_hemisphere,
+			ground_rate,
+			ground_direction,
+			declination,
+			declination_direction,
+			model,
+			lat_cal,
+			lon_cal,
+			lat_gd,
+			lon_gd
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{remarks},
+			#{delFlag},
+			#{car.id},
+			#{deviceId},
+			#{upTime},
+			#{locationStatus},
+			#{latGps},
+			#{latHemisphere},
+			#{lonGps},
+			#{lonHemisphere},
+			#{groundRate},
+			#{groundDirection},
+			#{declination},
+			#{declinationDirection},
+			#{model},
+			#{latCal},
+			#{lonCal},
+			#{latGD},
+			#{lonGD}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tp_gps_realtime SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			remarks = #{remarks},
+			car_id = #{car.id},
+			device_id = #{deviceId},
+			up_time = #{upTime},
+			location_status = #{locationStatus},
+			lat_gps = #{latGps},
+			lat_hemisphere = #{latHemisphere},
+			lon_gps = #{lonGps},
+			lon_hemisphere = #{lonHemisphere},
+			ground_rate = #{groundRate},
+			ground_direction = #{groundDirection},
+			declination = #{declination},
+			declination_direction = #{declinationDirection},
+			model = #{model},
+			lat_cal = #{latCal},
+			lon_cal = #{lonCal},
+			lat_gd = #{latGD},
+			lon_gd = #{lonGD}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM tp_gps_realtime
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE tp_gps_realtime SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="TpGpsRealtime" statementType="STATEMENT">
+		select * FROM tp_gps_realtime  where ${propertyName} = '${value}'
+	</select>
+
+    <select id="findGpsList" resultType="com.jeeplus.modules.tp.gpsrealtime.entity.TpGpsRealtime">
+		SELECT
+		<include refid="tpGpsRealtimeColumns"/>
+		FROM tp_gps_realtime a
+		<where>
+			a.del_flag = 0
+			<if test="deviceId != null and deviceId != ''">
+				AND a.device_id = #{deviceId}
+			</if>
+		</where>
+	</select>
+
+</mapper>

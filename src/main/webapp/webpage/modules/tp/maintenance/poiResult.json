@@ -1,0 +1,97 @@
+{
+  "status": "1",
+  "info": "OK",
+  "infocode": "10000",
+  "regeocode": {
+    "formatted_address": "北京市朝阳区望京街道方恒国际中心B座方恒国际中心",
+    "addressComponent": {
+      "country": "中国",
+      "province": "北京市",
+      "city": [],
+      "citycode": "010",
+      "district": "朝阳区",
+      "adcode": "110105",
+      "township": "望京街道",
+      "towncode": "110105026000",
+      "neighborhood": {
+        "name": "方恒国际中心",
+        "type": "商务住宅;楼宇;商住两用楼宇"
+      },
+      "building": {
+        "name": "方恒国际中心B座",
+        "type": "商务住宅;楼宇;商务写字楼"
+      },
+      "streetNumber": {
+        "street": "阜通东大街",
+        "number": "6-2号楼",
+        "location": "116.48129,39.9902869",
+        "direction": "西南",
+        "distance": "25.9205"
+      },
+      "businessAreas": [
+        {
+          "location": "116.47089234140496,39.9976009239991",
+          "name": "望京",
+          "id": "110105"
+        },
+        {
+          "location": "116.47305065693433,39.98350093430656",
+          "name": "花家地",
+          "id": "110105"
+        },
+        {
+          "location": "116.48976000793644,39.984900765873",
+          "name": "大山子",
+          "id": "110105"
+        }
+      ]
+    },
+    "pois": [],
+    "roads": [
+      {
+        "id": "010J50F0010203327",
+        "name": "阜通东大街",
+        "direction": "东南",
+        "distance": "55.3471",
+        "location": "116.481,39.9909"
+      },
+      {
+        "id": "010J50F00102037468",
+        "name": "望京小街",
+        "direction": "西",
+        "distance": "114.321",
+        "location": "116.483,39.99"
+      },
+      {
+        "id": "010J50F0010204252",
+        "name": "阜荣街",
+        "direction": "东北",
+        "distance": "145.602",
+        "location": "116.48,39.9898"
+      }
+    ],
+    "roadinters": [
+      {
+        "direction": "东",
+        "distance": "173.493",
+        "location": "116.4796256,39.98983306",
+        "first_id": "010J50F0010203327",
+        "first_name": "阜通东大街",
+        "second_id": "010J50F0010204252",
+        "second_name": "阜荣街"
+      }
+    ],
+    "aois": [
+      {
+        "id": "B000A837FH",
+        "name": "方恒国际中心",
+        "adcode": "110105",
+        "location": "116.481901,39.990758",
+        "area": "38428.606017",
+        "distance": "0",
+        "type": "120203"
+      }
+    ]
+  }
+}
+

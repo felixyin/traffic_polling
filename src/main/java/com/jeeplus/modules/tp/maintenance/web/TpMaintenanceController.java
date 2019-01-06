@@ -3,29 +3,18 @@
  */
 package com.jeeplus.modules.tp.maintenance.web;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
 import com.jeeplus.common.utils.JsonUtils;
-import com.jeeplus.common.utils.base.PropertiesUtil;
 import com.jeeplus.common.utils.text.Charsets;
-import com.jeeplus.modules.iim.entity.LayGroup;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
-import com.jeeplus.modules.tp.road.entity.SysArea;
-import com.jeeplus.modules.tp.road.service.SysAreaService;
-import com.jeeplus.modules.tp.road.service.TpRoadService;
-import com.jeeplus.modules.tp.roadcross.service.TpRoadCrossingService;
-import jsonscn.json2bean.Addresscomponent;
-import jsonscn.json2bean.PositionRootBean;
-import jsonscn.json2bean.Regeocode;
-import org.apache.commons.collections.CollectionUtils;
+import com.jeeplus.modules.tp.maintenance.gdbean.PositionRootBean;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -34,7 +23,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +30,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.config.Global;
 import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
@@ -50,7 +37,6 @@ import com.jeeplus.common.utils.excel.ExportExcel;
 import com.jeeplus.common.utils.excel.ImportExcel;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
 import com.jeeplus.modules.tp.maintenance.service.TpMaintenanceService;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  * 施工Controller

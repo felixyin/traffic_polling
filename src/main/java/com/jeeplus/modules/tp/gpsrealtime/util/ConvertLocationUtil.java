@@ -1,44 +1,105 @@
-package com.jeeplus.modules.tp.mqtt.util;
+package com.jeeplus.modules.tp.gpsrealtime.util;
 
+import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.JsonUtils;
 import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.common.utils.time.DateUtil;
+import com.jeeplus.modules.tp.gpsrealtime.entity.TpGpsRealtime;
+
+import java.text.ParseException;
+import java.util.Date;
 
 
 public class ConvertLocationUtil {
+    private static String GD_CONVERT_URL = "https://restapi.amap.com/v3/assistant/coordinate/convert?key=806cfc91a232e5be93e358b5af52f1c9&coordsys=gps&locations=";
 
-    public static GpsBean convert(String dtuMsg) {
-        if (StringUtils.isNotBlank(dtuMsg)) {
+    public static TpGpsRealtime convert(String dtuMsg) {
+        if (StringUtils.isNotBlank(dtuMsg) && dtuMsg.length() > 50) {
+
+            TpGpsRealtime gpsRealtime = new TpGpsRealtime();
+
             String[] list = dtuMsg.split(",");
-            String deviceId = list[1]; //设备id（唯一编号，用于标识不同设备和对应的车辆）
-            String utcHms = list[3]; //UTC 时间，hhmmss.sss(时分秒.毫秒)格式
-            String locationStatus = list[4];//定位状态，A=有效定位，V=无效定位
-            String latStr = list[5]; //纬度 ddmm.mmmm(度分)格式(前面的 0 也将被传输)
-            String latHemisphere = list[6]; //纬度半球 N(北半球)或 S(南半球)
-            String lonStr = list[7]; //经度 dddmm.mmmm(度分)格式(前面的 0 也将被传输)
-            String lonHemisphere = list[8]; //经度半球 E(东经)或 W(西经)
-            String groundRate = list[9]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
-            String groundDirection = list[10]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
-            String utcDate = list[11]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
-            String declination = list[12]; //磁偏角(000.0~180.0 度，前面的 0 也将被传输)
-            String declinationDirection = list[13]; //磁偏角方向，E(东)或 W(西)
-            String model = list[14]; //模式指示(仅 NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效)
 
+
+            String deviceId = list[1]; //设备id（唯一编号，用于标识不同设备和对应的车辆）
+            gpsRealtime.setDeviceId(deviceId);
+
+
+//            计算时间
+            String utcHms = list[3]; //UTC 时间，hhmmss.sss(时分秒.毫秒)格式
+            Date upTime = null;
+            try {
+                upTime = DateUtils.parseDate(DateUtils.getDate() + " " + utcHms, "yyyy-MM-dd hhmmss.sss");
+                gpsRealtime.setUpTime(upTime);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            String locationStatus = list[4];//定位状态，A=有效定位，V=无效定位
+            gpsRealtime.setLocationStatus(locationStatus);
+
+
+            String latStr = list[5]; //纬度 ddmm.mmmm(度分)格式(前面的 0 也将被传输)
+            gpsRealtime.setLatGps(latStr);
+
+
+            String latHemisphere = list[6]; //纬度半球 N(北半球)或 S(南半球)
+            gpsRealtime.setLatHemisphere(latHemisphere);
+
+
+            String lonStr = list[7]; //经度 dddmm.mmmm(度分)格式(前面的 0 也将被传输)
+            gpsRealtime.setLonGps(lonStr);
+
+
+            String lonHemisphere = list[8]; //经度半球 E(东经)或 W(西经)
+            gpsRealtime.setLonHemisphere(lonHemisphere);
+
+
+            String groundRate = list[9]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
+            gpsRealtime.setGroundRate(groundRate);
+
+
+            String groundDirection = list[10]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
+            gpsRealtime.setGroundDirection(groundDirection);
+
+
+            String utcDate = list[11]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
+
+
+            String declination = list[12]; //磁偏角(000.0~180.0 度，前面的 0 也将被传输)
+            gpsRealtime.setDeclination(declination);
+
+
+            String declinationDirection = list[13]; //磁偏角方向，E(东)或 W(西)
+            gpsRealtime.setDeclinationDirection(declinationDirection);
+
+
+            String model = list[14]; //模式指示(仅 NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效)
+            gpsRealtime.setModel(model);
+
+
+//            解密纬度
             String latStr1 = latStr.substring(0, 2);
             String latStr2 = latStr.substring(2, 4);
             String latStr3 = latStr.substring(5, latStr.length());
             System.out.println("分割后纬度：" + latStr1 + "," + latStr2 + "," + latStr3);
-            double lat = Double.parseDouble(latStr1) + BigDecimalUtil.div(Double.parseDouble(latStr2), 60) + BigDecimalUtil.div(Double.parseDouble(latStr3), 600000);
+            double latCal = Double.parseDouble(latStr1) + BigDecimalUtil.div(Double.parseDouble(latStr2), 60) + BigDecimalUtil.div(Double.parseDouble(latStr3), 600000);
+            gpsRealtime.setLatCal(String.valueOf(latCal));
 
+
+//            解密经度
             String lonStr1 = lonStr.substring(0, 3);
             String lonStr2 = lonStr.substring(3, 5);
             String lonStr3 = lonStr.substring(6, lonStr.length());
             System.out.println("分割后经度：" + lonStr1 + "," + lonStr2 + "," + lonStr3);
-            double lon = Double.parseDouble(lonStr1) + BigDecimalUtil.div(Double.parseDouble(lonStr2), 60) + BigDecimalUtil.div(Double.parseDouble(lonStr3), 600000);
+            double lonCal = Double.parseDouble(lonStr1) + BigDecimalUtil.div(Double.parseDouble(lonStr2), 60) + BigDecimalUtil.div(Double.parseDouble(lonStr3), 600000);
+            gpsRealtime.setLonCal(String.valueOf(lonCal));
 
-            // https://restapi.amap.com/v3/assistant/coordinate/convert?key=806cfc91a232e5be93e358b5af52f1c9&coordsys=gps&locations=120.41621666670001,36.164163333299996
+
+//            计算高德经纬度
             String lonGD = null, latGD = null;
-            String json = HttpUtil.get("https://restapi.amap.com/v3/assistant/coordinate/convert?key=806cfc91a232e5be93e358b5af52f1c9&coordsys=gps&locations=120.41621666670001,36.164163333299996");
-            System.out.println(json);
+            String json = HttpUtil.get(GD_CONVERT_URL + lonCal + "," + latCal);
             if (StringUtils.isNotBlank(json)) {
                 ConvertLocationBean convertLocationBean = JsonUtils.jsonToObject(json, ConvertLocationBean.class);
                 if (convertLocationBean != null) {
@@ -47,7 +108,13 @@ public class ConvertLocationUtil {
                     latGD = split[1];
                 }
             }
-            return new GpsBean(deviceId, utcHms, locationStatus, String.valueOf(lat), latHemisphere, String.valueOf(lon), lonHemisphere, groundRate, groundDirection, utcDate, declination, declinationDirection, model, lonGD, latGD);
+            gpsRealtime.setLatGD(latGD);
+            gpsRealtime.setLonGD(lonGD);
+
+
+            return gpsRealtime;
+//            return new GpsBean(deviceId, utcHms, locationStatus, latStr, latHemisphere, lonStr, lonHemisphere, groundRate, groundDirection,
+//                    utcDate, declination, declinationDirection, model, String.valueOf(latCal), String.valueOf(lonCal), latGD, lonGD);
         }
         return null;
     }
@@ -234,7 +301,7 @@ public class ConvertLocationUtil {
     public static void main(String[] args) {
         String gpsMsg = "$$$,car00001,$GPRMC,124757.000,A,3609.8498,N,12024.9730,E,0.0,0.0,030119,6.0,W,A*10";
         System.out.println("gps上传信息：" + gpsMsg);
-        GpsBean gpsBean = ConvertLocationUtil.convert(gpsMsg);
-        System.out.println("解析处理后的信息：" + gpsBean.toString());
+//        GpsBean gpsBean = ConvertLocationUtil.convert(gpsMsg);
+//        System.out.println("解析处理后的信息：" + gpsBean.toString());
     }
 }

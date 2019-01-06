@@ -1,4 +1,4 @@
-package com.jeeplus.modules.tp.mqtt.util;
+package com.jeeplus.modules.tp.gpsrealtime.util;
 
 public class ConvertLocationBean {
 

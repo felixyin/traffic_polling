@@ -17,7 +17,7 @@
 		a.road3_id AS "tpRoad3.id",
 		a.road4_id AS "tpRoad4.id",
 		a.lng AS "lng",
-		a.lat AS "lat",
+		a.latCal AS "latCal",
 		a.remarks AS "remarks",
 		b.name AS "sarea.name",
 		tpRoad1.name AS "tpRoad1.name",
@@ -127,7 +127,7 @@
 			road3_id,
 			road4_id,
 			lng,
-			lat,
+			latCal,
 			remarks
 		) VALUES (
 			#{id},
@@ -144,7 +144,7 @@
 			#{tpRoad3.id},
 			#{tpRoad4.id},
 			#{lng},
-			#{lat},
+			#{latCal},
 			#{remarks}
 		)
 	</insert>
@@ -161,7 +161,7 @@
 			road3_id = #{tpRoad3.id},
 			road4_id = #{tpRoad4.id},
 			lng = #{lng},
-			lat = #{lat},
+			latCal = #{latCal},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>

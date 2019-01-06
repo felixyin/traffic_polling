@@ -1,0 +1,105 @@
+{
+  "status": "1",
+  "info": "OK",
+  "infocode": "10000",
+  "regeocode": {
+    "formatted_address": "山东省青岛市李沧区李村街道枣园路27号果园路62号院",
+    "addressComponent": {
+      "country": "中国",
+      "province": "山东省",
+      "city": "青岛市",
+      "citycode": "0532",
+      "district": "李沧区",
+      "adcode": "370213",
+      "township": "李村街道",
+      "towncode": "370213006000",
+      "neighborhood": {
+        "name": [],
+        "type": []
+      },
+      "building": {
+        "name": [],
+        "type": []
+      },
+      "streetNumber": {
+        "street": "枣园路",
+        "number": "27号",
+        "location": "120.42134,36.16442",
+        "direction": "南",
+        "distance": "5.11427"
+      },
+      "businessAreas": [
+        {
+          "location": "120.42166312676058,36.1649352112676",
+          "name": "果园路",
+          "id": "370213"
+        },
+        {
+          "location": "120.42529948258712,36.16109328358209",
+          "name": "李村",
+          "id": "370213"
+        },
+        {
+          "location": "120.42072557954545,36.16492818181817",
+          "name": "枣园",
+          "id": "370213"
+        }
+      ]
+    },
+    "pois": [],
+    "roads": [
+      {
+        "id": "0532J51F047004271",
+        "name": "枣园路",
+        "direction": "东",
+        "distance": "43.3222",
+        "location": "120.421,36.1646"
+      },
+      {
+        "id": "0532J51F047004118",
+        "name": "金岭路",
+        "direction": "北",
+        "distance": "49.276",
+        "location": "120.421,36.164"
+      },
+      {
+        "id": "0532J51F04700422",
+        "name": "果园路",
+        "direction": "南",
+        "distance": "61.1936",
+        "location": "120.421,36.165"
+      }
+    ],
+    "roadinters": [
+      {
+        "direction": "北",
+        "distance": "51.2576",
+        "location": "120.4213683,36.16400528",
+        "first_id": "0532J51F047004118",
+        "first_name": "金岭路",
+        "second_id": "0532J51F047004271",
+        "second_name": "枣园路"
+      }
+    ],
+    "aois": [
+      {
+        "id": "B0FFGFGY7R",
+        "name": "果园路62号院",
+        "adcode": "370213",
+        "location": "120.420351,36.164322",
+        "area": "4323.906509",
+        "distance": "39.2533",
+        "type": "120300"
+      },
+      {
+        "id": "B021409KN7",
+        "name": "OYO三叶宾馆",
+        "adcode": "370213",
+        "location": "120.421889,36.164986",
+        "area": "1090.865038",
+        "distance": "45.5914",
+        "type": "100100"
+      }
+    ]
+  }
+}

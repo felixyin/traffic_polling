@@ -1,5 +1,4 @@
-package jsonscn.json2bean;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+package com.jeeplus.modules.tp.maintenance.gdbean;
 import org.codehaus.jackson.annotate.JsonProperty;
 /**
  * Auto-generated: 2018-12-23 0:2:39

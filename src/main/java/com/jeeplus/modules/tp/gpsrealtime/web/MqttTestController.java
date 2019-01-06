@@ -1,4 +1,4 @@
-package com.jeeplus.modules.tp.mqtt.web;
+package com.jeeplus.modules.tp.gpsrealtime.web;
 
 import com.jeeplus.core.web.BaseController;
 import org.eclipse.paho.client.mqttv3.MqttMessage;

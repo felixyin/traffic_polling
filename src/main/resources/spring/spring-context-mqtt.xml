@@ -42,7 +42,7 @@
     <!-- 消息处理类 -->
     <int:service-activator id="startCaseService"
                            input-channel="startCase" async="true" auto-startup="true" send-timeout="${mqtt.completionTimeout}"
-                           ref="mqttService" method="startCase" />
+                           ref="tpGpsRealtimeService" method="handleGPS" />
 
     <!--<bean id="mqttCaseService" class="com.jeeplus.modules.tp.mqtt.service.MqttService"/>-->
 

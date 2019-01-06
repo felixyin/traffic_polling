@@ -6,16 +6,13 @@ package com.jeeplus.modules.tp.maintenance.service;
 import java.util.*;
 
 import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.utils.collection.CollectionUtil;
-import com.jeeplus.modules.sys.utils.DictUtils;
+import com.jeeplus.modules.tp.maintenance.gdbean.*;
 import com.jeeplus.modules.tp.road.entity.SysArea;
 import com.jeeplus.modules.tp.road.entity.TpRoad;
-import com.jeeplus.modules.tp.road.mapper.TpRoadMapper;
 import com.jeeplus.modules.tp.road.service.SysAreaService;
 import com.jeeplus.modules.tp.road.service.TpRoadService;
 import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 import com.jeeplus.modules.tp.roadcross.service.TpRoadCrossingService;
-import jsonscn.json2bean.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

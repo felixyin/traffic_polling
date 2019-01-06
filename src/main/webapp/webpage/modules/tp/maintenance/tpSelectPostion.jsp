@@ -197,9 +197,9 @@
     if (location2) {
         var list = location2.split(',');
         var lng = list[0];
-        var lat = list[1];
+        var latCal = list[1];
         // 传入经纬度，设置地图中心点
-        var position = new AMap.LngLat(lng, lat);
+        var position = new AMap.LngLat(lng, latCal);
         // 简写 var position = [116, 39];
         map.setCenter(position);
     } else {
@@ -213,7 +213,7 @@
     AMap.event.addListener(auto, "select", function (e) {
         // console.log(e);
         // 传入经纬度，设置地图中心点
-        var position = new AMap.LngLat(e.poi.location.lng, e.poi.location.lat);  // 标准写法
+        var position = new AMap.LngLat(e.poi.location.lng, e.poi.location.latCal);  // 标准写法
         // 简写 var position = [116, 39];
         map.setCenter(position);
         positionPicker.start();

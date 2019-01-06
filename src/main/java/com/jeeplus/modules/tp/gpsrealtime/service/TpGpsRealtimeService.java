@@ -94,6 +94,8 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
 
         System.out.println("gps上传信息：" + gpsMsg);
         TpGpsRealtime gpsRealtime = ConvertLocationUtil.convert(gpsMsg);
+        if (null == gpsRealtime) return;// 没有获取到gps信号，不再继续执行
+
         System.out.println("解析处理后的信息：" + gpsRealtime.toString());
 
 //        获取deviceId，判断缓存中是否存在
@@ -170,9 +172,11 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
     public void runTask() {
         //        获取超时时间，或采用配置文件中配置的gps超时时间
         String carTackTimeoutStr = Global.getConfig("cartrack.timeout");
-        String carTackExcludeStr = Global.getConfig("cartrack.exclude");
+        String carTrackExcludeTimeStr = Global.getConfig("cartrack.exclude.time");
+        String carTrackExcludeKmStr = Global.getConfig("cartrack.exclude.km");
         int carTackTimeout = Integer.parseInt(carTackTimeoutStr);
-        int carTackExclude = Integer.parseInt(carTackExcludeStr);
+        int carTackExcludeTime = Integer.parseInt(carTrackExcludeTimeStr);
+        int carTackExcludeKm = Integer.parseInt(carTrackExcludeKmStr);
 
         try {
             Object carTackNeedObj = CacheUtils.get("carTackNeed");
@@ -188,12 +192,12 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                     TpGpsRealtime startGpsRealtime = (TpGpsRealtime) stringDateMap.get("startCarTrack");
                     TpGpsRealtime lastGpsRealtime = (TpGpsRealtime) stringDateMap.get("lastCarTrack");
 
-//                        如果超时，则认为此次出车任务结束，则计算cartrack信息
+//                        如果超时，则认为此次出车任务结束，则计算cartrack信息，单位秒
                     if (calLastedTime(lastGpsRealtime.getUpTime()) > carTackTimeout) {
 
-//                        小于 carTackExclude 的时间的行程，不做记录
+//                        小于 carTackExcludeTime 的时间的行程，不做记录
                         long excludeTime = lastGpsRealtime.getUpTime().getTime() - startGpsRealtime.getUpTime().getTime();
-                        if (excludeTime < carTackExclude) {
+                        if (excludeTime < carTackExcludeTime) {
 //                            清理垃圾数据
                             clearRealtime(devideId);
                             return;
@@ -211,8 +215,13 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                         setNameEnd(carTrack);
                         carTrack.setTimeBegin(startGpsRealtime.getUpTime());
                         carTrack.setTimeEnd(lastGpsRealtime.getUpTime());
-//                         计算高德POI
-                        setKm(carTrack);
+//                         计算行驶距离
+                        double km = getKm(carTrack);
+                        if (km < carTackExcludeKm) { // 如果行驶距离小于阈值则不处理（小哥可能在兜圈子）。
+//                            清理垃圾数据
+                            clearRealtime(devideId);
+                            return;
+                        }
 //                        保存car_track表
                         carTrackService.save(carTrack);
 //                        移动gps_realtime表对应数据，到gps_history表中
@@ -296,7 +305,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
         return car;
     }
 
-    private void setKm(TpCarTrack carTrack) {
+    private double getKm(TpCarTrack carTrack) {
         String jsonKm = HttpUtil.get(GD_DISTANCE_URL +
                 "&origins=" + carTrack.getLocationBegin() + "&destination=" + carTrack.getLocationEnd());
         if (StringUtils.isNotBlank(jsonKm)) {
@@ -310,8 +319,10 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                 double km = new BigDecimal(Double.parseDouble(results1.getDistance()) / 1000D)
                         .setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 carTrack.setKm(km);
+                return km;
             }
         }
+        return 0D;
     }
 
     private void setNameEnd(TpCarTrack carTrack) {
@@ -322,7 +333,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
             if (null != roadinters && roadinters.size() > 0) {
                 Roadinters roadinters1 = roadinters.get(0);
                 String nameEnd = roadinters1.getFirstName() + "与" + roadinters1.getSecondName() +
-                        "交叉口" + roadinters1.getDirection() + roadinters1.getDistance();
+                        "交叉口" + roadinters1.getDirection() + StringUtils.substringBefore(roadinters1.getDistance(), ".") + "米";
                 System.out.println(nameEnd);
                 carTrack.setNameEnd(nameEnd);
             }

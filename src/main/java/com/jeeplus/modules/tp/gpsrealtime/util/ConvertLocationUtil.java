@@ -7,7 +7,9 @@ import com.jeeplus.common.utils.time.DateUtil;
 import com.jeeplus.modules.tp.gpsrealtime.entity.TpGpsRealtime;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 
 public class ConvertLocationUtil {
@@ -23,17 +25,6 @@ public class ConvertLocationUtil {
 
             String deviceId = list[1]; //设备id（唯一编号，用于标识不同设备和对应的车辆）
             gpsRealtime.setDeviceId(deviceId);
-
-
-//            计算时间
-            String utcHms = list[3]; //UTC 时间，hhmmss.sss(时分秒.毫秒)格式
-            Date upTime = null;
-            try {
-                upTime = DateUtils.parseDate(DateUtils.getDate() + " " + utcHms, "yyyy-MM-dd hhmmss.sss");
-                gpsRealtime.setUpTime(upTime);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
 
             String locationStatus = list[4];//定位状态，A=有效定位，V=无效定位
@@ -65,6 +56,26 @@ public class ConvertLocationUtil {
 
 
             String utcDate = list[11]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
+            System.out.println(utcDate);
+
+
+            String utcHms = list[3]; //UTC 时间，hhmmss.sss(时分秒.毫秒)格式
+            System.out.println("-------------------------");
+            System.out.println(utcHms);
+
+
+//            计算时间
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss.SSS");
+                System.out.println(TimeZone.getTimeZone("UTC"));
+                sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                Date upTime = sdf.parse(utcDate + utcHms);
+                gpsRealtime.setUpTime(upTime);
+                System.out.println("-----------------------------------------------------------------");
+                System.out.println(DateUtils.formatDateTime(upTime));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
             String declination = list[12]; //磁偏角(000.0~180.0 度，前面的 0 也将被传输)

@@ -196,12 +196,14 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                     if (calLastedTime(lastGpsRealtime.getUpTime()) > carTackTimeout) {
 
 //                        小于 carTackExcludeTime 的时间的行程，不做记录
-                        long excludeTime = lastGpsRealtime.getUpTime().getTime() - startGpsRealtime.getUpTime().getTime();
-                        if (excludeTime < carTackExcludeTime) {
-//                            清理垃圾数据
-                            clearRealtime(devideId);
-                            return;
-                        }
+//                        long excludeTime = lastGpsRealtime.getUpTime().getTime() - startGpsRealtime.getUpTime().getTime();
+//                        if (excludeTime < carTackExcludeTime) {
+////                            清理垃圾数据
+//                            clearRealtime(devideId);
+////                            清除缓存
+//                            clearCache(carTrackMap, devideId);
+//                            return;
+//                        }
 
                         System.out.println("==================================================================================================================");
 
@@ -217,11 +219,13 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                         carTrack.setTimeEnd(lastGpsRealtime.getUpTime());
 //                         计算行驶距离
                         double km = getKm(carTrack);
-                        if (km < carTackExcludeKm) { // 如果行驶距离小于阈值则不处理（小哥可能在兜圈子）。
-//                            清理垃圾数据
-                            clearRealtime(devideId);
-                            return;
-                        }
+//                        if (km < carTackExcludeKm) { // 如果行驶距离小于阈值则不处理（小哥可能在兜圈子）。
+////                            清理垃圾数据
+//                            clearRealtime(devideId);
+////                            清除缓存
+//                            clearCache(carTrackMap, devideId);
+//                            return;
+//                        }
 //                        保存car_track表
                         carTrackService.save(carTrack);
 //                        移动gps_realtime表对应数据，到gps_history表中

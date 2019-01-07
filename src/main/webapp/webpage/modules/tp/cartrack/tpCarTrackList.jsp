@@ -7,7 +7,7 @@
 	<meta name="decorator" content="ani"/>
 	<%@ include file="/webpage/include/bootstraptable.jsp"%>
 	<%@include file="/webpage/include/treeview.jsp" %>
-	<%@include file="tpCarTrackList.js" %>
+	<%@include file="tpCarTrackList_.jsp" %>
 </head>
 <body>
 	<div class="wrapper wrapper-content">

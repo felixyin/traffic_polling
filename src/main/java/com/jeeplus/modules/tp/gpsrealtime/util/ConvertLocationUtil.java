@@ -16,7 +16,7 @@ public class ConvertLocationUtil {
     private static String GD_CONVERT_URL = "https://restapi.amap.com/v3/assistant/coordinate/convert?key=806cfc91a232e5be93e358b5af52f1c9&coordsys=gps&locations=";
 
     public static TpGpsRealtime convert(String dtuMsg) {
-        if (StringUtils.isNotBlank(dtuMsg) && dtuMsg.length() > 50) {
+        if (StringUtils.isNotBlank(dtuMsg) && dtuMsg.length() > 60) {// 小于60长度，说明没有gps定位信息，忽略
 
             TpGpsRealtime gpsRealtime = new TpGpsRealtime();
 

@@ -35,7 +35,7 @@
 				
 				
 				
-		carTrack.name AS "carTrack.name",
+-- 		carTrack.name AS "carTrack.name",
 				
 		car.name AS "car.name"
 	</sql>

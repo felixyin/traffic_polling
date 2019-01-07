@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
 
+import com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory;
+import com.jeeplus.modules.tp.gpshistory.service.TpGpsHistoryService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +49,9 @@ public class TpCarTrackController extends BaseController {
 
 	@Autowired
 	private TpCarTrackService tpCarTrackService;
+
+	@Autowired
+	private TpGpsHistoryService tpGpsHistoryService;
 	
 	@ModelAttribute
 	public TpCarTrack get(@RequestParam(required=false) String id) {
@@ -222,4 +227,18 @@ public class TpCarTrackController extends BaseController {
 		return j;
     }
 
+	/**
+	 * 选择查看轨迹
+	 */
+//	@RequiresPermissions("tp:cartrack:tpCarTrack:selectGpsHistory")
+	@RequestMapping(value = {"selectGpsHistory"})
+	public String selectGpsHistory(String carTrackId, Model model) {
+		TpCarTrack carTrack  = new TpCarTrack();
+		carTrack.setId(carTrackId);
+		TpGpsHistory gpsHistory = new TpGpsHistory();
+		gpsHistory.setCarTrack(carTrack);
+		List<TpGpsHistory> gpsHistories = tpGpsHistoryService.findAllList(gpsHistory);
+		model.addAttribute("gpsHistories", gpsHistories);
+		return "modules/tp/cartrack/tpShowGpsHistory";
+	}
 }

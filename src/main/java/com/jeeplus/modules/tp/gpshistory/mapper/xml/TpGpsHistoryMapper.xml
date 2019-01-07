@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.tp.gpshistory.mapper.TpGpsHistoryMapper">
-    
-	<sql id="tpGpsHistoryColumns">
+
+    <sql id="tpGpsHistoryColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -39,85 +39,78 @@
 				
 		car.name AS "car.name"
 	</sql>
-	
-	<sql id="tpGpsHistoryJoins">
+
+    <sql id="tpGpsHistoryJoins">
 		
 		LEFT JOIN tp_car_track carTrack ON carTrack.id = a.car_track_id
 		LEFT JOIN tp_car car ON car.id = a.car_id
 	</sql>
-	
-    
-	<select id="get" resultType="TpGpsHistory" >
-		SELECT 
-			<include refid="tpGpsHistoryColumns"/>
-		FROM tp_gps_history a
-		<include refid="tpGpsHistoryJoins"/>
-		WHERE a.id = #{id}
-	</select>
-	
-	<select id="findList" resultType="TpGpsHistory" >
-		SELECT 
-			<include refid="tpGpsHistoryColumns"/>
-		FROM tp_gps_history a
-		<include refid="tpGpsHistoryJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			${dataScope}
-			<if test="carTrack != null and carTrack.id != null and carTrack.id != ''">
-				AND a.car_track_id = #{carTrack.id}
-			</if>
-			<if test="car != null and car.id != null and car.id != ''">
-				AND a.car_id = #{car.id}
-			</if>
-			<if test="deviceId != null and deviceId != ''">
-				AND a.device_id LIKE 
-					<if test="dbName == 'oracle'">'%'||#{deviceId}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{deviceId}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{deviceId},'%')</if>
-			</if>
-			<if test="beginUpTime != null and endUpTime != null ">
-				AND a.up_time BETWEEN #{beginUpTime} AND #{endUpTime}
-			</if>
-			<if test="locationStatus != null and locationStatus != ''">
-				AND a.location_status = #{locationStatus}
-			</if>
-			<if test="latGps != null and latGps != ''">
-				AND a.lat_gps = #{latGps}
-			</if>
-			<if test="lonGps != null and lonGps != ''">
-				AND a.lon_gps = #{lonGps}
-			</if>
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<select id="findAllList" resultType="TpGpsHistory" >
-		SELECT 
-			<include refid="tpGpsHistoryColumns"/>
-		FROM tp_gps_history a
-		<include refid="tpGpsHistoryJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			${dataScope}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<insert id="insert">
+
+
+    <select id="get" resultType="TpGpsHistory">
+        SELECT
+        <include refid="tpGpsHistoryColumns"/>
+        FROM tp_gps_history a
+        <include refid="tpGpsHistoryJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="TpGpsHistory">
+        SELECT
+        <include refid="tpGpsHistoryColumns"/>
+        FROM tp_gps_history a
+        <include refid="tpGpsHistoryJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+            <if test="carTrack != null and carTrack.id != null and carTrack.id != ''">
+                AND a.car_track_id = #{carTrack.id}
+            </if>
+            <if test="car != null and car.id != null and car.id != ''">
+                AND a.car_id = #{car.id}
+            </if>
+            <if test="deviceId != null and deviceId != ''">
+                AND a.device_id LIKE
+                <if test="dbName == 'oracle'">'%'||#{deviceId}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{deviceId}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{deviceId},'%')</if>
+            </if>
+            <if test="beginUpTime != null and endUpTime != null ">
+                AND a.up_time BETWEEN #{beginUpTime} AND #{endUpTime}
+            </if>
+            <if test="locationStatus != null and locationStatus != ''">
+                AND a.location_status = #{locationStatus}
+            </if>
+            <if test="latGps != null and latGps != ''">
+                AND a.lat_gps = #{latGps}
+            </if>
+            <if test="lonGps != null and lonGps != ''">
+                AND a.lon_gps = #{lonGps}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="TpGpsHistory">
+        SELECT
+        <include refid="tpGpsHistoryColumns"/>
+        FROM tp_gps_history a
+        <include refid="tpGpsHistoryJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+        </where>
+        ORDER BY a.up_time ASC
+    </select>
+
+    <insert id="insert">
 		INSERT INTO tp_gps_history(
 			id,
 			create_by,
@@ -172,8 +165,8 @@
 			#{lonGD}
 		)
 	</insert>
-	
-	<update id="update">
+
+    <update id="update">
 		UPDATE tp_gps_history SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
@@ -198,25 +191,25 @@
 			lon_gd = #{lonGD}
 		WHERE id = #{id}
 	</update>
-	
-	
-	<!--物理删除-->
-	<update id="delete">
+
+
+    <!--物理删除-->
+    <update id="delete">
 		DELETE FROM tp_gps_history
 		WHERE id = #{id}
 	</update>
-	
-	<!--逻辑删除-->
-	<update id="deleteByLogic">
+
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
 		UPDATE tp_gps_history SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
-	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
-	<select id="findUniqueByProperty" resultType="TpGpsHistory" statementType="STATEMENT">
+
+
+    <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+    <select id="findUniqueByProperty" resultType="TpGpsHistory" statementType="STATEMENT">
 		select * FROM tp_gps_history  where ${propertyName} = '${value}'
 	</select>
-	
+
 </mapper>

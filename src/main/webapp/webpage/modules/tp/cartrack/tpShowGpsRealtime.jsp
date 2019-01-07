@@ -22,8 +22,13 @@
         .input-card .btn:last-child {
             margin-right: 0;
         }
-        .amap-logo,.amap-copyright{
-            display: none!important;
+
+        .amap-logo, .amap-copyright {
+            display: none !important;
+        }
+
+        #div {
+            color: red;
         }
     </style>
 </head>
@@ -43,21 +48,62 @@
     </div>
 </div>
 <script type="text/javascript" src="//webapi.amap.com/maps?v=1.4.11&key=044a68bca642bd52ae17b08c3fa21c88"></script>
-<script type="text/javascript">
 
-    var marker,
-        lineArr = eval('${gpsHistories}');
-        // lineArr = [[116.478935, 39.997761], [116.478939, 39.997825], [116.478912, 39.998549],
-        //     [116.478912, 39.998549], [116.478998, 39.998555], [116.478998, 39.998555], [116.479282, 39.99856],
-        //     [116.479658, 39.998528], [116.480151, 39.998453], [116.480784, 39.998302], [116.480784, 39.998302],
-        //     [116.481149, 39.998184], [116.481573, 39.997997], [116.481863, 39.997846], [116.482072, 39.997718],
-        //     [116.482362, 39.997718], [116.483633, 39.998935], [116.48367, 39.998968], [116.484648, 39.999861]];
+<body>
+<h1>WEBSOCKET----TEST</h1>
+<div id="div">
+
+</div>
+<script type="text/javascript">
+    var div = document.getElementById('div');
+    var socket = new WebSocket('ws://localhost:8080/websocket');
+
 
     var map = new AMap.Map("container", {
         resizeEnable: true,
         // center: [116.397428, 39.90923],
         zoom: 17
     });
+
+    socket.onopen = function (event) {
+        console.log(event);
+        socket.send('websocket client connect test');
+    }
+
+    socket.onclose = function (event) {
+        console.log(event);
+    }
+
+    socket.onerror = function (event) {
+        console.log(event);
+    }
+
+    socket.onmessage = function (event) {
+        console.log(event)
+        div.innerHTML += (' @_@ ' + event.data + ' ~_~ ');
+    }
+
+    // 数据结构
+    /*
+    {
+        deviceId:[] // lineArr
+    }
+     */
+
+    // 1. 查询gps_realtime表所有数据
+    // 2. 查询
+    var dataStruct= {
+
+    };
+
+    var marker,
+        <%--lineArr = eval('${gpsHistories}');--%>
+    lineArr = [[116.478935, 39.997761], [116.478939, 39.997825], [116.478912, 39.998549],
+        [116.478912, 39.998549], [116.478998, 39.998555], [116.478998, 39.998555], [116.479282, 39.99856],
+        [116.479658, 39.998528], [116.480151, 39.998453], [116.480784, 39.998302], [116.480784, 39.998302],
+        [116.481149, 39.998184], [116.481573, 39.997997], [116.481863, 39.997846], [116.482072, 39.997718],
+        [116.482362, 39.997718], [116.483633, 39.998935], [116.48367, 39.998968], [116.484648, 39.999861]];
+
 
     marker = new AMap.Marker({
         map: map,
@@ -79,19 +125,21 @@
         // strokeStyle: "solid"  //线样式
     });
 
-    var passedPolyline = new AMap.Polyline({
-        map: map,
-        // path: lineArr,
-        strokeColor: "#AF5",  //线颜色
-        // strokeOpacity: 1,     //线透明度
-        strokeWeight: 6,      //线宽
-        // strokeStyle: "solid"  //线样式
-    });
+    window.polyline = polyline;
 
-
-    marker.on('moving', function (e) {
-        passedPolyline.setPath(e.passedPath);
-    });
+    // var passedPolyline = new AMap.Polyline({
+    //     map: map,
+    //     path: lineArr,
+    //     strokeColor: "#AF5",  //线颜色
+    //     // strokeOpacity: 1,     //线透明度
+    //     strokeWeight: 6,      //线宽
+    //     // strokeStyle: "solid"  //线样式
+    // });
+    //
+    //
+    // marker.on('moving', function (e) {
+    //     passedPolyline.setPath(e.passedPath);
+    // });
 
     map.setFitView();
 

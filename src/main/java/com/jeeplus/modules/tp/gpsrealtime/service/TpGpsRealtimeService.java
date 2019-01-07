@@ -15,6 +15,7 @@ import com.jeeplus.modules.tp.car.entity.TpCar;
 import com.jeeplus.modules.tp.car.service.TpCarService;
 import com.jeeplus.modules.tp.cartrack.entity.TpCarTrack;
 import com.jeeplus.modules.tp.cartrack.service.TpCarTrackService;
+import com.jeeplus.modules.tp.cartrack.websocket.MyWebSocketHandler;
 import com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory;
 import com.jeeplus.modules.tp.gpshistory.service.TpGpsHistoryService;
 import com.jeeplus.modules.tp.gpsrealtime.gdbean.DistanceRootBean;
@@ -62,6 +63,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
     @Resource
     private TpGpsRealtimeService gpsRealtimeService;
 
+    private MyWebSocketHandler webSocketHandler = new MyWebSocketHandler();
 
     public TpGpsRealtime get(String id) {
         return super.get(id);
@@ -108,22 +110,29 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
         if (null != car) {
 //        如果存在，获取carId
             gpsRealtime.setCar(car);
+//            car.setLocation(gpsRealtime.getLonGD() + "," + gpsRealtime.getLatGD());
+//            carService.save(car);
         } else {
 //        如果不存在，存储car表，获取carId
             TpCar car2 = new TpCar();
             car2.setDeviceId(deviceId);
+            car2.setLocation(gpsRealtime.getLonGD() + "," + gpsRealtime.getLatGD());
             carService.save(car2);
             CacheUtils.put(deviceId, car2);
             gpsRealtime.setCar(car2);
         }
 
 //        存储gps_realtime表
-        this.save(gpsRealtime);
+//        if ((gpsRealtime.getLonGD() + "," + gpsRealtime.getLatGD()).equals(car.getLocation())) { // 判断车辆是否停止不动 113行
+            this.save(gpsRealtime);
+//        }
 
 //        记录时间到缓存：key为deviceId；value为一个map，startUpTime为第一次gps信号接收时间，lastUpTime为最后一次gps信号接收时间
         setCache(gpsRealtime, deviceId);
 
 //        websocket推送到所有连接的客户端地图中 TODO
+//        webSocketHandler.sendMessage(gpsRealtime.getCar().getId() + "," + gpsRealtime.getLonGD() + "," + gpsRealtime.getLatGD());
+
     }
 
     private void setCache(TpGpsRealtime gpsRealtime, String deviceId) {

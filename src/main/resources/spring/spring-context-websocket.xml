@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+ 		http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd"
+       default-lazy-init="true">
+
+    <description>Web Socket Configuration</description>
+
+
+    <!-- websocket处理类 -->
+    <bean id="msgHandler" class="com.jeeplus.modules.tp.cartrack.websocket.MyWebSocketHandler"/>
+
+    <!-- 握手接口/拦截器 ，看项目需求是否需要-->
+    <bean id="handshakeInterceptor" class="com.jeeplus.modules.tp.cartrack.websocket.MyHandshakeInterceptor"/>
+
+    <websocket:handlers allowed-origins="http://localhost">
+        <websocket:mapping path="/websocket" handler="msgHandler"/>
+        <websocket:handshake-interceptors>
+            <ref bean="handshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
+
+    <!-- 注册 sockJS,sockJs是spring对不能使用websocket协议的客户端提供一种模拟 -->
+    <websocket:handlers allowed-origins="http://localhost">
+        <websocket:mapping path="/sockjs/websocket" handler="msgHandler"/>
+        <websocket:handshake-interceptors>
+            <ref bean="handshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+        <websocket:sockjs/>
+    </websocket:handlers>
+
+</beans>

@@ -98,19 +98,26 @@
         </choose>
     </select>
 
-    <select id="findAllList" resultType="TpGpsHistory">
-        SELECT
-        <include refid="tpGpsHistoryColumns"/>
-        FROM tp_gps_history a
-        <include refid="tpGpsHistoryJoins"/>
-        <where>
-            a.del_flag = #{DEL_FLAG_NORMAL}
-            ${dataScope}
-        </where>
-        ORDER BY a.up_time ASC
-    </select>
+	<select id="findAllList" resultType="TpGpsHistory" >
+		SELECT
+		<include refid="tpGpsHistoryColumns"/>
+		FROM tp_gps_history a
+		<include refid="tpGpsHistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
 
-    <insert id="insert">
+	<insert id="insert">
 		INSERT INTO tp_gps_history(
 			id,
 			create_by,
@@ -210,6 +217,18 @@
     <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
     <select id="findUniqueByProperty" resultType="TpGpsHistory" statementType="STATEMENT">
 		select * FROM tp_gps_history  where ${propertyName} = '${value}'
+	</select>
+
+    <select id="findListByCarTrackId" resultType="com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory">
+		SELECT
+		<include refid="tpGpsHistoryColumns"/>
+		FROM tp_gps_history a
+		<include refid="tpGpsHistoryJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			AND a.car_track_id = #{carTrackId}
+		</where>
+		ORDER BY a.up_time ASC
 	</select>
 
 </mapper>

@@ -96,7 +96,7 @@
     map.setFitView();
 
     function startAnimation() {
-        marker.moveAlong(lineArr, 200);
+        marker.moveAlong(lineArr, 800);
     }
 
     function pauseAnimation() {

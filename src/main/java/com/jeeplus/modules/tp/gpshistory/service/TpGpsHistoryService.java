@@ -5,6 +5,7 @@ package com.jeeplus.modules.tp.gpshistory.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,9 @@ import com.jeeplus.modules.tp.gpshistory.mapper.TpGpsHistoryMapper;
 @Service
 @Transactional(readOnly = true)
 public class TpGpsHistoryService extends CrudService<TpGpsHistoryMapper, TpGpsHistory> {
+
+	@Autowired
+	private  TpGpsHistoryMapper tpGpsHistoryMapper;
 
 	public TpGpsHistory get(String id) {
 		return super.get(id);
@@ -43,5 +47,8 @@ public class TpGpsHistoryService extends CrudService<TpGpsHistoryMapper, TpGpsHi
 	public void delete(TpGpsHistory tpGpsHistory) {
 		super.delete(tpGpsHistory);
 	}
-	
+
+    public List<TpGpsHistory> findListByCarTrackId(String carTrackId) {
+		return tpGpsHistoryMapper.findListByCarTrackId(carTrackId);
+    }
 }

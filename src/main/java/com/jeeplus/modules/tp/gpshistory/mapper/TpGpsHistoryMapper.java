@@ -7,6 +7,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory;
 
+import java.util.List;
+
 /**
  * 历史轨迹MAPPER接口
  * @author 尹彬
@@ -14,5 +16,6 @@ import com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory;
  */
 @MyBatisMapper
 public interface TpGpsHistoryMapper extends BaseMapper<TpGpsHistory> {
-	
+
+    List<TpGpsHistory> findListByCarTrackId(String carTrackId);
 }

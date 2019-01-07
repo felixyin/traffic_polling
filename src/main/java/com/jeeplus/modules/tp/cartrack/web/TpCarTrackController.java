@@ -235,11 +235,7 @@ public class TpCarTrackController extends BaseController {
 //	@RequiresPermissions("tp:cartrack:tpCarTrack:selectGpsHistory")
     @RequestMapping(value = {"selectGpsHistory"})
     public String selectGpsHistory(String carTrackId, Model model) {
-        TpCarTrack carTrack = new TpCarTrack();
-        carTrack.setId(carTrackId);
-        TpGpsHistory gpsHistory = new TpGpsHistory();
-        gpsHistory.setCarTrack(carTrack);
-        List<TpGpsHistory> gpsHistortoryList = tpGpsHistoryService.findAllList(gpsHistory);
+        List<TpGpsHistory> gpsHistortoryList = tpGpsHistoryService.findListByCarTrackId(carTrackId);
         List<String[]> list = new ArrayList();
         for (TpGpsHistory gpsHistory1 : gpsHistortoryList) {
             list.add(new String[]{gpsHistory1.getLonGD(), gpsHistory1.getLatGD()});

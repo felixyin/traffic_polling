@@ -1,0 +1,72 @@
+{
+  "status": "1",
+  "info": "OK",
+  "infocode": "10000",
+  "regeocode": {
+    "formatted_address": "山东省青岛市城阳区夏庄街道黑龙江中路3200号",
+    "addressComponent": {
+      "country": "中国",
+      "province": "山东省",
+      "city": "青岛市",
+      "citycode": "0532",
+      "district": "城阳区",
+      "adcode": "370214",
+      "township": "夏庄街道",
+      "towncode": "370214002000",
+      "neighborhood": {
+        "name": [],
+        "type": []
+      },
+      "building": {
+        "name": [],
+        "type": []
+      },
+      "streetNumber": {
+        "street": "黑龙江中路",
+        "number": "3200号",
+        "location": "120.431398,36.2045261",
+        "direction": "东南",
+        "distance": "24.8565"
+      },
+      "businessAreas": [
+        []
+      ]
+    },
+    "pois": [],
+    "roads": [
+      {
+        "id": "0532J51F046004221",
+        "name": "黑龙江中路",
+        "direction": "西",
+        "distance": "33.5855",
+        "location": "120.432,36.2047"
+      },
+      {
+        "id": "0532J51F0470041176",
+        "name": "G20青银高速",
+        "direction": "西",
+        "distance": "167.802",
+        "location": "120.433,36.2046"
+      },
+      {
+        "id": "0532J51F046004907",
+        "name": "214省道",
+        "direction": "西南",
+        "distance": "414.635",
+        "location": "120.433,36.2083"
+      }
+    ],
+    "roadinters": [
+      {
+        "direction": "西南",
+        "distance": "438.567",
+        "location": "120.43289,36.20844278",
+        "first_id": "0532J51F046004221",
+        "first_name": "黑龙江中路",
+        "second_id": "0532J51F046004907",
+        "second_name": "214省道"
+      }
+    ],
+    "aois": []
+  }
+}

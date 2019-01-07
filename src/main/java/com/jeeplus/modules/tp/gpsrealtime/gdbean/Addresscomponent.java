@@ -17,10 +17,10 @@ public class Addresscomponent {
     private String adcode;
     private String township;
     private String towncode;
-    @JsonProperty("streetNumber")
-    private Streetnumber streetnumber;
-    @JsonProperty("businessAreas")
-    private List<Businessareas> businessareas;
+//    @JsonProperty("streetNumber")
+//    private Streetnumber streetnumber;
+//    @JsonProperty("businessAreas")
+//    private List<Businessareas> businessareas;
     public void setCountry(String country) {
          this.country = country;
      }
@@ -70,20 +70,20 @@ public class Addresscomponent {
          return towncode;
      }
 
-
-
-    public void setStreetnumber(Streetnumber streetnumber) {
-         this.streetnumber = streetnumber;
-     }
-     public Streetnumber getStreetnumber() {
-         return streetnumber;
-     }
-
-    public void setBusinessareas(List<Businessareas> businessareas) {
-         this.businessareas = businessareas;
-     }
-     public List<Businessareas> getBusinessareas() {
-         return businessareas;
-     }
+//
+//
+//    public void setStreetnumber(Streetnumber streetnumber) {
+//         this.streetnumber = streetnumber;
+//     }
+//     public Streetnumber getStreetnumber() {
+//         return streetnumber;
+//     }
+//
+//    public void setBusinessareas(List<Businessareas> businessareas) {
+//         this.businessareas = businessareas;
+//     }
+//     public List<Businessareas> getBusinessareas() {
+//         return businessareas;
+//     }
 
 }

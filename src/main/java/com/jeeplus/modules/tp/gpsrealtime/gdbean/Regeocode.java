@@ -14,10 +14,10 @@ public class Regeocode {
     private String formattedAddress;
     @JsonProperty("addressComponent")
     private Addresscomponent addresscomponent;
-    private List<String> pois;
-    private List<Roads> roads;
+//    private List<String> pois;
+//    private List<Roads> roads;
     private List<Roadinters> roadinters;
-    private List<Aois> aois;
+//    private List<Aois> aois;
     public void setFormattedAddress(String formattedAddress) {
          this.formattedAddress = formattedAddress;
      }
@@ -32,19 +32,19 @@ public class Regeocode {
          return addresscomponent;
      }
 
-    public void setPois(List<String> pois) {
-         this.pois = pois;
-     }
-     public List<String> getPois() {
-         return pois;
-     }
-
-    public void setRoads(List<Roads> roads) {
-         this.roads = roads;
-     }
-     public List<Roads> getRoads() {
-         return roads;
-     }
+//    public void setPois(List<String> pois) {
+//         this.pois = pois;
+//     }
+//     public List<String> getPois() {
+//         return pois;
+//     }
+//
+//    public void setRoads(List<Roads> roads) {
+//         this.roads = roads;
+//     }
+//     public List<Roads> getRoads() {
+//         return roads;
+//     }
 
     public void setRoadinters(List<Roadinters> roadinters) {
          this.roadinters = roadinters;
@@ -52,12 +52,12 @@ public class Regeocode {
      public List<Roadinters> getRoadinters() {
          return roadinters;
      }
-
-    public void setAois(List<Aois> aois) {
-         this.aois = aois;
-     }
-     public List<Aois> getAois() {
-         return aois;
-     }
+//
+//    public void setAois(List<Aois> aois) {
+//         this.aois = aois;
+//     }
+//     public List<Aois> getAois() {
+//         return aois;
+//     }
 
 }

@@ -64,13 +64,13 @@
 					</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>开始时间：</label></td>
 					<td class="width-35">
-						<form:input path="timeBegin" htmlEscape="false"    class="form-control required date"/>
+						<form:input path="timeBegin" htmlEscape="false"  value="${fns:formatDateTime(tpCarTrack.timeBegin)}"  class="form-control required date"/>
 					</td>
 				</tr>
 				<tr>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>结束时间：</label></td>
 					<td class="width-35">
-						<form:input path="timeEnd" htmlEscape="false"    class="form-control required date"/>
+						<form:input path="timeEnd" htmlEscape="false"    value="${fns:formatDateTime(tpCarTrack.timeEnd)}"   class="form-control required date"/>
 					</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>行驶里程：</label></td>
 					<td class="width-35">

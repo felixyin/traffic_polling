@@ -6,6 +6,7 @@ package com.jeeplus.modules.tp.gpshistory.mapper;
 import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -17,5 +18,5 @@ import java.util.List;
 @MyBatisMapper
 public interface TpGpsHistoryMapper extends BaseMapper<TpGpsHistory> {
 
-    List<TpGpsHistory> findListByCarTrackId(String carTrackId);
+    List<TpGpsHistory> findListByCarTrackId(@Param("carTrackId") String carTrackId);
 }

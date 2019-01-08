@@ -153,6 +153,13 @@
                     title: '最后GPS位置',
                     sortable: true,
                     sortName: 'location'
+
+                }
+                , {
+                    field: 'locationName',
+                    title: '最后位置名称',
+                    sortable: true,
+                    sortName: 'locationName'
                     , formatter: function (value, row, index) {
                         value = jp.unescapeHTML(value);
                         <c:choose>
@@ -167,13 +174,6 @@
                         </c:otherwise>
                         </c:choose>
                     }
-                }
-                , {
-                    field: 'locationName',
-                    title: '最后位置名称',
-                    sortable: true,
-                    sortName: 'locationName'
-
                 }
                 , {
                     field: 'startKm',

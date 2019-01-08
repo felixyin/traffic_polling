@@ -96,10 +96,10 @@
                         }
                         <c:choose>
                         <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:edit')}">
-                        return "<a href='javascript:edit(\"" + row.id + "\")'>详情</a>";
+                        return "<a href='javascript:edit(\"" + row.id + "\")'>修改</a>";
                         </c:when>
                         <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:view')}">
-                        return "<a href='javascript:view(\"" + row.id + "\")'>详情</a>";
+                        return "<a href='javascript:view(\"" + row.id + "\")'>查看</a>";
                         </c:when>
                         <c:otherwise>
                         return value;
@@ -132,86 +132,86 @@
 
                     }
 
+                }
+                // , {
+                //     field: 'locationBegin',
+                //     title: '开始位置',
+                //     sortable: true,
+                //     sortName: 'locationBegin'
+                //
+                // }
+                ,
+                {
+                    field: 'nameBegin',
+                    title: '开始位置地名',
+                    sortable: true,
+                    sortName: 'nameBegin'
+                    , formatter: function (value, row, index) {
+                        if (value == null || value == "") {
+                            value = "-";
+                        }
+                        <c:choose>
+                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:edit')}">
+                        return "<a href='javascript:viewLocation(" + JSON.stringify({
+                            location: row.locationBegin,
+                            locationName: row.nameBegin
+                        }) + ")'>" + value + "</a>";
+                        </c:when>
+                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:view')}">
+                        return "<a href='javascript:viewLocation(" + JSON.stringify({
+                            location: row.locationBegin,
+                            locationName: row.nameBegin
+                        }) + ")'>" + value + "</a>";
+                        </c:when>
+                        <c:otherwise>
+                        return value;
+                        </c:otherwise>
+                        </c:choose>
+
+                    },
+                }
+                // , {
+                //     field: 'locationEnd',
+                //     title: '结束位置',
+                //     sortable: true,
+                //     sortName: 'locationEnd'
+                //
+                // }
+                , {
+                    field: 'nameEnd',
+                    title: '结束位置地名',
+                    sortable: true,
+                    sortName: 'nameEnd'
+                    , formatter: function (value, row, index) {
+
+                        if (value == null || value == "") {
+                            value = "-";
+                        }
+                        <c:choose>
+                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:edit')}">
+                        return "<a href='javascript:viewLocation(" + JSON.stringify({
+                            location: row.locationEnd,
+                            locationName: row.nameEnd
+                        }) + ")'>" + value + "</a>";
+                        </c:when>
+                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:view')}">
+                        return "<a href='javascript:viewLocation(" + JSON.stringify({
+                            location: row.locationEnd,
+                            locationName: row.nameEnd
+                        }) + ")'>" + value + "</a>";
+                        </c:when>
+                        <c:otherwise>
+                        return value;
+                        </c:otherwise>
+                        </c:choose>
+
+                    },
                 },
                 {
                     field: 'car.name',
                     title: '关联车辆',
                     sortable: true,
                     sortName: 'car.name'
-
-                }
-                , {
-                    field: 'locationBegin',
-                    title: '开始位置',
-                    sortable: true,
-                    sortName: 'locationBegin'
-                    , formatter: function (value, row, index) {
-
-                        if (value == null || value == "") {
-                            value = "-";
-                        }
-                        <c:choose>
-                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:edit')}">
-                        return "<a href='javascript:viewLocation(" + JSON.stringify({
-                            location: row.locationBegin,
-                            locationName: row.nameBegin
-                        }) + ")'>" + value + "</a>";
-                        </c:when>
-                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:view')}">
-                        return "<a href='javascript:viewLocation(" + JSON.stringify({
-                            location: row.locationBegin,
-                            locationName: row.nameBegin
-                        }) + ")'>" + value + "</a>";
-                        </c:when>
-                        <c:otherwise>
-                        return value;
-                        </c:otherwise>
-                        </c:choose>
-
-                    },
-                },
-                {
-                    field: 'nameBegin',
-                    title: '开始位置地名',
-                    sortable: true,
-                    sortName: 'nameBegin'
-
-                }
-                , {
-                    field: 'locationEnd',
-                    title: '结束位置',
-                    sortable: true,
-                    sortName: 'locationEnd'
-                    , formatter: function (value, row, index) {
-
-                        if (value == null || value == "") {
-                            value = "-";
-                        }
-                        <c:choose>
-                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:edit')}">
-                        return "<a href='javascript:viewLocation(" + JSON.stringify({
-                            location: row.locationEnd,
-                            locationName: row.nameEnd
-                        }) + ")'>" + value + "</a>";
-                        </c:when>
-                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:view')}">
-                        return "<a href='javascript:viewLocation(" + JSON.stringify({
-                            location: row.locationEnd,
-                            locationName: row.nameEnd
-                        }) + ")'>" + value + "</a>";
-                        </c:when>
-                        <c:otherwise>
-                        return value;
-                        </c:otherwise>
-                        </c:choose>
-
-                    },
-                }
-                , {
-                    field: 'nameEnd',
-                    title: '结束位置地名',
-                    sortable: true,
-                    sortName: 'nameEnd'
 
                 }
                 , {

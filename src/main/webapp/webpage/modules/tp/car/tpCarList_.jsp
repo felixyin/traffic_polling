@@ -359,7 +359,7 @@
     function viewLocation(row) {
         var location = row.location;
         var roadcrossName = row.locationName;
-        jp.openChildDialog("查看最后位置", "${ctx}/tp/maintenance/tpMaintenance/selectPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
+        jp.openChildDialog("查看最后位置", "${ctx}/tp/cartrack/tpCarTrack/showPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
     }
 
 </script>

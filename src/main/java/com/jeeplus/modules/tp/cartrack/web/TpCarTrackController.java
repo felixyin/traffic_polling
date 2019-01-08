@@ -255,4 +255,14 @@ public class TpCarTrackController extends BaseController {
         return "modules/tp/cartrack/tpShowGpsRealtime";
     }
 
+    /**
+     * 查看地点
+     */
+//	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
+    @RequestMapping(value = {"showPostion"})
+    public String showPostion(String roadcrossName, String location, Model model) {
+        model.addAttribute("roadcrossName", roadcrossName);
+        model.addAttribute("location", location);
+        return "modules/tp/cartrack/tpShowPostion";
+    }
 }

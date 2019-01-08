@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jeeplus.modules.tp.dam.mapper.TpDamMapper">
+    
+	<sql id="tpDamColumns">
+		a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.dam_type AS "damType",
+		a.description AS "description",
+		a.pic AS "pic",
+		a.size AS "size",
+		a.location AS "location",
+		a.area_id AS "area.id",
+		a.roadcross_id AS "roadcross.id",
+		a.nearest_junction AS "nearestJunction",
+		a.road_id AS "road.id",
+		a.address AS "address",
+		a.nearest_poi AS "nearestPoi",
+		a.remarks AS "remarks",
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		area.name AS "area.name",
+				
+		roadcross.name AS "roadcross.name",
+				
+				
+		road.name AS "road.name"
+	</sql>
+	
+	<sql id="tpDamJoins">
+		
+		LEFT JOIN sys_area area ON area.id = a.area_id
+		LEFT JOIN tp_road_crossing roadcross ON roadcross.id = a.roadcross_id
+		LEFT JOIN tp_road road ON road.id = a.road_id
+	</sql>
+	
+    
+	<select id="get" resultType="TpDam" >
+		SELECT 
+			<include refid="tpDamColumns"/>
+		FROM tp_dam a
+		<include refid="tpDamJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TpDam" >
+		SELECT 
+			<include refid="tpDamColumns"/>
+		FROM tp_dam a
+		<include refid="tpDamJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="damType != null and damType != ''">
+				AND a.dam_type = #{damType}
+			</if>
+			<if test="description != null and description != ''">
+				AND a.description LIKE 
+					<if test="dbName == 'oracle'">'%'||#{description}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{description}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{description},'%')</if>
+			</if>
+			<if test="size != null and size != ''">
+				AND a.size LIKE 
+					<if test="dbName == 'oracle'">'%'||#{size}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{size}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{size},'%')</if>
+			</if>
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+			<if test="roadcross != null and roadcross.id != null and roadcross.id != ''">
+				AND a.roadcross_id = #{roadcross.id}
+			</if>
+			<if test="road != null and road.id != null and road.id != ''">
+				AND a.road_id = #{road.id}
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address LIKE 
+					<if test="dbName == 'oracle'">'%'||#{address}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{address}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{address},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TpDam" >
+		SELECT 
+			<include refid="tpDamColumns"/>
+		FROM tp_dam a
+		<include refid="tpDamJoins"/>
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.update_date DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO tp_dam(
+			id,
+			create_by,
+			create_date,
+			update_by,
+			update_date,
+			del_flag,
+			dam_type,
+			description,
+			pic,
+			size,
+			location,
+			area_id,
+			roadcross_id,
+			nearest_junction,
+			road_id,
+			address,
+			nearest_poi,
+			remarks
+		) VALUES (
+			#{id},
+			#{createBy.id},
+			#{createDate},
+			#{updateBy.id},
+			#{updateDate},
+			#{delFlag},
+			#{damType},
+			#{description},
+			#{pic},
+			#{size},
+			#{location},
+			#{area.id},
+			#{roadcross.id},
+			#{nearestJunction},
+			#{road.id},
+			#{address},
+			#{nearestPoi},
+			#{remarks}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE tp_dam SET 	
+			update_by = #{updateBy.id},
+			update_date = #{updateDate},
+			dam_type = #{damType},
+			description = #{description},
+			pic = #{pic},
+			size = #{size},
+			location = #{location},
+			area_id = #{area.id},
+			roadcross_id = #{roadcross.id},
+			nearest_junction = #{nearestJunction},
+			road_id = #{road.id},
+			address = #{address},
+			nearest_poi = #{nearestPoi},
+			remarks = #{remarks}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!--物理删除-->
+	<update id="delete">
+		DELETE FROM tp_dam
+		WHERE id = #{id}
+	</update>
+	
+	<!--逻辑删除-->
+	<update id="deleteByLogic">
+		UPDATE tp_dam SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+	<select id="findUniqueByProperty" resultType="TpDam" statementType="STATEMENT">
+		select * FROM tp_dam  where ${propertyName} = '${value}'
+	</select>
+	
+</mapper>

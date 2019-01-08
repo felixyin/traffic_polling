@@ -104,7 +104,7 @@
                                 <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:jiaoJing">
                                     <button type="button" class="btn btn-primary btn-block  btn-parsley"
                                             data-loading-text="正在计算..."
-                                            onclick="openSelectPostionDialog();"/>
+                                            onclick="openSelectPostionDialog();">
                                     <i class="fa fa-map-marker "></i>
                                     ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
                                     </button>

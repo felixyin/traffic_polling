@@ -197,9 +197,9 @@
     if (location2) {
         var list = location2.split(',');
         var lng = list[0];
-        var latCal = list[1];
+        var lat = list[1];
         // 传入经纬度，设置地图中心点
-        var position = new AMap.LngLat(lng, latCal);
+        var position = new AMap.LngLat(lng, lat);
         // 简写 var position = [116, 39];
         map.setCenter(position);
     } else {
@@ -209,15 +209,6 @@
         auto.setCityLimit(city);
     }
 
-    // ----------------------------------- 选中自动完成行，地图定位
-    AMap.event.addListener(auto, "select", function (e) {
-        // console.log(e);
-        // 传入经纬度，设置地图中心点
-        var position = new AMap.LngLat(e.poi.location.lng, e.poi.location.lat);  // 标准写法
-        // 简写 var position = [116, 39];
-        map.setCenter(position);
-        positionPicker.start();
-    });//注册监听，当选中某条记录时会触发
 
     AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
         // ----------------------------------- 拖拽定位后，显示数据
@@ -230,6 +221,16 @@
                 size: [48, 48]
             }
         });
+
+        // ----------------------------------- 选中自动完成行，地图定位
+        AMap.event.addListener(auto, "select", function (e) {
+            // console.log(e);
+            // 传入经纬度，设置地图中心点
+            var position = new AMap.LngLat(e.poi.location.lng, e.poi.location.lat);  // 标准写法
+            // 简写 var position = [116, 39];
+            map.setCenter(position);
+            positionPicker.start();
+        });//注册监听，当选中某条记录时会触发
 
         positionPicker.on('success', function (positionResult) {
             _positionResult = positionResult;

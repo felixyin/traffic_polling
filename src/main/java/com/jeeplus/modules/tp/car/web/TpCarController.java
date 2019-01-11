@@ -220,4 +220,24 @@ public class TpCarController extends BaseController {
 		return j;
     }
 
+	/**
+	 * 实时位置大屏
+	 */
+//	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
+	@RequestMapping(value = {"realtimeLocations"})
+	public String realtimeLocations( Model model) {
+		return "modules/tp/cartrack/tpRealtimeLocations";
+	}
+
+	/**
+	 * 实时位置大屏，获取位置(伪实时)
+	 */
+//	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
+	@RequestMapping(value = {"getRealtimeLocations"})
+	@ResponseBody
+	public List<Map>  getRealtimeLocations( Model model) {
+		List<Map> allList = tpCarService.findAllLocation();
+		return allList;
+	}
+
 }

@@ -163,11 +163,20 @@
     if (location2) {
         var list = location2.split(',');
         var lng = list[0];
-        var latCal = list[1];
+        var lat = list[1];
         // 传入经纬度，设置地图中心点
-        var position = new AMap.LngLat(lng, latCal);
+        var position = new AMap.LngLat(lng, lat);
         // 简写 var position = [116, 39];
         map.setCenter(position);
+
+
+        // var marker = new AMap.Marker({
+        //     map: map,
+        //     position:  position,
+        //     icon: "https://webapi.amap.com/images/car.png",
+        //     offset: new AMap.Pixel(-26, -13)
+        // });
+
     } else {
         console.log(city);
         map.setCity(city);
@@ -178,12 +187,12 @@
     AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
         // ----------------------------------- 拖拽定位后，显示数据
         var positionPicker = new PositionPicker({
-            mode: 'dragMap',
+            // mode: 'dragMarker',
             map: map,
             iconStyle: { //自定义外观
-                url: '//webapi.amap.com/ui/1.0/assets/position-picker2.png',
-                ancher: [24, 40],
-                size: [48, 48]
+                url: '//webapi.amap.com/images/car.png',
+                ancher: [48, 24],
+                size: [48, 24]
             }
         });
 

@@ -228,5 +228,14 @@
 	<select id="findUniqueByProperty" resultType="TpCar" statementType="STATEMENT">
 		select * FROM tp_car  where ${propertyName} = '${value}'
 	</select>
-	
+
+    <select id="findAllLocation" resultType="java.util.Map">
+		select
+		a.name AS "name",
+				a.location AS "location",
+		office.name AS "officeName"
+		 from tp_car AS a
+		 LEFT JOIN sys_office office ON office.id = a.office_id
+	</select>
+
 </mapper>

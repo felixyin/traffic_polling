@@ -362,4 +362,8 @@
         jp.openChildDialog("查看最后位置", "${ctx}/tp/cartrack/tpCarTrack/showPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
     }
 
+    function  realtimeLocations() {
+        <%--jp.openChildDialog("实时位置大屏", "${ctx}/tp/car/tpCar/realtimeLocations", "1050px", "580px", postionSelectCallback);--%>
+        jp.windowOpen("${ctx}/tp/car/tpCar/realtimeLocations", "1050px","实时位置大屏", "1050px", "580px")
+    }
 </script>

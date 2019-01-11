@@ -4,7 +4,9 @@
 package com.jeeplus.modules.tp.car.service;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,9 @@ import com.jeeplus.modules.tp.car.mapper.TpCarMapper;
 @Service
 @Transactional(readOnly = true)
 public class TpCarService extends CrudService<TpCarMapper, TpCar> {
+
+	@Autowired
+	private TpCarMapper tpCarMapper;
 
 	public TpCar get(String id) {
 		return super.get(id);
@@ -43,5 +48,8 @@ public class TpCarService extends CrudService<TpCarMapper, TpCar> {
 	public void delete(TpCar tpCar) {
 		super.delete(tpCar);
 	}
-	
+
+    public List<Map> findAllLocation() {
+		return tpCarMapper.findAllLocation();
+    }
 }

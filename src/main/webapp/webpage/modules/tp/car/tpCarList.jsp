@@ -94,6 +94,11 @@
                         <i class="glyphicon glyphicon-plus"></i> 新建
                     </button>
                 </shiro:hasPermission>
+                <%--<shiro:hasPermission name="tp:car:tpCar:realtimeLocations">--%>
+                    <button id="add" class="btn btn-primary" onclick="realtimeLocations()">
+                        <i class="glyphicon glyphicon-map-marker"></i> 实时位置大屏
+                    </button>
+                <%--</shiro:hasPermission>--%>
                 <shiro:hasPermission name="tp:car:tpCar:edit">
                     <button id="edit" class="btn btn-success" disabled onclick="edit()">
                         <i class="glyphicon glyphicon-edit"></i> 修改

@@ -150,16 +150,9 @@
 
                 , {
                     field: 'location',
-                    title: '最后GPS位置',
+                    title: '最新GPS位置',
                     sortable: true,
                     sortName: 'location'
-
-                }
-                , {
-                    field: 'locationName',
-                    title: '最后位置名称',
-                    sortable: true,
-                    sortName: 'locationName'
                     , formatter: function (value, row, index) {
                         value = jp.unescapeHTML(value);
                         <c:choose>
@@ -174,6 +167,13 @@
                         </c:otherwise>
                         </c:choose>
                     }
+                }
+                , {
+                    field: 'locationName',
+                    title: '最后停车位置',
+                    sortable: true,
+                    sortName: 'locationName'
+
                 }
                 , {
                     field: 'startKm',
@@ -364,6 +364,6 @@
 
     function  realtimeLocations() {
         <%--jp.openChildDialog("实时位置大屏", "${ctx}/tp/car/tpCar/realtimeLocations", "1050px", "580px", postionSelectCallback);--%>
-        jp.windowOpen("${ctx}/tp/car/tpCar/realtimeLocations", "1050px","实时位置大屏", "1050px", "580px")
+        jp.windowOpen("${ctx}/tp/car/tpCar/realtimeLocations", "实时位置大屏", "1050px", "580px")
     }
 </script>

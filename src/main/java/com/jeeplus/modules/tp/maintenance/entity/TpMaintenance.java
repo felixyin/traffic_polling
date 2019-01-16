@@ -27,6 +27,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	private static final long serialVersionUID = 1L;
 	private String num;		// 任务编号
 	private String jobType;		// 任务类型
+	private String malfunctionType; 	// 故障类型
 	private String source;		// 任务来源
     private String jobDescription; //任务描述
 	private String location;		// 经纬度
@@ -38,6 +39,7 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	private String nearestPoi;		// 搜索地址相对位置
 	private User sendBy;		// 派单人
 	private Date sendDate;		// 派单时间
+	private String whatDay; 	// 星期几
 	private Office office;		// 施工单位
 	private User leaderBy;		// 施工负责人
 	private Date jobBeginDate;		// 施工开始时间
@@ -63,6 +65,14 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 
 	public TpMaintenance(String id){
 		super(id);
+	}
+
+	public String getMalfunctionType() {
+		return malfunctionType;
+	}
+
+	public void setMalfunctionType(String malfunctionType) {
+		this.malfunctionType = malfunctionType;
 	}
 
 	@ExcelField(title="任务编号", align=2, sort=7)

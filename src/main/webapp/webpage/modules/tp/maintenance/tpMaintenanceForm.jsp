@@ -99,31 +99,45 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-sm-2 control-label"><font color="red">*</font>故障类型：</label>
+                            <div class="col-sm-4">
+                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <form:select path="malfunctionType" class="form-control required">
+                                        <form:option value="" label=""/>
+                                        <form:options items="${fns:getDictList('malfunction_type')}" itemLabel="label"
+                                                      itemValue="value" htmlEscape="false"/>
+                                    </form:select>
+                                </shiro:hasPermission>
+                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <input type="hidden" name="source" value="${tpMaintenance.malfunctionType}">
+                                    ${fns:getDictLabel(tpMaintenance.malfunctionType,'malfunction_type','')}
+                                </shiro:lacksPermission>
+                            </div>
+
                             <label class="col-sm-2 control-label"><font color="red">*</font>选择位置：</label>
                             <div class="col-sm-4">
                                 <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:jiaoJing">
-                                    <button type="button" class="btn btn-primary btn-block  btn-parsley"
+                                    <button type="button" class="btn btn-primary "
                                             data-loading-text="正在计算..."
-                                            onclick="openSelectPostionDialog();">
-                                    <i class="fa fa-map-marker "></i>
-                                    ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
+                                            title="${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}"
+                                            onclick="openSelectPostionDialog();"
+                                            style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+                                        <i class="fa fa-map-marker "></i>
+                                            ${tpMaintenance.roadcross.name}${fns:abbr(tpMaintenance.nearestJunction,16) }
                                     </button>
                                 </shiro:hasAnyPermissions>
                                 <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
                                     ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
                                 </shiro:lacksPermission>
-                            </div>
-                            <label class="col-sm-2 control-label">详细位置信息：</label>
-                            <div class="col-sm-4">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-primary active">
                                         <input type="radio" id="_addressDetail_hide" name="_addressDetail" autocomplete="off" value="0"
                                                checked
-                                               onchange="$('#my-address-detail').slideUp();"> 合 起
+                                               onchange="$('#my-address-detail').slideUp();"> 合起
                                     </label>
                                     <label class="btn btn-primary">
                                         <input type="radio" id="_addressDetail_show" name="_addressDetail" autocomplete="off" value="1"
-                                               onchange="$('#my-address-detail').slideDown();"> 展 开
+                                               onchange="$('#my-address-detail').slideDown();"> 展开
                                     </label>
                                 </div>
                             </div>

@@ -113,6 +113,16 @@
 
                 }
                 , {
+                    field: 'malfunction_type',
+                    title: '故障类型',
+                    sortable: true,
+                    sortName: 'malfunctionType',
+                    formatter: function (value, row, index) {
+                        return jp.getDictLabel(${fns:toJson(fns:getDictList('malfunction_type'))}, value, "-");
+                    }
+
+                }
+                    , {
                     field: 'jobType',
                     title: '任务类型',
                     sortable: true,
@@ -122,6 +132,7 @@
                     }
 
                 }
+
                 , {
                     field: 'source',
                     title: '任务来源',
@@ -175,6 +186,15 @@
                     sortable: true,
                     sortName: 'sendDate'
 
+                }
+                , {
+                    field: 'whatDay',
+                    title: '星期几',
+                    sortable: true,
+                    sortName: 'whatDay',
+                    formatter: function (value, row, index) {
+                        return jp.getDictLabel(${fns:toJson(fns:getDictList('what_day'))}, value, "-");
+                    }
                 }
                 , {
                     field: 'office.name',

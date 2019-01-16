@@ -212,7 +212,36 @@
                     title: '关联车辆',
                     sortable: true,
                     sortName: 'car.name'
+                    , formatter: function (value, row, index) {
+                        if (value == null || value == "") {
+                            value = "-";
+                        }
+                        <c:choose>
+                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:edit')}">
+                        return "<a href='javascript:viewCar(" + JSON.stringify({
+                            carId: row.car.id,
+                        }) + ")'>" + value + "</a>";
+                        </c:when>
+                        <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:view')}">
+                        return "<a href='javascript:viewCar(" + JSON.stringify({
+                            carId: row.car.id,
+                        }) + ")'>" + value + "</a>";
+                        </c:when>
+                        <c:otherwise>
+                        return value;
+                        </c:otherwise>
+                        </c:choose>
 
+                    },
+                }
+                , {
+                    field: 'whatDay',
+                    title: '星期几',
+                    sortable: true,
+                    sortName: 'whatDay',
+                    formatter: function (value, row, index) {
+                        return jp.getDictLabel(${fns:toJson(fns:getDictList('what_day'))}, value, "-");
+                    }
                 }
                 , {
                     field: 'timeBegin',
@@ -416,6 +445,11 @@
         var location = row.location;
         var roadcrossName = row.locationName;
         jp.openChildDialog("查看最后位置", "${ctx}/tp/cartrack/tpCarTrack/showPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
+    }
+
+    function viewCar(row){
+        var carId= row.carId;
+        jp.openChildDialog("查看车辆", "${ctx}/tp/car/tpCar/form?id=" + carId, "1050px", "580px", postionSelectCallback);
     }
 
 </script>

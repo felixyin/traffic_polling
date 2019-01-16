@@ -12,6 +12,7 @@
 		a.del_flag AS "delFlag",
 		a.num AS "num",
 		a.job_type AS "jobType",
+		a.malfunction_type AS "malfunctionType",
 		a.job_source AS "source",
 		a.job_description AS "jobDescription",
 		a.location AS "location",
@@ -23,6 +24,7 @@
 		a.nearest_poi AS "nearestPoi",
 		a.send_by AS "sendBy.id",
 		a.send_date AS "sendDate",
+		a.what_day AS "whatDay",
 		a.office AS "office.id",
 		a.leader_by AS "leaderBy.id",
 		a.job_begin_date AS "jobBeginDate",
@@ -148,6 +150,12 @@
 			<if test="status != null and status != ''">
 				AND a.status = #{status}
 			</if>
+			<if test="malfunctionType != null and malfunctionType != ''">
+				AND a.malfunction_type = #{malfunctionType}
+			</if>
+			<if test="whatDay != null and whatDay != ''">
+				AND a.what_day = #{whatDay}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -189,6 +197,7 @@
 			del_flag,
 			num,
 			job_type,
+			malfunction_type,
 			job_source,
 			job_description,
 			location,
@@ -200,6 +209,7 @@
 			nearest_poi,
 			send_by,
 			send_date,
+			what_day,
 			office,
 			leader_by,
 			job_begin_date,
@@ -221,6 +231,7 @@
 			#{delFlag},
 			#{num},
 			#{jobType},
+			#{malfunctionType},
 			#{source},
 			#{jobDescription},
 			#{location},
@@ -232,6 +243,7 @@
 			#{nearestPoi},
 			#{sendBy.id},
 			#{sendDate},
+			#{whatDay},
 			#{office.id},
 			#{leaderBy.id},
 			#{jobBeginDate},
@@ -253,6 +265,7 @@
 			remarks = #{remarks},
 			num = #{num},
 			job_type = #{jobType},
+			malfunction_type = #{malfunctionType},
 			job_source = #{source},
 			job_description = #{jobDescription},
 			location = #{location},
@@ -264,6 +277,7 @@
 			nearest_poi = #{nearestPoi},
 			send_by = #{sendBy.id},
 			send_date = #{sendDate},
+			what_day = #{whatDay},
 			office = #{office.id},
 			leader_by = #{leaderBy.id},
 			job_begin_date = #{jobBeginDate},

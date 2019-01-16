@@ -30,6 +30,13 @@
 				<form:input path="nameEnd" htmlEscape="false" maxlength="64"  class=" form-control"/>
 			</div>
 			 <div class="col-xs-12 col-sm-6 col-md-4">
+				<label class="label-item single-overflow pull-left" title="星期几：">星期几：</label>
+				 <form:select path="whatDay"  class="form-control m-b">
+					 <form:option value="" label=""/>
+					 <form:options items="${fns:getDictList('what_day')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
+				 </form:select>
+			</div>
+			 <div class="col-xs-12 col-sm-6 col-md-4">
 				<label class="label-item single-overflow pull-left" title="开始时间：">开始时间：</label>
 				<form:input path="timeBegin" htmlEscape="false"  class=" form-control"/>
 			</div>

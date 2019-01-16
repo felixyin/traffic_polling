@@ -22,6 +22,7 @@
 		a.job_desc AS "jobDesc",
 		a.user_id AS "user.id",
 		a.remarks AS "remarks",
+		a.what_day AS "whatDay",
 				
 				
 				
@@ -104,6 +105,9 @@
 			<if test="user != null and user.id != null and user.id != ''">
 				AND a.user_id = #{user.id}
 			</if>
+			<if test="whatDay != null and whatDay != ''">
+				AND a.what_day = #{whatDay}
+			</if>
 		</where>
 		<choose>
 			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
@@ -154,6 +158,7 @@
 			maintenance_id,
 			job_desc,
 			user_id,
+			what_day,
 			remarks
 		) VALUES (
 			#{id},
@@ -174,6 +179,7 @@
 			#{maintenance.id},
 			#{jobDesc},
 			#{user.id},
+			#{whatDay},
 			#{remarks}
 		)
 	</insert>
@@ -194,6 +200,7 @@
 			maintenance_id = #{maintenance.id},
 			job_desc = #{jobDesc},
 			user_id = #{user.id},
+			what_day = #{whatDay},
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>

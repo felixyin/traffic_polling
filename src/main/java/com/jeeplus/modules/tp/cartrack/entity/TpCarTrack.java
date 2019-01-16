@@ -33,6 +33,7 @@ public class TpCarTrack extends DataEntity<TpCarTrack> {
 	private TpMaintenance maintenance;		// 关联任务
 	private String jobDesc;		// 任务描述
 	private User user;		// 关联驾驶人
+    private String whatDay;  	// 星期几
 
 	private Date beginTimeBegin;		// 开始 开始时间
 	private Date endTimeBegin;		// 结束 开始时间
@@ -163,7 +164,15 @@ public class TpCarTrack extends DataEntity<TpCarTrack> {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
+	public String getWhatDay() {
+		return whatDay;
+	}
+
+	public void setWhatDay(String whatDay) {
+		this.whatDay = whatDay;
+	}
+
 	public Date getBeginTimeBegin() {
 		return beginTimeBegin;
 	}

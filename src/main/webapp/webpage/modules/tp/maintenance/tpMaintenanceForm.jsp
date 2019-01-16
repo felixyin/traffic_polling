@@ -511,7 +511,7 @@
                                     <div style="float:right;padding-top:2px;padding-right:15px;line-height: 40px;">
                                         <label style="display:inline">物料总成本：</label>
                                         <span id="my-money-span">${tpMaintenance.money}元</span>
-                                        <input id="money" name="money" value="0" type="hidden"
+                                        <input id="money" name="money" value="${tpMaintenance.money}" type="hidden"
                                                class="form-control  isFloatGtZero">
                                     </div>
                                 </shiro:hasPermission>

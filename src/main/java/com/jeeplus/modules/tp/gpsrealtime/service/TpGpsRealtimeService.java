@@ -11,6 +11,8 @@ import com.jeeplus.common.config.Global;
 import com.jeeplus.common.utils.CacheUtils;
 import com.jeeplus.common.utils.JsonUtils;
 import com.jeeplus.common.utils.StringUtils;
+import com.jeeplus.common.utils.time.DateUtil;
+import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.tp.car.entity.TpCar;
 import com.jeeplus.modules.tp.car.service.TpCarService;
 import com.jeeplus.modules.tp.cartrack.entity.TpCarTrack;
@@ -244,6 +246,13 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                             return;
                         }
                         logger.info("==================================================================================================================");
+//                        计算星期几
+                        carTrack.setWhatDay(String.valueOf(DateUtil.getDayOfWeek(carTrack.getTimeBegin())));
+//                        主驾驶人，默认为车辆负责人
+                        User user = car.getUser();
+                        if(null!=user){
+                            carTrack.setUser(user);
+                        }
 //                        保存car_track表
                         carTrackService.save(carTrack);
 //                        移动gps_realtime表对应数据，到gps_history表中

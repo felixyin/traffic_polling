@@ -5,6 +5,7 @@ package com.jeeplus.modules.tp.maintenance.service;
 
 import java.util.*;
 
+import com.jeeplus.common.config.Global;
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.modules.tp.maintenance.gdbean.*;
 import com.jeeplus.modules.tp.road.entity.SysArea;
@@ -189,7 +190,7 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
             List<TpRoad> tpRoads = tpRoadService.findByName(road.getName());
             if (CollectionUtils.isEmpty(tpRoads)) {
                 tpRoad.setArea(districtArea);
-                tpRoad.setRoadType("2"); // TODO 默认为主干路
+                tpRoad.setRoadType(Global.getConfig("road.level"));
                 tpRoad.setName(road.getName());
                 tpRoad.setRemarks(road.getId()); // 存储地图用id，可能用得着
                 tpRoadService.save(tpRoad);

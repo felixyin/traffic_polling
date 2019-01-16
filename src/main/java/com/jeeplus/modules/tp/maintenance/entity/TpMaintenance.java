@@ -359,4 +359,11 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
 	}
 
 
+	public String getWhatDay() {
+		return whatDay;
+	}
+
+	public void setWhatDay(String whatDay) {
+		this.whatDay = whatDay;
+	}
 }

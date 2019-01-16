@@ -113,7 +113,29 @@
 
                 }
                 , {
-                    field: 'malfunction_type',
+                    field: 'id',
+                    title: '出车记录',
+                    sortable: true,
+                    sortName: 'id'
+                    , formatter: function (value, row, index) {
+                        value = jp.unescapeHTML(value);
+                        <c:choose>
+                        <c:when test="${fns:hasPermission('tp:maintenance:tpMaintenance:edit')}">
+                        return "<a href='javascript:viewCarTrack(\"" + row.id + "\")'>查看出车记录</a>";
+                        </c:when>
+                        <c:when test="${fns:hasPermission('tp:maintenance:tpMaintenance:view')}">
+                        return "<a href='javascript:viewCarTrack(\"" + row.id + "\")'>查看出车记录</a>";
+                        </c:when>
+                        <c:otherwise>
+                        return value;
+                        </c:otherwise>
+                        </c:choose>
+                    }
+
+                }
+
+                , {
+                    field: 'malfunctionType',
                     title: '故障类型',
                     sortable: true,
                     sortName: 'malfunctionType',
@@ -404,6 +426,13 @@
         jp.go("${ctx}/tp/maintenance/tpMaintenance/form/view?id=" + id);
     }
 
+    // 查看出车记录
+    function viewCarTrack(id){
+        if (id == undefined) {
+            id = getIdSelections();
+        }
+        jp.openViewDialog('查看出车记录', "${ctx}/tp/cartrack/tpCarTrack/list?maintenance.id=" + id, '1200px', '600px');
+    }
 
     function getPicTabHtml(value, row, index) {
         var valueArray = value.split("|");
@@ -425,6 +454,7 @@
         var htmltpl = $("#tpMaintenanceChildrenTpl").html().replace(/(\/\/\<!\-\-)|(\/\/\-\->)/g, "");
         row.idx = row.id;
         console.log(row);
+
         var html = Mustache.render(htmltpl, row);
         $.get("${ctx}/tp/maintenance/tpMaintenance/detail?id=" + row.id, function (tpMaintenance) {
             var tpMaintenanceChild1RowIdx = 0,
@@ -510,6 +540,7 @@
                 <div id="tab-{{idx}}-2" class="tab-pane fade "></div>
                 <div id="tab-{{idx}}-3" class="tab-pane fade "></div>
                 <div id="tab-{{idx}}-4" class="tab-pane fade "></div>
+
                 <div id="tab-{{idx}}-6" class="tab-pane fade ">
                     <p class="text-left">
                         详细地址：{{address}}

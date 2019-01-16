@@ -7,6 +7,7 @@ import java.util.*;
 
 import com.jeeplus.common.config.Global;
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.time.DateUtil;
 import com.jeeplus.modules.tp.maintenance.gdbean.*;
 import com.jeeplus.modules.tp.road.entity.SysArea;
 import com.jeeplus.modules.tp.road.entity.TpRoad;
@@ -99,6 +100,12 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
         TpRoad tpRoad = tpMaintenance.getRoad();
         if (tpRoad != null && StringUtils.isNoneBlank(tpRoad.getRoadType())) {
             tpRoadService.save(tpRoad); // update
+        }
+
+//        计算星期几
+        Date sendDate = tpMaintenance.getSendDate();
+        if (null != sendDate) {
+            tpMaintenance.setWhatDay("" + DateUtil.getDayOfWeek(sendDate));
         }
 
         super.save(tpMaintenance);

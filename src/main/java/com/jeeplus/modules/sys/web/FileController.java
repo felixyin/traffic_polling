@@ -339,7 +339,7 @@ public class FileController extends BaseController {
             if (isImage(newFile)) {
                 int thumbnailWidth = Integer.parseInt(Global.getConfig("thumbnail.width"));
                 int thumbnailHeight = Integer.parseInt(Global.getConfig("thumbnail.height"));
-                Thumbnails.of(newFile).scale(thumbnailWidth, thumbnailHeight).toFile(newFile);
+                Thumbnails.of(newFile).size(thumbnailWidth, thumbnailHeight).toFile(newFile);
             }
 
             j.put("id", newFile.getAbsolutePath());

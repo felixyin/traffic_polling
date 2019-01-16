@@ -88,7 +88,7 @@
 					<td class="width-15 active"><label class="pull-right">关联任务：</label></td>
 					<td class="width-35">
 						<sys:gridselect url="${ctx}/tp/maintenance/tpMaintenance/data" id="maintenance" name="maintenance.id" value="${tpCarTrack.maintenance.id}" labelName="maintenance.num" labelValue="${tpCarTrack.maintenance.num}"
-							 title="选择关联任务" cssClass="form-control " fieldLabels="任务编号|任务类型|所属路口|所属道路|派单人|施工单位|施工负责人|施工过程" fieldKeys="num|job_source|roadcross.name|road.name|send_by.name|office.name|leader_by.name|process" searchLabels="任务编号|任务类型|施工负责人" searchKeys="num|job_source|leader_by.name|process" ></sys:gridselect>
+							 title="选择关联任务" cssClass="form-control " fieldLabels="任务编号|所属路口|所属道路|施工单位|施工负责人" fieldKeys="num|roadcross.name|road.name|office.name|leaderBy.name" searchLabels="任务编号|任务类型|施工负责人" searchKeys="num|jobSource|leaderBy.name" ></sys:gridselect>
 					</td>
 				</tr>
 				<tr>

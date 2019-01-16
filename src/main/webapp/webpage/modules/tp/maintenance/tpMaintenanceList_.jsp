@@ -223,6 +223,12 @@
                     title: '施工单位',
                     sortable: true,
                     sortName: 'office.name'
+                }
+                 , {
+                    field: 'leaderBy.name',
+                    title: '施工负责人',
+                    sortable: true,
+                    sortName: 'leaderBy.name'
 
                 }
                 , {

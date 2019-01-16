@@ -132,8 +132,14 @@
 				<tr>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属路口：</label></td>
 					<td class="width-35">
-						<sys:gridselect url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross" name="roadcross.id" value="${tpDam.roadcross.id}" labelName="roadcross.name" labelValue="${tpDam.roadcross.name}"
-							 title="选择所属路口" cssClass="form-control required" fieldLabels="" fieldKeys="" searchLabels="" searchKeys="" ></sys:gridselect>
+						<sys:gridselect   url="${ctx}/tp/roadcross/tpRoadCrossing/data" id="roadcross"
+										name="roadcross.id" value="${tpDam.roadcross.id}"
+										labelName="roadcross.name"
+										labelValue="${tpDam.roadcross.name}"
+										title="选择所属路口" cssClass="form-control required"
+										fieldLabels="路口名称|所属区域|所属街道" fieldKeys="name|sarea.name|township"
+										searchLabels="路口名称|所属区域"
+										searchKeys="name|sarea.name"></sys:gridselect>
 					</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属路口相对位置：</label></td>
 					<td class="width-35">
@@ -143,8 +149,12 @@
 				<tr>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>所属道路：</label></td>
 					<td class="width-35">
-						<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id" value="${tpDam.road.id}" labelName="road.name" labelValue="${tpDam.road.name}"
-							 title="选择所属道路" cssClass="form-control required" fieldLabels="" fieldKeys="" searchLabels="" searchKeys="" ></sys:gridselect>
+						<sys:gridselect url="${ctx}/tp/road/tpRoad/data" id="road" name="road.id"
+										value="${tpDam.road.id}" labelName="road.name"
+										labelValue="${tpDam.road.name}"
+										title="选择附近道路" cssClass="form-control " fieldLabels="道路名称|所属区域"
+										fieldKeys="name|area.name" searchLabels="道路名称|所属区域"
+										searchKeys="name|area.name"></sys:gridselect>
 					</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>搜索用地址：</label></td>
 					<td class="width-35">

@@ -349,7 +349,6 @@
         jp.openViewDialog('查看车辆', "${ctx}/tp/car/tpCar/form?id=" + id, '800px', '500px');
     }
 
-
     // 地址选择，保存成功后，显示到施工管理表单控件中
     function postionSelectCallback(param) {
         console.log(param);

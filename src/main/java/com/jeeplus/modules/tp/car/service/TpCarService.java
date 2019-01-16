@@ -18,7 +18,7 @@ import com.jeeplus.modules.tp.car.mapper.TpCarMapper;
 /**
  * 车辆Service
  * @author 尹彬
- * @version 2019-01-05
+ * @version 2019-01-16
  */
 @Service
 @Transactional(readOnly = true)
@@ -48,8 +48,7 @@ public class TpCarService extends CrudService<TpCarMapper, TpCar> {
 	public void delete(TpCar tpCar) {
 		super.delete(tpCar);
 	}
-
-    public List<Map> findAllLocation() {
+	public List<Map> findAllLocation() {
 		return tpCarMapper.findAllLocation();
-    }
+	}
 }

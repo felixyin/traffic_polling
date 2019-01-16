@@ -37,7 +37,7 @@ import com.jeeplus.modules.tp.car.service.TpCarService;
 /**
  * 车辆Controller
  * @author 尹彬
- * @version 2019-01-05
+ * @version 2019-01-16
  */
 @Controller
 @RequestMapping(value = "${adminPath}/tp/car/tpCar")
@@ -239,5 +239,4 @@ public class TpCarController extends BaseController {
 		List<Map> allList = tpCarService.findAllLocation();
 		return allList;
 	}
-
 }

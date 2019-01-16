@@ -218,7 +218,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
 //                            清除缓存
                             clearCache(carTrackMap, devideId);
 
-                            logger.info("excludeTime:"+excludeTime+" < carTackExcludeTime:"+carTackExcludeTime+"，因时间不足清理数据。");
+                            logger.info("excludeTime:" + excludeTime + " < carTackExcludeTime:" + carTackExcludeTime + "，因时间不足清理数据。");
                             return;
                         }
 
@@ -240,7 +240,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                             clearRealtime(devideId);
 //                            清除缓存
                             clearCache(carTrackMap, devideId);
-                            logger.info("km:"+km+" < carTackExcludeKm:"+carTackExcludeKm+"，因距离不足清理数据。");
+                            logger.info("km:" + km + " < carTackExcludeKm:" + carTackExcludeKm + "，因距离不足清理数据。");
                             return;
                         }
                         logger.info("==================================================================================================================");
@@ -274,19 +274,19 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
         if (null != car) {
             car.setLocation(carTrack.getLocationEnd());
             car.setLocationName(carTrack.getNameEnd());
-            Integer sumTime = car.getSumTime();
+            Long sumTime = car.getSumTime();
             if (null == sumTime) {
                 long time = carTrack.getTimeEnd().getTime() - carTrack.getTimeBegin().getTime();
-                car.setSumTime(Math.round(time / 1000 / 60));
+                car.setSumTime((long) (0L + Math.ceil(time / 1000 / 60)));
             } else {
                 long time = carTrack.getTimeEnd().getTime() - carTrack.getTimeBegin().getTime();
-                car.setSumTime(sumTime + Math.round(time / 1000 / 60));
+                car.setSumTime((long) (sumTime + Math.ceil(time / 1000 / 60)));
             }
             Double sumKm = car.getSumKm();
             if (null == sumKm) {
                 car.setSumKm(carTrack.getKm());
             } else {
-                car.setSumKm(sumKm + carTrack.getKm());
+                car.setSumKm(sumKm + Math.ceil(carTrack.getKm()));
             }
             carService.save(car);
             logger.info("=================> car数据已更新：" + car);
@@ -342,8 +342,8 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
             }
             if (null != results && results.size() > 0) {
                 Results results1 = results.get(0);
-                double m  = Double.parseDouble(results1.getDistance());
-                double km = new BigDecimal(m/ 1000D).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                double m = Double.parseDouble(results1.getDistance());
+                double km = new BigDecimal(m / 1000D).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
                 carTrack.setKm(km);
                 return m;
             }

@@ -7,35 +7,43 @@
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
 		a.update_by AS "updateBy.id",
-		a.update_date AS "updateDate",
 		a.del_flag AS "delFlag",
 		a.deviceid AS "deviceId",
 		a.office_id AS "office.id",
+		a.user_id AS "user.id",
 		a.name AS "name",
 		a.brand AS "brand",
 		a.purpose AS "purpose",
 		a.person_count AS "personCount",
 		a.carrying_capacity AS "carryingCapacity",
-		a.remarks AS "remarks",
 		a.location AS "location",
 		a.location_name AS "locationName",
 		a.start_km AS "startKm",
 		a.sum_km AS "sumKm",
 		a.current_km AS "currentKm",
 		a.sum_time AS "sumTime",
+		a.consumption AS "consumption",
+		a.insurance_company AS "insuranceCompany",
+		a.insurance_date AS "insuranceDate",
+		a.maintain_km AS "maintainKm",
+		a.maintain_date AS "maintainDate",
+		a.remarks AS "remarks",
+		a.update_date AS "updateDate",
 				
 				
 				
 				
 				
 				
+		office.name AS "office.name",
 				
-		office.name AS "office.name"
+		user.name AS "user.name"
 	</sql>
 	
 	<sql id="tpCarJoins">
 		
 		LEFT JOIN sys_office office ON office.id = a.office_id
+		LEFT JOIN sys_user user ON user.id = a.user_id
 	</sql>
 	
     
@@ -55,14 +63,14 @@
 		<where>
 			a.del_flag = #{DEL_FLAG_NORMAL}
 			${dataScope}
-			<if test="deviceId != null and deviceId != ''">
-				AND a.deviceid LIKE 
-					<if test="dbName == 'oracle'">'%'||#{deviceId}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{deviceId}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{deviceId},'%')</if>
-			</if>
 			<if test="office != null and office.id != null and office.id != ''">
-				AND a.office_id = #{office.id}
+				AND a.office_id LIKE 
+					<if test="dbName == 'oracle'">'%'||#{office.id}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{office.id}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{office.id},'%')</if>
+			</if>
+			<if test="user != null and user.id != null and user.id != ''">
+				AND a.user_id = #{user.id}
 			</if>
 			<if test="name != null and name != ''">
 				AND a.name LIKE 
@@ -82,18 +90,6 @@
 					<if test="dbName == 'mssql'">'%'+#{purpose}+'%'</if>
 					<if test="dbName == 'mysql'">concat('%',#{purpose},'%')</if>
 			</if>
-			<if test="beginPersonCount != null and endPersonCount != null ">
-				AND a.person_count BETWEEN #{beginPersonCount} AND #{endPersonCount}
-			</if>
-			<if test="beginCarryingCapacity != null and endCarryingCapacity != null ">
-				AND a.carrying_capacity BETWEEN #{beginCarryingCapacity} AND #{endCarryingCapacity}
-			</if>
-			<if test="remarks != null and remarks != ''">
-				AND a.remarks LIKE 
-					<if test="dbName == 'oracle'">'%'||#{remarks}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{remarks}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{remarks},'%')</if>
-			</if>
 			<if test="locationName != null and locationName != ''">
 				AND a.location_name LIKE 
 					<if test="dbName == 'oracle'">'%'||#{locationName}||'%'</if>
@@ -111,6 +107,21 @@
 			</if>
 			<if test="beginSumTime != null and endSumTime != null ">
 				AND a.sum_time BETWEEN #{beginSumTime} AND #{endSumTime}
+			</if>
+			<if test="insuranceCompany != null and insuranceCompany != ''">
+				AND a.insurance_company LIKE 
+					<if test="dbName == 'oracle'">'%'||#{insuranceCompany}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{insuranceCompany}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{insuranceCompany},'%')</if>
+			</if>
+			<if test="beginInsuranceDate != null and endInsuranceDate != null ">
+				AND a.insurance_date BETWEEN #{beginInsuranceDate} AND #{endInsuranceDate}
+			</if>
+			<if test="beginMaintainKm != null and endMaintainKm != null ">
+				AND a.maintain_km BETWEEN #{beginMaintainKm} AND #{endMaintainKm}
+			</if>
+			<if test="beginMaintainDate != null and endMaintainDate != null ">
+				AND a.maintain_date BETWEEN #{beginMaintainDate} AND #{endMaintainDate}
 			</if>
 		</where>
 		<choose>
@@ -148,64 +159,82 @@
 			create_by,
 			create_date,
 			update_by,
-			update_date,
 			del_flag,
 			deviceid,
 			office_id,
+			user_id,
 			name,
 			brand,
 			purpose,
 			person_count,
 			carrying_capacity,
-			remarks,
 			location,
 			location_name,
 			start_km,
 			sum_km,
 			current_km,
-			sum_time
+			sum_time,
+			consumption,
+			insurance_company,
+			insurance_date,
+			maintain_km,
+			maintain_date,
+			remarks,
+			update_date
 		) VALUES (
 			#{id},
 			#{createBy.id},
 			#{createDate},
 			#{updateBy.id},
-			#{updateDate},
 			#{delFlag},
 			#{deviceId},
 			#{office.id},
+			#{user.id},
 			#{name},
 			#{brand},
 			#{purpose},
 			#{personCount},
 			#{carryingCapacity},
-			#{remarks},
 			#{location},
 			#{locationName},
 			#{startKm},
 			#{sumKm},
 			#{currentKm},
-			#{sumTime}
+			#{sumTime},
+			#{consumption},
+			#{insuranceCompany},
+			#{insuranceDate},
+			#{maintainKm},
+			#{maintainDate},
+			#{remarks},
+			#{updateDate}
 		)
 	</insert>
 	
 	<update id="update">
 		UPDATE tp_car SET 	
 			update_by = #{updateBy.id},
-			update_date = #{updateDate},
 			deviceid = #{deviceId},
 			office_id = #{office.id},
+			user_id = #{user.id},
 			name = #{name},
 			brand = #{brand},
 			purpose = #{purpose},
 			person_count = #{personCount},
 			carrying_capacity = #{carryingCapacity},
-			remarks = #{remarks},
 			location = #{location},
 			location_name = #{locationName},
 			start_km = #{startKm},
 			sum_km = #{sumKm},
 			current_km = #{currentKm},
-			sum_time = #{sumTime}
+			sum_time = #{sumTime},
+			consumption = #{consumption},
+			insurance_company = #{insuranceCompany},
+			insurance_date = #{insuranceDate},
+			maintain_km = #{maintainKm},
+			maintain_date = #{maintainDate},
+			remarks = #{remarks},
+			update_date = #{updateDate}
 		WHERE id = #{id}
 	</update>
 	
@@ -229,7 +258,7 @@
 		select * FROM tp_car  where ${propertyName} = '${value}'
 	</select>
 
-    <select id="findAllLocation" resultType="java.util.Map">
+	<select id="findAllLocation" resultType="java.util.Map">
 		select
 		a.name AS "name",
 				a.location AS "location",
@@ -237,5 +266,5 @@
 		 from tp_car AS a
 		 LEFT JOIN sys_office office ON office.id = a.office_id
 	</select>
-
+	
 </mapper>

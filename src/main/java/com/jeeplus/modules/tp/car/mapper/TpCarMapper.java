@@ -13,11 +13,10 @@ import java.util.Map;
 /**
  * 车辆MAPPER接口
  * @author 尹彬
- * @version 2019-01-05
+ * @version 2019-01-16
  */
 @MyBatisMapper
 public interface TpCarMapper extends BaseMapper<TpCar> {
 
     List<Map> findAllLocation();
-
 }

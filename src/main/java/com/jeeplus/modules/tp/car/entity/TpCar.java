@@ -4,6 +4,9 @@
 package com.jeeplus.modules.tp.car.entity;
 
 import com.jeeplus.modules.sys.entity.Office;
+import com.jeeplus.modules.sys.entity.User;
+import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import com.jeeplus.core.persistence.DataEntity;
 import com.jeeplus.common.utils.excel.annotation.ExcelField;
@@ -11,38 +14,44 @@ import com.jeeplus.common.utils.excel.annotation.ExcelField;
 /**
  * 车辆Entity
  * @author 尹彬
- * @version 2019-01-05
+ * @version 2019-01-16
  */
 public class TpCar extends DataEntity<TpCar> {
 	
 	private static final long serialVersionUID = 1L;
 	private String deviceId;		// 车辆编号
 	private Office office;		// 所属单位
+	private User user;		// 主要驾驶人
 	private String name;		// 车辆名称
 	private String brand;		// 车辆品牌
 	private String purpose;		// 车辆用途
 	private Integer personCount;		// 载人数量
 	private Double carryingCapacity;		// 载货重量（吨）
-
 	private String location;		// 最后GPS位置
 	private String locationName;		// 最后位置名称
 	private Double startKm;		// 装机时总里程
 	private Double sumKm;		// GPS总里程
 	private Double currentKm;		// 当前预计总里程
-	private Integer sumTime;		// GPS运行总时间
-
-	private Integer beginPersonCount;		// 开始 载人数量
-	private Integer endPersonCount;		// 结束 载人数量
-	private Double beginCarryingCapacity;		// 开始 载货重量（吨）
-	private Double endCarryingCapacity;		// 结束 载货重量（吨）
+	private Long sumTime;		// GPS运行总时间
+	private Double consumption;		// 油耗（升/每百公里）
+	private String insuranceCompany;		// 投保公司
+	private Date insuranceDate;		// 投保日期
+	private Double maintainKm;		// 保养时公里数
+	private Date maintainDate;		// 保养日期
 	private Double beginStartKm;		// 开始 装机时总里程
 	private Double endStartKm;		// 结束 装机时总里程
 	private Double beginSumKm;		// 开始 GPS总里程
 	private Double endSumKm;		// 结束 GPS总里程
 	private Double beginCurrentKm;		// 开始 当前预计总里程
 	private Double endCurrentKm;		// 结束 当前预计总里程
-	private Integer beginSumTime;		// 开始 GPS运行总时间
-	private Integer endSumTime;		// 结束 GPS运行总时间
+	private Long beginSumTime;		// 开始 GPS运行总时间
+	private Long endSumTime;		// 结束 GPS运行总时间
+	private Date beginInsuranceDate;		// 开始 投保日期
+	private Date endInsuranceDate;		// 结束 投保日期
+	private Double beginMaintainKm;		// 开始 保养时公里数
+	private Double endMaintainKm;		// 结束 保养时公里数
+	private Date beginMaintainDate;		// 开始 保养日期
+	private Date endMaintainDate;		// 结束 保养日期
 	
 	public TpCar() {
 		super();
@@ -52,7 +61,7 @@ public class TpCar extends DataEntity<TpCar> {
 		super(id);
 	}
 
-	@ExcelField(title="车辆编号", align=2, sort=6)
+	@ExcelField(title="车辆编号", dictType="del_flag", align=2, sort=5)
 	public String getDeviceId() {
 		return deviceId;
 	}
@@ -61,13 +70,22 @@ public class TpCar extends DataEntity<TpCar> {
 		this.deviceId = deviceId;
 	}
 	
-	@ExcelField(title="所属单位", fieldType=Office.class, value="office.name", align=2, sort=7)
+	@ExcelField(title="所属单位", fieldType=Office.class, value="office.name", align=2, sort=6)
 	public Office getOffice() {
 		return office;
 	}
 
 	public void setOffice(Office office) {
 		this.office = office;
+	}
+	
+	@ExcelField(title="主要驾驶人", fieldType=User.class, value="user.name", align=2, sort=7)
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	@ExcelField(title="车辆名称", align=2, sort=8)
@@ -115,7 +133,7 @@ public class TpCar extends DataEntity<TpCar> {
 		this.carryingCapacity = carryingCapacity;
 	}
 	
-	@ExcelField(title="最后GPS位置", align=2, sort=14)
+	@ExcelField(title="最后GPS位置", align=2, sort=13)
 	public String getLocation() {
 		return location;
 	}
@@ -124,7 +142,7 @@ public class TpCar extends DataEntity<TpCar> {
 		this.location = location;
 	}
 	
-	@ExcelField(title="最后位置名称", align=2, sort=15)
+	@ExcelField(title="最后位置名称", align=2, sort=14)
 	public String getLocationName() {
 		return locationName;
 	}
@@ -133,7 +151,7 @@ public class TpCar extends DataEntity<TpCar> {
 		this.locationName = locationName;
 	}
 	
-	@ExcelField(title="装机时总里程", align=2, sort=16)
+	@ExcelField(title="装机时总里程", align=2, sort=15)
 	public Double getStartKm() {
 		return startKm;
 	}
@@ -142,7 +160,7 @@ public class TpCar extends DataEntity<TpCar> {
 		this.startKm = startKm;
 	}
 	
-	@ExcelField(title="GPS总里程", align=2, sort=17)
+	@ExcelField(title="GPS总里程", align=2, sort=16)
 	public Double getSumKm() {
 		return sumKm;
 	}
@@ -151,7 +169,7 @@ public class TpCar extends DataEntity<TpCar> {
 		this.sumKm = sumKm;
 	}
 	
-	@ExcelField(title="当前预计总里程", align=2, sort=18)
+	@ExcelField(title="当前预计总里程", align=2, sort=17)
 	public Double getCurrentKm() {
 		return currentKm;
 	}
@@ -159,48 +177,63 @@ public class TpCar extends DataEntity<TpCar> {
 	public void setCurrentKm(Double currentKm) {
 		this.currentKm = currentKm;
 	}
-
-	@ExcelField(title="GPS运行总时间", align=2, sort=19)
-	public Integer getSumTime() {
+	
+	@ExcelField(title="GPS运行总时间", align=2, sort=18)
+	public Long getSumTime() {
 		return sumTime;
 	}
 
-	public void setSumTime(Integer sumTime) {
+	public void setSumTime(Long sumTime) {
 		this.sumTime = sumTime;
 	}
 	
-	public Integer getBeginPersonCount() {
-		return beginPersonCount;
+	@ExcelField(title="油耗（升/每百公里）", align=2, sort=19)
+	public Double getConsumption() {
+		return consumption;
 	}
 
-	public void setBeginPersonCount(Integer beginPersonCount) {
-		this.beginPersonCount = beginPersonCount;
+	public void setConsumption(Double consumption) {
+		this.consumption = consumption;
 	}
 	
-	public Integer getEndPersonCount() {
-		return endPersonCount;
+	@ExcelField(title="投保公司", align=2, sort=20)
+	public String getInsuranceCompany() {
+		return insuranceCompany;
 	}
 
-	public void setEndPersonCount(Integer endPersonCount) {
-		this.endPersonCount = endPersonCount;
-	}
-		
-	public Double getBeginCarryingCapacity() {
-		return beginCarryingCapacity;
-	}
-
-	public void setBeginCarryingCapacity(Double beginCarryingCapacity) {
-		this.beginCarryingCapacity = beginCarryingCapacity;
+	public void setInsuranceCompany(String insuranceCompany) {
+		this.insuranceCompany = insuranceCompany;
 	}
 	
-	public Double getEndCarryingCapacity() {
-		return endCarryingCapacity;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ExcelField(title="投保日期", align=2, sort=21)
+	public Date getInsuranceDate() {
+		return insuranceDate;
 	}
 
-	public void setEndCarryingCapacity(Double endCarryingCapacity) {
-		this.endCarryingCapacity = endCarryingCapacity;
+	public void setInsuranceDate(Date insuranceDate) {
+		this.insuranceDate = insuranceDate;
 	}
-		
+	
+	@ExcelField(title="保养时公里数", align=2, sort=22)
+	public Double getMaintainKm() {
+		return maintainKm;
+	}
+
+	public void setMaintainKm(Double maintainKm) {
+		this.maintainKm = maintainKm;
+	}
+	
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@ExcelField(title="保养日期", align=2, sort=23)
+	public Date getMaintainDate() {
+		return maintainDate;
+	}
+
+	public void setMaintainDate(Date maintainDate) {
+		this.maintainDate = maintainDate;
+	}
+	
 	public Double getBeginStartKm() {
 		return beginStartKm;
 	}
@@ -249,20 +282,68 @@ public class TpCar extends DataEntity<TpCar> {
 		this.endCurrentKm = endCurrentKm;
 	}
 		
-	public Integer getBeginSumTime() {
+	public Long getBeginSumTime() {
 		return beginSumTime;
 	}
 
-	public void setBeginSumTime(Integer beginSumTime) {
+	public void setBeginSumTime(Long beginSumTime) {
 		this.beginSumTime = beginSumTime;
 	}
 	
-	public Integer getEndSumTime() {
+	public Long getEndSumTime() {
 		return endSumTime;
 	}
 
-	public void setEndSumTime(Integer endSumTime) {
+	public void setEndSumTime(Long endSumTime) {
 		this.endSumTime = endSumTime;
+	}
+		
+	public Date getBeginInsuranceDate() {
+		return beginInsuranceDate;
+	}
+
+	public void setBeginInsuranceDate(Date beginInsuranceDate) {
+		this.beginInsuranceDate = beginInsuranceDate;
+	}
+	
+	public Date getEndInsuranceDate() {
+		return endInsuranceDate;
+	}
+
+	public void setEndInsuranceDate(Date endInsuranceDate) {
+		this.endInsuranceDate = endInsuranceDate;
+	}
+		
+	public Double getBeginMaintainKm() {
+		return beginMaintainKm;
+	}
+
+	public void setBeginMaintainKm(Double beginMaintainKm) {
+		this.beginMaintainKm = beginMaintainKm;
+	}
+	
+	public Double getEndMaintainKm() {
+		return endMaintainKm;
+	}
+
+	public void setEndMaintainKm(Double endMaintainKm) {
+		this.endMaintainKm = endMaintainKm;
+	}
+		
+	public Date getBeginMaintainDate() {
+		return beginMaintainDate;
+	}
+
+	public void setBeginMaintainDate(Date beginMaintainDate) {
+		this.beginMaintainDate = beginMaintainDate;
+	}
+	
+	public Date getEndMaintainDate() {
+		return endMaintainDate;
+	}
+
+	public void setEndMaintainDate(Date endMaintainDate) {
+		this.endMaintainDate = endMaintainDate;
 	}
 		
 }

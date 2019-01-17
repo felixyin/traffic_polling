@@ -45,8 +45,11 @@
 				<tr>
 					<td class="width-15 active"><label class="pull-right">所属单位：</label></td>
 					<td class="width-35">
-						<sys:treeselect id="office" name="office.id" value="${tpCar.office.id}" labelName="office.name" labelValue="${tpCar.office.name}"
-							title="部门" url="/sys/office/treeData?type=2" cssClass="form-control " allowClear="true" notAllowSelectParent="true"/>
+						<sys:treeselect id="office" name="office.id" value="${tpCar.office.id}"
+										labelName="office.name" labelValue="${tpCar.office.name}"
+										title="施工单位" url="/sys/office/myTreeData?type=3"
+										cssClass="form-control required" allowClear="true"
+										notAllowSelectParent="true"/>
 					</td>
 					<td class="width-15 active"><label class="pull-right">主要驾驶人：</label></td>
 					<td class="width-35">

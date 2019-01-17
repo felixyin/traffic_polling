@@ -49,11 +49,11 @@
 				<form id="loginForm" role="form" action="${ctx}/login" method="post">
 					<div class="form-content">
 						<div class="form-group">
-							<input type="text" id="username" name="username" class="form-control input-underline input-lg required"  value="admin" autocomplete="off" placeholder="用户名">
+							<input type="text" id="username" name="username" class="form-control input-underline input-lg required"  value="" autocomplete="off" placeholder="用户名">
 						</div>
 
 						<div class="form-group">
-							<input type="password" id="password" name="password" value="admin" class="form-control input-underline input-lg required" autocomplete="off" placeholder="密码">
+							<input type="password" id="password" name="password" value="" class="form-control input-underline input-lg required" autocomplete="off" placeholder="密码">
 						</div>
 						<c:if test="${isValidateCodeLogin}">
 						<div class="form-group  text-muted">

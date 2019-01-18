@@ -8,10 +8,9 @@
     <title>${fns:getConfig('productName')} 登录</title>
     <style type="text/css">
         .login-page {
-            position:relative;
+            position: relative;
             opacity: 0.9;
             width: 600px;
-            height: 700px;
             overflow: auto;
             background: rgba(60, 162, 224, 0);
             text-align: center;
@@ -76,84 +75,82 @@
 
 
 <div class="login-page">
-    <div class="row">
-        <%--<img  class="img-circle" src="${ctxStatic}/common/images/flat-avatar.png" class="user-avatar" />--%>
-        <h1>城市交通设施维护管理平台</h1>
-        <sys:message content="${message}" showType="1"/>
-        <form id="loginForm" role="form" action="${ctx}/login" method="post">
-            <div class="form-content">
-                <div class="form-group">
-                    <input type="text" id="username" name="username" class="form-control input-underline input-lg required" value=""
-                           autocomplete="off" placeholder="用户名">
-                </div>
-
-                <div class="form-group">
-                    <input type="password" id="password" name="password" value="" class="form-control input-underline input-lg required"
-                           autocomplete="off" placeholder="密码">
-                </div>
-                <c:if test="${isValidateCodeLogin}">
-                    <div class="form-group  text-muted">
-                        <label class="inline"><font color="white">验证码:</font></label>
-                        <sys:validateCode name="validateCode" inputCssStyle="margin-bottom:5px;" buttonCssStyle="color:white"/>
-                    </div>
-                </c:if>
-                <ul class="pull-right btn btn-info btn-circle" style="background-color:white;height:45px;width:46px">
-                    <li class="dropdown color-picker">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                            <span><i class="fa fa-circle"></i></span>
-                        </a>
-                        <ul class="dropdown-menu pull-right animated fadeIn" role="menu">
-                            <li class="padder-h-xs">
-                                <table class="table color-swatches-table text-center no-m-b">
-                                    <tr>
-                                        <td class="text-center colorr">
-                                            <a href="#" data-theme="blue" class="theme-picker">
-                                                <i class="fa fa-circle blue-base"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center colorr">
-                                            <a href="#" data-theme="green" class="theme-picker">
-                                                <i class="fa fa-circle green-base"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center colorr">
-                                            <a href="#" data-theme="red" class="theme-picker">
-                                                <i class="fa fa-circle red-base"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-center colorr">
-                                            <a href="#" data-theme="purple" class="theme-picker">
-                                                <i class="fa fa-circle purple-base"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center color">
-                                            <a href="#" data-theme="midnight-blue" class="theme-picker">
-                                                <i class="fa fa-circle midnight-blue-base"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center colorr">
-                                            <a href="#" data-theme="lynch" class="theme-picker">
-                                                <i class="fa fa-circle lynch-base"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <label class="inline">
-                    <input type="checkbox" id="rememberMe" name="rememberMe" ${rememberMe ? 'checked' : ''} class="ace"/>
-                    <span class="lbl"> 记住我</span>
-                </label>
+    <img src="${ctxStatic}/common/images/jinghui2.png" style="width: 100px;"/>
+    <h1>城市交通设施维护管理平台</h1>
+    <sys:message content="${message}" showType="1"/>
+    <form id="loginForm" role="form" action="${ctx}/login" method="post">
+        <div class="form-content">
+            <div class="form-group">
+                <input type="text" id="username" name="username" class="form-control input-underline input-lg required" value=""
+                       autocomplete="off" placeholder="用户名">
             </div>
-            <input type="submit" class="btn btn-white btn-outline btn-lg btn-rounded progress-login" value="登录">
-            <%--&nbsp;--%>
-            <%--<a href="${ctx}/sys/register" class="btn btn-white btn-outline btn-lg btn-rounded progress-login">注册</a>--%>
-        </form>
-    </div>
+
+            <div class="form-group">
+                <input type="password" id="password" name="password" value="" class="form-control input-underline input-lg required"
+                       autocomplete="off" placeholder="密码">
+            </div>
+            <c:if test="${isValidateCodeLogin}">
+                <div class="form-group  text-muted">
+                    <label class="inline"><font color="white">验证码:</font></label>
+                    <sys:validateCode name="validateCode" inputCssStyle="margin-bottom:5px;" buttonCssStyle="color:white"/>
+                </div>
+            </c:if>
+            <ul class="pull-right btn btn-info btn-circle" style="background-color:white;height:45px;width:46px">
+                <li class="dropdown color-picker">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                        <span><i class="fa fa-circle"></i></span>
+                    </a>
+                    <ul class="dropdown-menu pull-right animated fadeIn" role="menu">
+                        <li class="padder-h-xs">
+                            <table class="table color-swatches-table text-center no-m-b">
+                                <tr>
+                                    <td class="text-center colorr">
+                                        <a href="#" data-theme="blue" class="theme-picker">
+                                            <i class="fa fa-circle blue-base"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center colorr">
+                                        <a href="#" data-theme="green" class="theme-picker">
+                                            <i class="fa fa-circle green-base"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center colorr">
+                                        <a href="#" data-theme="red" class="theme-picker">
+                                            <i class="fa fa-circle red-base"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center colorr">
+                                        <a href="#" data-theme="purple" class="theme-picker">
+                                            <i class="fa fa-circle purple-base"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center color">
+                                        <a href="#" data-theme="midnight-blue" class="theme-picker">
+                                            <i class="fa fa-circle midnight-blue-base"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center colorr">
+                                        <a href="#" data-theme="lynch" class="theme-picker">
+                                            <i class="fa fa-circle lynch-base"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <label class="inline" style="padding-left: 35px;">
+                <input type="checkbox" id="rememberMe" name="rememberMe" ${rememberMe ? 'checked' : ''} class="ace"/>
+                <span class="lbl"> 记住我</span>
+            </label>
+        </div>
+        <input type="submit" class="btn btn-white btn-outline btn-lg btn-rounded progress-login" value="登录">
+        <%--&nbsp;--%>
+        <%--<a href="${ctx}/sys/register" class="btn btn-white btn-outline btn-lg btn-rounded progress-login">注册</a>--%>
+    </form>
 </div>
 
 <script>

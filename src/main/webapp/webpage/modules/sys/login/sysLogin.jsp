@@ -7,6 +7,9 @@
     <meta name="decorator" content="ani"/>
     <title>${fns:getConfig('productName')} 登录</title>
     <style type="text/css">
+        .dropdown-menu {
+            height: 105px;
+        }
         .login-page {
             position: relative;
             opacity: 0.9;
@@ -75,7 +78,7 @@
 
 
 <div class="login-page">
-    <img src="${ctxStatic}/common/images/jinghui2.png" style="width: 100px;"/>
+    <img src="${ctxStatic}/common/images/jinghui2.png" style="width: 130px;"/>
     <h1>城市交通设施维护管理平台</h1>
     <sys:message content="${message}" showType="1"/>
     <form id="loginForm" role="form" action="${ctx}/login" method="post">

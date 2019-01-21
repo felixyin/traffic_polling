@@ -3,16 +3,19 @@ package com.jeeplus.modules.tp.gpsrealtime.util;
 import com.jeeplus.common.utils.DateUtils;
 import com.jeeplus.common.utils.JsonUtils;
 import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.common.utils.time.DateUtil;
 import com.jeeplus.modules.tp.gpsrealtime.entity.TpGpsRealtime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
 
 public class ConvertLocationUtil {
+
+    private static Logger logger = LoggerFactory.getLogger(ConvertLocationUtil.class);
+    
     private static String GD_CONVERT_URL = "https://restapi.amap.com/v3/assistant/coordinate/convert?key=806cfc91a232e5be93e358b5af52f1c9&coordsys=gps&locations=";
 
     public static TpGpsRealtime convert(String dtuMsg) {
@@ -56,23 +59,22 @@ public class ConvertLocationUtil {
 
 
             String utcDate = list[11]; //地面速率(000.0~999.9 节，前面的 0 也将被传输)
-            System.out.println(utcDate);
+            logger.debug(utcDate);
 
 
             String utcHms = list[3]; //UTC 时间，hhmmss.sss(时分秒.毫秒)格式
-            System.out.println("-------------------------");
-            System.out.println(utcHms);
+            logger.debug("-------------------------");
+            logger.debug(utcHms);
 
 
 //            计算时间
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyHHmmss.SSS");
-                System.out.println(TimeZone.getTimeZone("UTC"));
                 sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                 Date upTime = sdf.parse(utcDate + utcHms);
                 gpsRealtime.setUpTime(upTime);
-                System.out.println("-----------------------------------------------------------------");
-                System.out.println(DateUtils.formatDateTime(upTime));
+                logger.debug("-----------------------------------------------------------------");
+                logger.debug(DateUtils.formatDateTime(upTime));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -98,7 +100,7 @@ public class ConvertLocationUtil {
             String latStr1 = latStr.substring(0, 2);
             String latStr2 = latStr.substring(2, 4);
             String latStr3 = latStr.substring(5, latStr.length());
-            System.out.println("分割后纬度：" + latStr1 + "," + latStr2 + "," + latStr3);
+            logger.debug("分割后纬度：" + latStr1 + "," + latStr2 + "," + latStr3);
             double latCal = Double.parseDouble(latStr1) + BigDecimalUtil.div(Double.parseDouble(latStr2), 60) + BigDecimalUtil.div(Double.parseDouble(latStr3), 600000);
             gpsRealtime.setLatCal(String.valueOf(latCal));
 
@@ -107,7 +109,7 @@ public class ConvertLocationUtil {
             String lonStr1 = lonStr.substring(0, 3);
             String lonStr2 = lonStr.substring(3, 5);
             String lonStr3 = lonStr.substring(6, lonStr.length());
-            System.out.println("分割后经度：" + lonStr1 + "," + lonStr2 + "," + lonStr3);
+            logger.debug("分割后经度：" + lonStr1 + "," + lonStr2 + "," + lonStr3);
             double lonCal = Double.parseDouble(lonStr1) + BigDecimalUtil.div(Double.parseDouble(lonStr2), 60) + BigDecimalUtil.div(Double.parseDouble(lonStr3), 600000);
             gpsRealtime.setLonCal(String.valueOf(lonCal));
 
@@ -136,19 +138,19 @@ public class ConvertLocationUtil {
 
     /*        *//*
      * double[] res1 = gcj02towgs84(114.109374d, 22.619651d); double[] res2
-     * = wgs84tobd09(res1[0], res1[1]); System.out.println(res2[0] + "," +
+     * = wgs84tobd09(res1[0], res1[1]); logger.debug(res2[0] + "," +
      * res2[1]);
      *
      * double gpsLng = 114.109374d; double gpsLat = 22.619651d; double[] res
-     * = gcj02tobd09(gpsLng, gpsLat); System.out.println(res[0]);
-     * System.out.println(res[1]);
+     * = gcj02tobd09(gpsLng, gpsLat); logger.debug(res[0]);
+     * logger.debug(res[1]);
      *
      * double[] res3 = wgs84tobd09(113.968498,22.595167);
-     * System.out.println(res3[0]+","+res3[1]);
+     * logger.debug(res3[0]+","+res3[1]);
      *//*
 
         double[] res4 = wgs84togcj02(114.103458, 22.561741);
-        System.out.println(res4[0] + "," + res4[1]);*/
+        logger.debug(res4[0] + "," + res4[1]);*/
 
     static double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
     // π
@@ -315,8 +317,8 @@ public class ConvertLocationUtil {
 
     public static void main(String[] args) {
         String gpsMsg = "$$$,car00001,$GPRMC,124757.000,A,3609.8498,N,12024.9730,E,0.0,0.0,030119,6.0,W,A*10";
-        System.out.println("gps上传信息：" + gpsMsg);
+        logger.debug("gps上传信息：" + gpsMsg);
 //        GpsBean gpsBean = ConvertLocationUtil.convert(gpsMsg);
-//        System.out.println("解析处理后的信息：" + gpsBean.toString());
+//        logger.debug("解析处理后的信息：" + gpsBean.toString());
     }
 }

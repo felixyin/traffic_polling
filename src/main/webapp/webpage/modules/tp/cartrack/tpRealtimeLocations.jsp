@@ -74,13 +74,13 @@
                 if (oldMarker) {
                     map.remove(oldMarker);
                 }
-                addMarker(d, map);
+                addMarker(d, map,name);
             }
         });
 
     }, 5000);
 
-    function addMarker(d, map) {
+    function addMarker(d, map,name) {
         // var ratLon = d.location.split(',');
         // // console.log(ratLon);
         // oldMarker.setPosition(new AMap.LngLat(ratLon[0], ratLon[1]));

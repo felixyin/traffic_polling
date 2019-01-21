@@ -268,5 +268,12 @@
 		 from tp_car AS a
 		 LEFT JOIN sys_office office ON office.id = a.office_id
 	</select>
-	
+	<select id="findByDeviceId" resultType="com.jeeplus.modules.tp.car.entity.TpCar">
+		SELECT
+		<include refid="tpCarColumns"/>
+		FROM tp_car a
+		<include refid="tpCarJoins"/>
+		WHERE a.deviceid = #{deviceId}
+	</select>
+
 </mapper>

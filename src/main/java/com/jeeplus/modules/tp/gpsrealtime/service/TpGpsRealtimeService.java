@@ -112,7 +112,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
 
 //        CacheUtils.remove(deviceId);
 //        Object carObj = CacheUtils.get(deviceId);
-        TpCar car = carService.findUniqueByProperty("deviceId", deviceId);
+        TpCar car = carService.findByDeviceId(deviceId);
 
         if (null != car) {
 //        如果存在，获取carId

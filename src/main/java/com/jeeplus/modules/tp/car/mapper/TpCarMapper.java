@@ -19,4 +19,6 @@ import java.util.Map;
 public interface TpCarMapper extends BaseMapper<TpCar> {
 
     List<Map> findAllLocation();
+
+    TpCar findByDeviceId(String deviceId);
 }

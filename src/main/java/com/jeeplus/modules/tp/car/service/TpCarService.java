@@ -64,4 +64,8 @@ public class TpCarService extends CrudService<TpCarMapper, TpCar> {
         }
         return list;
     }
+
+    public TpCar findByDeviceId(String deviceId) {
+        return tpCarMapper.findByDeviceId(deviceId);
+    }
 }

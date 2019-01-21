@@ -43,7 +43,7 @@ public abstract class Task implements Job {
         
         run();
        
-	    System.out.println("任务名称 = [" + scheduleJob.getName() + "]"+ " 在 " + dateFormat.format(new Date())+" 时运行"); 
+//	    System.out.println("任务名称 = [" + scheduleJob.getName() + "]"+ " 在 " + dateFormat.format(new Date())+" 时运行");
     }
     
     public abstract void run();

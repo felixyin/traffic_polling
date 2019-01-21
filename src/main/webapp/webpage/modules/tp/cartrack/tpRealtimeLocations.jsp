@@ -47,26 +47,6 @@
     var city = "<%= Global.getConfig("city")%>".trim();
 
 
-    // var map = new AMap.Map('container', {
-    //     mapStyle: 'amap://styles/light', //设置地图的显示样式
-    //     /*
-    //     bg 区域面
-    //     point 兴趣点
-    //     road 道路及道路标注
-    //     building 建筑物
-    //      */
-    //     features: [
-    //         'bg',
-    //         'road',
-    //         'point',
-    //         'building'
-    //     ],// 多个种类要素显示
-    //     // resizeEnable: true,
-    //     zoom: 17,
-    //     scrollWheel: true,
-    //     city: city
-    // });
-
     var map = new AMap.Map("container", {
         resizeEnable: true,
         // center: [116.397428, 39.90923],
@@ -75,33 +55,52 @@
 
     map.setCity(city);
 
+
     var carList = {};
     setInterval(function () {
 
         jp.get("${ctx}/tp/car/tpCar/getRealtimeLocations", function (data) {
-            console.log(data);
+            // console.log(data);
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 var name = d.name;
+                // console.log(name)
                 var oldMarker = carList[name];
                 if (oldMarker) {
                     var ratLon = d.location.split(',');
-                    console.log(ratLon);
+                    // console.log(ratLon);
                     oldMarker.setPosition(new AMap.LngLat(ratLon[0], ratLon[1]));
                 } else {
                     var ratLon = d.location.split(',');
-                    console.log(ratLon);
+                    // console.log(ratLon);
+
+                    //构建信息窗体中显示的内容
+                    console.log(d);
+                    var info = [];
+                    info.push("<div><p>公司："+d.officeName+"</p>");
+                    info.push("<p>车牌："+d.name+"</p>");
+                    info.push("<p>时间："+jp.dateFormat(d.updateDate,'yyyy-MM-dd hh:mm:ss')+"</p></div>");
+
+
                     var marker = new AMap.Marker({
                         map: map,
                         position:  [ratLon[0], ratLon[1]],
                         icon: "https://webapi.amap.com/images/car.png",
-                        offset: new AMap.Pixel(-26, -13)
+                        offset: new AMap.Pixel(-26, -13),
+                        label: {
+                            offset: new AMap.Pixel(-50, -55),//修改label相对于maker的位置
+                            content: info.join('')
+                        }
                     });
+
+
+
                     // 将创建的点标记添加到已有的地图实例：
                     // map.add(marker);
                     // marker.setMap(map);
 //                      移除已创建的 marker
 //                     map.remove(marker);
+
                     carList[name] = marker;
                 }
             }

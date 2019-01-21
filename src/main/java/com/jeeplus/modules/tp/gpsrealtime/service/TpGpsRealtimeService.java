@@ -332,7 +332,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
     }
 
     private TpCar setCar(String deviceId, TpCarTrack carTrack) {
-        TpCar car = carService.findUniqueByProperty("deviceId", deviceId);
+        TpCar car = carService.findByDeviceId(deviceId);
         if (null != car) {
 //                              如果存在，获取carId
             carTrack.setCar(car);

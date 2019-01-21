@@ -258,7 +258,6 @@ public class TpMaintenanceController extends BaseController {
     public AjaxJson savePosition(@RequestParam(required = false) String json) throws Exception {
         AjaxJson j = new AjaxJson();
         json = URLDecoder.decode(json, Charsets.UTF_8_NAME);
-        System.out.println(json);
 
         PositionRootBean bean = JsonUtils.jsonToObject(json, PositionRootBean.class);
         TpMaintenance tpMaintenance = tpMaintenanceService.savePosition(bean);

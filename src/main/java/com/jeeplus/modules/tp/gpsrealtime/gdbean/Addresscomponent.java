@@ -15,8 +15,8 @@ public class Addresscomponent {
     private String citycode;
     private String district;
     private String adcode;
-    private String township;
-    private String towncode;
+//    private String township;
+//    private String towncode;
 //    @JsonProperty("streetNumber")
 //    private Streetnumber streetnumber;
 //    @JsonProperty("businessAreas")
@@ -56,19 +56,19 @@ public class Addresscomponent {
          return adcode;
      }
 
-    public void setTownship(String township) {
-         this.township = township;
-     }
-     public String getTownship() {
-         return township;
-     }
-
-    public void setTowncode(String towncode) {
-         this.towncode = towncode;
-     }
-     public String getTowncode() {
-         return towncode;
-     }
+//    public void setTownship(String township) {
+//         this.township = township;
+//     }
+//     public String getTownship() {
+//         return township;
+//     }
+//
+//    public void setTowncode(String towncode) {
+//         this.towncode = towncode;
+//     }
+//     public String getTowncode() {
+//         return towncode;
+//     }
 
 //
 //

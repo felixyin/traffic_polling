@@ -400,7 +400,6 @@
                                         } else {
                                             String[] mpList = mpStr.split("\\|");
                                             for (String imgSrc : mpList) {
-                                                System.out.println(imgSrc);
                                                 if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
                                     %>
                                     <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflow-x','hidden')"
@@ -436,7 +435,6 @@
                                         } else {
                                             String[] mpList = mpStr.split("\\|");
                                             for (String imgSrc : mpList) {
-                                                System.out.println(imgSrc);
                                                 if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
                                     %>
                                     <img onclick="jp.showPic('<%=imgSrc%>');"
@@ -473,7 +471,6 @@
                                         } else {
                                             String[] mpList = mpStr.split("\\|");
                                             for (String imgSrc : mpList) {
-                                                System.out.println(imgSrc);
                                                 if (matcherRegularExpression("(gif|jpg|jpeg|png|GIF|JPG|PNG)$", imgSrc)) {
                                     %>
                                     <img onclick="jp.showPic('<%=imgSrc%>');$('.fixed-table-body').css('overflow-x','hidden')"

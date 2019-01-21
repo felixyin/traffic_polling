@@ -241,7 +241,6 @@ public class TpCarTrackController extends BaseController {
             list.add(new String[]{gpsHistory1.getLonGD(), gpsHistory1.getLatGD()});
         }
         String  gpsHistories = JsonUtils.objectToJson(list);
-        System.out.println(gpsHistories);
         model.addAttribute("gpsHistories", gpsHistories);
         return "modules/tp/cartrack/tpShowGpsHistory";
     }

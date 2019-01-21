@@ -16,7 +16,7 @@ public class ConvertLocationUtil {
     private static String GD_CONVERT_URL = "https://restapi.amap.com/v3/assistant/coordinate/convert?key=806cfc91a232e5be93e358b5af52f1c9&coordsys=gps&locations=";
 
     public static TpGpsRealtime convert(String dtuMsg) {
-        if (StringUtils.isNotBlank(dtuMsg) && dtuMsg.length() > 60) {// 小于60长度，说明没有gps定位信息，忽略
+        if (StringUtils.isNotBlank(dtuMsg) && dtuMsg.length() > 80) {// 小于60长度，说明没有gps定位信息，忽略
 
             TpGpsRealtime gpsRealtime = new TpGpsRealtime();
 
@@ -79,11 +79,15 @@ public class ConvertLocationUtil {
 
 
             String declination = list[12]; //磁偏角(000.0~180.0 度，前面的 0 也将被传输)
-            gpsRealtime.setDeclination(declination);
+            if(StringUtils.isNotBlank(declination)){ // 兼容2g设备没有次数的问题
+                gpsRealtime.setDeclination(declination);
+            }
 
 
             String declinationDirection = list[13]; //磁偏角方向，E(东)或 W(西)
-            gpsRealtime.setDeclinationDirection(declinationDirection);
+            if(StringUtils.isNotBlank(declinationDirection)) { // 兼容2g设备没有次数的问题
+                gpsRealtime.setDeclinationDirection(declinationDirection);
+            }
 
 
             String model = list[14]; //模式指示(仅 NMEA0183 3.00 版本输出，A=自主定位，D=差分，E=估算，N=数据无效)

@@ -29,8 +29,8 @@ public class TpGpsRealtime extends DataEntity<TpGpsRealtime> {
 	private String lonHemisphere;		// 经度半球
 	private String groundRate;		// 地面速率
 	private String groundDirection;		// 地面航向
-	private String declination;		// 磁偏角
-	private String declinationDirection;		// 磁偏角方向
+	private String declination="0.0";		// 磁偏角
+	private String declinationDirection="";		// 磁偏角方向
 	private String model;		// 模式指示
 	private String latCal;		// 解密后纬度
 	private String lonCal;		// 解密后经度

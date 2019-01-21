@@ -260,6 +260,7 @@
 
 	<select id="findAllLocation" resultType="java.util.Map">
 		select
+        a.deviceid AS "deviceId",
 		a.name AS "name",
         a.location AS "location",
         a.update_date AS "updateDate",

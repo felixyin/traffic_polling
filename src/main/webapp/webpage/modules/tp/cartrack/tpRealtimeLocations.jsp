@@ -29,9 +29,11 @@
         .input-card .btn:last-child {
             margin-right: 0;
         }
-        .amap-logo,.amap-copyright{
-            display: none!important;
+
+        .amap-logo, .amap-copyright {
+            display: none !important;
         }
+
         .amap-zoomcontrol {
             display: none !important;
         }
@@ -50,7 +52,7 @@
     var map = new AMap.Map("container", {
         resizeEnable: true,
         // center: [116.397428, 39.90923],
-        zoom: 17
+        zoom: 12
     });
 
     map.setCity(city);
@@ -75,25 +77,26 @@
                     // console.log(ratLon);
 
                     //构建信息窗体中显示的内容
-                    console.log(d);
                     var info = [];
-                    info.push("<div><p>公司："+d.officeName+"</p>");
-                    info.push("<p>车牌："+d.name+"</p>");
-                    info.push("<p>时间："+jp.dateFormat(d.updateDate,'yyyy-MM-dd hh:mm:ss')+"</p></div>");
+                    info.push("<div><p>公司：" + d.officeName ? d.officeName : '未知，请先设置' + "</p>");
+                    info.push("<p>车牌：" + d.name ? d.name : '新装车辆，请先设置' + "</p>");
+                    info.push("<p>时间：" + jp.dateFormat(d.updateDate, 'yyyy-MM-dd hh:mm:ss') + "</p></div>");
 
-
+                    var online = d.online;
+                    var icon = "${ctxStatic}/common/images/car_offline.png";
+                    if (online) {
+                        icon = "${ctxStatic}/common/images/car_online.png";
+                    }
                     var marker = new AMap.Marker({
                         map: map,
-                        position:  [ratLon[0], ratLon[1]],
-                        icon: "https://webapi.amap.com/images/car.png",
+                        position: [ratLon[0], ratLon[1]],
+                        icon: icon,
                         offset: new AMap.Pixel(-26, -13),
                         label: {
                             offset: new AMap.Pixel(-50, -55),//修改label相对于maker的位置
                             content: info.join('')
                         }
                     });
-
-
 
                     // 将创建的点标记添加到已有的地图实例：
                     // map.add(marker);
@@ -106,8 +109,9 @@
             }
         });
 
-    }, 3000);
+    }, 5000);
 
+    map.setZoom(12);
 
     map.setFitView();
 </script>

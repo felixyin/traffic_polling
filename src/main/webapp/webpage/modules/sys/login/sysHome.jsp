@@ -74,13 +74,13 @@
                 if (oldMarker) {
                     map.remove(oldMarker);
                 }
-                addMarker(d,map);
+                addMarker(d, map);
             }
         });
 
     }, 5000);
 
-    function addMarker(d,map){
+    function addMarker(d, map) {
         // var ratLon = d.location.split(',');
         // // console.log(ratLon);
         // oldMarker.setPosition(new AMap.LngLat(ratLon[0], ratLon[1]));
@@ -91,8 +91,8 @@
 
         //构建信息窗体中显示的内容
         var info = [];
-        info.push("<div style='z-index:3'><p>公司：" + d.officeName ? d.officeName : '未知，请先设置' + "</p>");
-        info.push("<p>车牌：" + d.name ? d.name : '新装车辆，请先设置' + "</p>");
+        info.push("<div><p>公司：" + (d.officeName ? d.officeName : '未知，请先设置') + "</p>");
+        info.push("<p>车牌：" + (d.name ? d.name : '新装车辆，请先设置') + "</p>");
         info.push("<p>时间：" + jp.dateFormat(d.updateDate, 'yyyy-MM-dd hh:mm:ss') + "</p></div>");
 
         var online = d.online;

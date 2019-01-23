@@ -79,7 +79,7 @@
 					</td>
 					<td class="width-15 active"><label class="pull-right"><font color="red">*</font>维度：</label></td>
 					<td class="width-35">
-						<form:input path="lat" htmlEscape="false"    class="form-control required isFloatGtZero"/>
+						<form:input path="latCal" htmlEscape="false"    class="form-control required isFloatGtZero"/>
 					</td>
 				</tr>
 				<tr>

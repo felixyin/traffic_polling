@@ -46,6 +46,21 @@
 <script type="text/javascript" src="//webapi.amap.com/maps?v=1.4.11&key=044a68bca642bd52ae17b08c3fa21c88"></script>
 
 <script type="text/javascript">
+    jp.info('点击地图，按下F11全屏和取消全屏');
+
+    //设置快捷键
+    $('body').keyup(function () {
+        // 先判断焦点是不是在文本框中或者下拉框
+        if (document.activeElement.localName != "input" && document.activeElement.localName != "select") {
+            var value = event.keyCode;
+            //判断按键是不是F11
+            if (value == 122) {
+                // console.log("按下F11键...");
+                toggleFullScreen();
+            }
+        }
+    });
+
     var city = "<%= Global.getConfig("city")%>".trim();
 
 
@@ -74,13 +89,13 @@
                 if (oldMarker) {
                     map.remove(oldMarker);
                 }
-                addMarker(d, map,name);
+                addMarker(d, map, name);
             }
         });
 
     }, 5000);
 
-    function addMarker(d, map,name) {
+    function addMarker(d, map, name) {
         // var ratLon = d.location.split(',');
         // // console.log(ratLon);
         // oldMarker.setPosition(new AMap.LngLat(ratLon[0], ratLon[1]));

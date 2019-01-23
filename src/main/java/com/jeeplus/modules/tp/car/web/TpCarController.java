@@ -223,7 +223,7 @@ public class TpCarController extends BaseController {
 	/**
 	 * 实时位置大屏
 	 */
-//	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
+	@RequiresPermissions("tp:car:tpCar:realtimeLocations")
 	@RequestMapping(value = {"realtimeLocations"})
 	public String realtimeLocations( Model model) {
 		return "modules/tp/cartrack/tpRealtimeLocations";

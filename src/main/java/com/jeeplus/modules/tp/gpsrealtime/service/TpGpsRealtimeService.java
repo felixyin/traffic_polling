@@ -275,7 +275,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
     private void clearCache(Map<String, Map<String, Object>> carTrackMap, String devideId) {
         carTrackMap.remove(devideId);
         CacheUtils.put("carTackNeed", carTrackMap);
-//                        CacheUtils.remove(devideId);
+        CacheUtils.remove(devideId);
         logger.info("=================> 处理完毕，清理缓存：" + devideId);
     }
 

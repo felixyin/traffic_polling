@@ -119,6 +119,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
             gpsRealtime.setCar(car);
             car.setLocation(gpsRealtime.getLonGD() + "," + gpsRealtime.getLatGD());
             carService.save(car);
+            CacheUtils.put(deviceId, car);
         } else {
 //        如果不存在，存储car表，获取carId
             TpCar car2 = new TpCar();

@@ -57,8 +57,10 @@ public class TpCarService extends CrudService<TpCarMapper, TpCar> {
             String deviceId = map.get("deviceId").toString();
             try {
                 Object carObj = CacheUtils.get(deviceId);
-                map.put("online", null != carObj);
-            }catch (Exception e){
+                if (null != carObj) {
+                    map.put("online", true);
+                }
+            } catch (Exception e) {
                 map.put("online", false);
             }
         }

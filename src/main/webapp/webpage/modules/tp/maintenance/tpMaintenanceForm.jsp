@@ -118,44 +118,30 @@
                             <div class="col-sm-4">
                                 <!-- Split button -->
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-danger">Action</button>
-                                    <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="caret"></span>
-                                        <span class="sr-only">Toggle Dropdown</span>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Action</a></li>
-                                        <li><a href="#">Another action</a></li>
-                                        <li><a href="#">Something else here</a></li>
-                                        <li role="separator" class="divider"></li>
-                                        <li><a href="#">Separated link</a></li>
-                                    </ul>
+                                    <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        <button type="button" class="btn btn-primary "
+                                                data-loading-text="正在计算..."
+                                                title="${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}"
+                                                onclick="openSelectPostionDialog();"
+                                                style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
+                                            <i class="fa fa-map-marker "></i>
+                                                ${tpMaintenance.roadcross.name}${fns:abbr(tpMaintenance.nearestJunction,16) }
+                                        </button>
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="caret"></span>
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li id="_addressDetail_hide" name="_addressDetail" onclick="$('#my-address-detail').slideUp();"><a href="#">合起</a></li>
+                                            <li id="_addressDetail_show" name="_addressDetail" onclick="$('#my-address-detail').slideDown();"><a href="#">展开</a></li>
+                                        </ul>
+                                    </shiro:hasAnyPermissions>
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                        ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
+                                    </shiro:lacksPermission>
+
                                 </div>
 
-                                <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:jiaoJing">
-                                    <button type="button" class="btn btn-primary "
-                                            data-loading-text="正在计算..."
-                                            title="${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}"
-                                            onclick="openSelectPostionDialog();"
-                                            style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
-                                        <i class="fa fa-map-marker "></i>
-                                            ${tpMaintenance.roadcross.name}${fns:abbr(tpMaintenance.nearestJunction,16) }
-                                    </button>
-                                </shiro:hasAnyPermissions>
-                                <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
-                                    ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
-                                </shiro:lacksPermission>
-                                <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-primary active">
-                                        <input type="radio" id="_addressDetail_hide" name="_addressDetail" autocomplete="off" value="0"
-                                               checked
-                                               onchange="$('#my-address-detail').slideUp();"> 合起
-                                    </label>
-                                    <label class="btn btn-primary">
-                                        <input type="radio" id="_addressDetail_show" name="_addressDetail" autocomplete="off" value="1"
-                                               onchange="$('#my-address-detail').slideDown();"> 展开
-                                    </label>
-                                </div>
                             </div>
                         </div>
 

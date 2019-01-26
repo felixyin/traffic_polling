@@ -206,7 +206,16 @@ $(document).ready(function() {
 		        field: 'sumTime',
 		        title: 'GPS运行总时间',
 		        sortable: true,
-		        sortName: 'sumTime'
+		        sortName: 'sumTime',
+                formatter: function (value, row, index) {
+		        	if(value){
+						var xiaoShi = Math.floor(value / 60);
+						var fenZhong = value % 60;
+		        		return xiaoShi + '小时' +fenZhong + '分钟';
+					}else{
+		        		return '';
+					}
+                }
 		       
 		    }
 			,{

@@ -167,7 +167,7 @@
                                                     class="form-control required"/>
                                     </shiro:hasPermission>
                                     <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
-                                        <input type="hidden" name="location" value="${tpMaintenance.location}">
+                                        <input type="hidden" id="location" name="location" value="${tpMaintenance.location}">
                                         ${tpMaintenance.location}
                                     </shiro:lacksPermission>
                                 </div>
@@ -186,7 +186,8 @@
                                                         searchKeys="name|sarea.name"></sys:gridselect>
                                     </shiro:hasPermission>
                                     <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
-                                        <input type="hidden" name="roadcross.id" value="${tpMaintenance.roadcross.id}">
+                                        <input type="hidden"  name="roadcross.id" value="${tpMaintenance.roadcross.id}">
+                                        <input type="hidden" id="roadcrossName" name="roadcross.id" value="${tpMaintenance.roadcross.name}">
                                         ${tpMaintenance.roadcross.name}
                                     </shiro:lacksPermission>
                                 </div>

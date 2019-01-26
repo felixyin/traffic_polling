@@ -46,7 +46,7 @@
 <script type="text/javascript" src="//webapi.amap.com/maps?v=1.4.11&key=044a68bca642bd52ae17b08c3fa21c88"></script>
 
 <script type="text/javascript">
-    jp.info('点击地图，按下F11全屏和取消全屏');
+    jp.info('全屏，请点击地图，按F11键');
 
     //设置快捷键
     $('body').keyup(function () {

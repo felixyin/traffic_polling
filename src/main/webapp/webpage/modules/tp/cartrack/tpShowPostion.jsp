@@ -7,7 +7,7 @@
     <meta name="decorator" content="ani"/>
     <!-- SUMMERNOTE -->
     <%@include file="/webpage/include/summernote.jsp" %>
-    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>
+    <%--<link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css"/>--%>
 
     <style type="text/css">
         html,
@@ -79,6 +79,11 @@
         .amap-zoomcontrol {
             display: none !important;
         }
+
+        .amap-markers{
+            overflow: visible!important;
+            /*z-index:11111;*/
+        }
     </style>
 </head>
 <body>
@@ -122,7 +127,7 @@
     </div>
 </div>
 <script type="text/javascript"
-        src='//webapi.amap.com/maps?v=1.4.11&key=044a68bca642bd52ae17b08c3fa21c88&plugin=AMap.ToolBar'></script>
+        src='//webapi.amap.com/maps?v=1.4.12&key=044a68bca642bd52ae17b08c3fa21c88'></script>
 <!-- UI组件库 1.0 -->
 <script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
 <%--<script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>--%>
@@ -154,14 +159,14 @@
             'point',
             'building'
         ],// 多个种类要素显示
-        // resizeEnable: true,
-        zoom: 17,
-        scrollWheel: true,
-        city: city
+        resizeEnable: false,
+        zoom: 16,
+        scrollWheel: true
     });
 
+    var list;
     if (location2) {
-        var list = location2.split(',');
+        list = location2.split(',');
         var lng = list[0];
         var lat = list[1];
         // 传入经纬度，设置地图中心点
@@ -170,34 +175,46 @@
         map.setCenter(position);
 
 
-        // var marker = new AMap.Marker({
-        //     map: map,
-        //     position:  position,
-        //     icon: "https://webapi.amap.com/images/car.png",
-        //     offset: new AMap.Pixel(-26, -13)
-        // });
-
     } else {
-        console.log(city);
         map.setCity(city);
-        auto.setCity(city);
-        auto.setCityLimit(city);
     }
+
+
+    AMapUI.loadUI(['overlay/SimpleMarker'], function(SimpleMarker) {
+
+
+        new SimpleMarker({
+            // iconLabel: '',
+            //自定义图标节点(img)的属性
+            iconStyle: {
+
+                src: '//webapi.amap.com/theme/v1.3/markers/b/mark_b.png',
+                style: {
+                    width: '20px',
+                    height: '30px'
+                }
+            },
+
+            //设置基点偏移
+            offset: new AMap.Pixel(-10, -30),
+
+            map: map,
+            showPositionPoint: true,
+            position: list,
+            zIndex: 2000000
+        });
+
+    });
+
 
     AMapUI.loadUI(['misc/PositionPicker'], function (PositionPicker) {
         // ----------------------------------- 拖拽定位后，显示数据
         var positionPicker = new PositionPicker({
-            // mode: 'dragMarker',
-            map: map,
-            iconStyle: { //自定义外观
-                url: '//webapi.amap.com/images/car.png',
-                ancher: [48, 24],
-                size: [48, 24]
-            }
+            mode:'dragMarker',//拖拽Marker模式
+            map:map
         });
 
         positionPicker.on('success', function (positionResult) {
-            _positionResult = positionResult;
             document.getElementById('lnglat').innerHTML = positionResult.position;
             document.getElementById('address').innerHTML = positionResult.address;
             document.getElementById('nearestJunction').innerHTML = positionResult.nearestJunction;
@@ -213,11 +230,13 @@
         });
 
         positionPicker.start();
+        // positionPicker.stop();
 
-        map.addControl(new AMap.ToolBar({
-            liteStyle: true
-        }))
     });
+
+    // map.setFitView();
+    // map.panBy(0, 1);
+
 </script>
 </body>
 </html>

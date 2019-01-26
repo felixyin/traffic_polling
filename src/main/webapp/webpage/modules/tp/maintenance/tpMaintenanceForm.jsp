@@ -118,7 +118,7 @@
                             <div class="col-sm-4">
                                 <!-- Split button -->
                                 <div class="btn-group">
-                                    <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:selectPostion">
                                         <button type="button" class="btn btn-primary "
                                                 data-loading-text="正在计算..."
                                                 title="${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}"
@@ -136,7 +136,7 @@
                                             <li id="_addressDetail_show" name="_addressDetail" onclick="$('#my-address-detail').slideDown();"><a href="#">展开</a></li>
                                         </ul>
                                     </shiro:hasAnyPermissions>
-                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
+                                    <shiro:lacksPermission name="tp:maintenance:tpMaintenance:selectPostion">
                                         ${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}
                                     </shiro:lacksPermission>
 

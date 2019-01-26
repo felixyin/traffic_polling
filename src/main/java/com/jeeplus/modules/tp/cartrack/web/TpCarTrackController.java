@@ -234,14 +234,15 @@ public class TpCarTrackController extends BaseController {
      */
 //	@RequiresPermissions("tp:cartrack:tpCarTrack:selectGpsHistory")
     @RequestMapping(value = {"selectGpsHistory"})
-    public String selectGpsHistory(String carTrackId, Model model) {
-        List<TpGpsHistory> gpsHistortoryList = tpGpsHistoryService.findListByCarTrackId(carTrackId);
+    public String selectGpsHistory(TpCarTrack tpCarTrack, Model model) {
+        List<TpGpsHistory> gpsHistortoryList = tpGpsHistoryService.findListByCarTrackId(tpCarTrack.getId());
         List<String[]> list = new ArrayList();
         for (TpGpsHistory gpsHistory1 : gpsHistortoryList) {
             list.add(new String[]{gpsHistory1.getLonGD(), gpsHistory1.getLatGD()});
         }
         String  gpsHistories = JsonUtils.objectToJson(list);
         model.addAttribute("gpsHistories", gpsHistories);
+        model.addAttribute("tpCarTrack", tpCarTrack);
         return "modules/tp/cartrack/tpShowGpsHistory";
     }
 

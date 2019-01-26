@@ -431,8 +431,7 @@
 
     // 查看行驶轨迹
     function viewTrack(carTrackId) {
-        console.log(carTrackId);
-        jp.openChildDialog("查看行驶轨迹", "${ctx}/tp/cartrack/tpCarTrack/selectGpsHistory?carTrackId=" + carTrackId, "1050px", "580px", postionSelectCallback);
+        jp.openViewDialog("查看行驶轨迹", "${ctx}/tp/cartrack/tpCarTrack/selectGpsHistory?id=" + carTrackId, "1050px", "580px", postionSelectCallback);
     }
 
     // 地址选择，保存成功后，显示到施工管理表单控件中
@@ -444,12 +443,12 @@
     function viewLocation(row) {
         var location = row.location;
         var roadcrossName = row.locationName;
-        jp.openChildDialog("查看最后位置", "${ctx}/tp/cartrack/tpCarTrack/showPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
+        jp.openViewDialog("查看最后位置", "${ctx}/tp/cartrack/tpCarTrack/showPostion?roadcrossName=" + roadcrossName + "&location=" + location, "1050px", "580px", postionSelectCallback);
     }
 
     function viewCar(row){
         var carId= row.carId;
-        jp.openChildDialog("查看车辆", "${ctx}/tp/car/tpCar/form?id=" + carId, "1050px", "580px", postionSelectCallback);
+        jp.openViewDialog("查看车辆", "${ctx}/tp/car/tpCar/form?id=" + carId, "1050px", "580px", postionSelectCallback);
     }
 
 </script>

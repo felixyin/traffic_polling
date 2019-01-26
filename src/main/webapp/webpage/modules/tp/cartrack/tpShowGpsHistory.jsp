@@ -22,8 +22,9 @@
         .input-card .btn:last-child {
             margin-right: 0;
         }
-        .amap-logo,.amap-copyright{
-            display: none!important;
+
+        .amap-logo, .amap-copyright {
+            display: none !important;
         }
     </style>
 </head>
@@ -31,6 +32,17 @@
 <div class="wrapper wrapper-content">
     <div id="container"></div>
     <div class="input-card">
+        <h4>轨迹信息</h4>
+        <div>
+            <p>车牌：${tpCarTrack.car.name}</p>
+            <p>驾驶人：${tpCarTrack.user.name}</p>
+            <p>开始位置：${tpCarTrack.nameBegin}</p>
+            <p>结束位置：${tpCarTrack.nameEnd}</p>
+            <p>星期几：${fns:getDictLabel(tpCarTrack.whatDay,'what_day' , '星期？') }</p>
+            <p>开始时间：${fns:formatDateTime(tpCarTrack.timeBegin)}</p>
+            <p>结束时间：${fns:formatDateTime(tpCarTrack.timeEnd)}</p>
+        </div>
+        <br>
         <h4>轨迹回放控制</h4>
         <div class="input-item">
             <input type="button" class="btn" value="开始动画" id="start" onclick="startAnimation()"/>
@@ -47,11 +59,11 @@
 
     var marker,
         lineArr = eval('${gpsHistories}');
-        // lineArr = [[116.478935, 39.997761], [116.478939, 39.997825], [116.478912, 39.998549],
-        //     [116.478912, 39.998549], [116.478998, 39.998555], [116.478998, 39.998555], [116.479282, 39.99856],
-        //     [116.479658, 39.998528], [116.480151, 39.998453], [116.480784, 39.998302], [116.480784, 39.998302],
-        //     [116.481149, 39.998184], [116.481573, 39.997997], [116.481863, 39.997846], [116.482072, 39.997718],
-        //     [116.482362, 39.997718], [116.483633, 39.998935], [116.48367, 39.998968], [116.484648, 39.999861]];
+    // lineArr = [[116.478935, 39.997761], [116.478939, 39.997825], [116.478912, 39.998549],
+    //     [116.478912, 39.998549], [116.478998, 39.998555], [116.478998, 39.998555], [116.479282, 39.99856],
+    //     [116.479658, 39.998528], [116.480151, 39.998453], [116.480784, 39.998302], [116.480784, 39.998302],
+    //     [116.481149, 39.998184], [116.481573, 39.997997], [116.481863, 39.997846], [116.482072, 39.997718],
+    //     [116.482362, 39.997718], [116.483633, 39.998935], [116.48367, 39.998968], [116.484648, 39.999861]];
 
     var map = new AMap.Map("container", {
         resizeEnable: true,

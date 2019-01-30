@@ -119,13 +119,13 @@
                                 <!-- Split button -->
                                 <div class="btn-group">
                                     <shiro:hasAnyPermissions name="tp:maintenance:tpMaintenance:selectPostion">
-                                        <button type="button" class="btn btn-primary "
+                                        <button id="postionBtn" type="button" class="btn btn-primary "
                                                 data-loading-text="正在计算..."
                                                 title="${tpMaintenance.roadcross.name }${tpMaintenance.nearestJunction}"
                                                 onclick="openSelectPostionDialog();"
                                                 style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">
                                             <i class="fa fa-map-marker "></i>
-                                                ${tpMaintenance.roadcross.name}${fns:abbr(tpMaintenance.nearestJunction,16) }
+                                            <span>${tpMaintenance.roadcross.name}${fns:abbr(tpMaintenance.nearestJunction,16) }</span>
                                         </button>
                                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="caret"></span>
@@ -1078,6 +1078,9 @@
 
             var nearestPoi = tm.nearestPoi;
             $('#nearestPoi').val(nearestPoi);
+
+            var position = roadcross.name+nearestJunction;
+            $('#postionBtn').attr('title',position).find('span').text(position);
 
             //    打开详细地址信息
             $('#_addressDetail_show').trigger('click');

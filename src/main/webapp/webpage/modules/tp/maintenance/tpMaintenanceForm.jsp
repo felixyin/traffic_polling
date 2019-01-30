@@ -127,13 +127,16 @@
                                             <i class="fa fa-map-marker "></i>
                                             <span>${tpMaintenance.roadcross.name}${fns:abbr(tpMaintenance.nearestJunction,16) }</span>
                                         </button>
-                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">
                                             <span class="caret"></span>
                                             <span class="sr-only">Toggle Dropdown</span>
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li id="_addressDetail_hide" name="_addressDetail" onclick="$('#my-address-detail').slideUp();"><a href="#">合起</a></li>
-                                            <li id="_addressDetail_show" name="_addressDetail" onclick="$('#my-address-detail').slideDown();"><a href="#">展开</a></li>
+                                            <li id="_addressDetail_hide" name="_addressDetail" onclick="$('#my-address-detail').slideUp();">
+                                                <a href="#">合起</a></li>
+                                            <li id="_addressDetail_show" name="_addressDetail"
+                                                onclick="$('#my-address-detail').slideDown();"><a href="#">展开</a></li>
                                         </ul>
                                     </shiro:hasAnyPermissions>
                                     <shiro:lacksPermission name="tp:maintenance:tpMaintenance:selectPostion">
@@ -186,7 +189,7 @@
                                                         searchKeys="name|sarea.name"></sys:gridselect>
                                     </shiro:hasPermission>
                                     <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
-                                        <input type="hidden"  name="roadcross.id" value="${tpMaintenance.roadcross.id}">
+                                        <input type="hidden" name="roadcross.id" value="${tpMaintenance.roadcross.id}">
                                         <input type="hidden" id="roadcrossName" name="roadcross.id" value="${tpMaintenance.roadcross.name}">
                                         ${tpMaintenance.roadcross.name}
                                     </shiro:lacksPermission>
@@ -1079,8 +1082,8 @@
             var nearestPoi = tm.nearestPoi;
             $('#nearestPoi').val(nearestPoi);
 
-            var position = roadcross.name+nearestJunction;
-            $('#postionBtn').attr('title',position).find('span').text(position);
+            var position = roadcross.name + nearestJunction;
+            $('#postionBtn').attr('title', position).text(position);
 
             //    打开详细地址信息
             $('#_addressDetail_show').trigger('click');

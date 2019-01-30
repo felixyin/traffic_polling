@@ -197,6 +197,7 @@
 		where a.name_py like concat('%',#{query},'%')
 		or a.name like concat('%',#{query},'%')
 		or b.name_py like concat('%',#{query},'%')
+		limit 10
 	</select>
 
 </mapper>

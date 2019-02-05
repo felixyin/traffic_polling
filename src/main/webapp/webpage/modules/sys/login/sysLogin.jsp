@@ -145,7 +145,7 @@
                     </ul>
                 </li>
             </ul>
-            <label class="inline" style="padding-left: 38px;">
+            <label class="inline" style="display:none;padding-left: 38px;">
                 <input type="checkbox" id="rememberMe" name="rememberMe" ${rememberMe ? 'checked' : ''} class="ace"/>
                 <span class="lbl"> 记住我</span>
             </label>

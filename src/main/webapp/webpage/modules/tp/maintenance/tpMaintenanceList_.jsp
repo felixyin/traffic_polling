@@ -144,15 +144,18 @@
                     }
 
                 }
-                    , {
+                , {
                     field: 'jobType',
                     title: '任务类型',
                     sortable: true,
                     sortName: 'jobType',
                     formatter: function (value, row, index) {
-                        return jp.getDictLabel(${fns:toJson(fns:getDictList('job_type'))}, value, "-");
+                        var vv = value.split(',');
+                        var listV = ${fns:toJson(fns:getDictList('job_type'))};
+                        return vv.map(function (v) {
+                            return jp.getDictLabel(listV, v, "-");
+                        }).join(';');
                     }
-
                 }
 
                 , {
@@ -224,7 +227,7 @@
                     sortable: true,
                     sortName: 'office.name'
                 }
-                 , {
+                , {
                     field: 'leaderBy.name',
                     title: '施工负责人',
                     sortable: true,
@@ -276,7 +279,7 @@
             $tpMaintenanceTable.bootstrapTable('hideColumn', v);
         });
         $('.keep-open :checkbox').change(function () {
-            var hiddenColumns = $tpMaintenanceTable.bootstrapTable('getHiddenColumns').map(function (v,i) {
+            var hiddenColumns = $tpMaintenanceTable.bootstrapTable('getHiddenColumns').map(function (v, i) {
                 return v.field;
             }).join(',');
             console.log(hiddenColumns);
@@ -293,7 +296,7 @@
 
         /*解决滚动条和图片弹窗冲突问题*/
         // $(document.body).on('click', '.layui-layer-shade', function () {
-            // $('.fixed-table-body').css('overflow-x', 'auto')
+        // $('.fixed-table-body').css('overflow-x', 'auto')
         // });
 
         if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {//如果是移动端
@@ -433,7 +436,7 @@
     }
 
     // 查看出车记录
-    function viewCarTrack(id){
+    function viewCarTrack(id) {
         if (id == undefined) {
             id = getIdSelections();
         }

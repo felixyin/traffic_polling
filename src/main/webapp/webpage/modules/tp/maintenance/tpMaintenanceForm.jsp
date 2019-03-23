@@ -56,15 +56,29 @@
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务类型：</label>
                             <div class="col-sm-4">
                                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:jiaoJing">
-                                    <form:select path="jobType" class="form-control required readonly">
+                                    <form:select path="jobType" class="form-control required readonly" multiple="multiple">
                                         <form:option value="" label=""/>
-                                        <form:options items="${fns:getDictList('job_type')}" itemLabel="label"
-                                                      itemValue="value" htmlEscape="false"/>
+                                        <c:forEach items="${fns:getDictList('job_type')}" var="all">
+                                            <c:choose>
+                                                <c:when test="${fn:contains(tpMaintenance.jobType,all.value)}">
+                                                    <form:option value="${all.value}" selected="selected"> ${all.label} </form:option>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <form:option value="${all.value}"> ${all.label} </form:option>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:forEach>
                                     </form:select>
                                 </shiro:hasPermission>
                                 <shiro:lacksPermission name="tp:maintenance:tpMaintenance:jiaoJing">
                                     <input type="hidden" name="jobType" value="${tpMaintenance.jobType}">
-                                    ${fns:getDictLabel(tpMaintenance.jobType,'job_type','')}
+                                    <c:forEach items="${fns:getDictList('job_type')}" var="all">
+                                        <c:choose>
+                                            <c:when test="${fn:contains(tpMaintenance.jobType,all.value)}">
+                                                ${fns:getDictLabel(all.value,'job_type','')}<br/>
+                                            </c:when>
+                                        </c:choose>
+                                    </c:forEach>
                                 </shiro:lacksPermission>
                             </div>
                             <label class="col-sm-2 control-label"><font color="red">*</font>任务来源：</label>

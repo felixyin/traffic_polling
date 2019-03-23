@@ -1,5 +1,5 @@
 /**
- * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
+ * Copyright &copy; 2018-2020 <a href="http://www.yinbin.ink/">青岛前途软件技术</a> All rights reserved.
  */
 package com.jeeplus.modules.tp.gpsrealtime.service;
 
@@ -29,6 +29,7 @@ import com.jeeplus.modules.tp.gpsrealtime.util.HttpUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -98,6 +99,57 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
         super.delete(tpGpsRealtime);
     }
 
+
+    @Autowired
+    private TpCarService tpCarService;
+
+
+    /**
+     * 实时轨迹第一步：初始化所有车辆定位，和车辆轨迹
+     *
+     * @return
+     */
+    public Map<String, Map<String, Object>> loadRealtimeGpsMap() {
+        Map<String, Map<String, Object>> realtimeGpsMap = new HashMap<>();
+        /*
+         a.deviceid AS "deviceId",
+		a.name AS "name",
+        a.location AS "location",
+        a.update_date AS "updateDate",
+		office.name AS "officeName"
+         */
+//        1、先获取所有的车辆列表
+        List<Map> allList = tpCarService.findAllLocation();
+
+//        2、查询缓存中存储的每个车辆gps信息
+        for (Map carMap : allList) {
+            String deviceId = carMap.get("deviceId").toString();
+
+            Object carTackNeedObj = CacheUtils.get("carTackNeed");
+            if (null != carTackNeedObj) {
+                Map<String, Map<String, Object>> carTrackMap = (HashMap<String, Map<String, Object>>) carTackNeedObj;
+                if (carTrackMap.containsKey(deviceId)) {
+                    Map<String, Object> valueMap = carTrackMap.get(deviceId);
+                    carMap.putAll(valueMap);
+                }
+            }
+
+            List<TpGpsRealtime> gpsRealtimes = gpsRealtimeService.findGpsList(deviceId);
+            carMap.put("gpsRealtimes",gpsRealtimes);
+
+            realtimeGpsMap.put(deviceId, carMap); // 记录开始时间和结束时间
+        }
+
+//        构建map，返回显示轨迹
+        return realtimeGpsMap;
+    }
+
+
+    /**
+     * 处理gps的核心逻辑
+     *
+     * @param gpsMsg
+     */
     @Transactional(readOnly = false)
     public void handleGPS(String gpsMsg) {
 
@@ -138,6 +190,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
 //        记录时间到缓存：key为deviceId；value为一个map，startUpTime为第一次gps信号接收时间，lastUpTime为最后一次gps信号接收时间
         setCache(gpsRealtime, deviceId);
 
+//        实时轨迹第二步：
 //        websocket推送到所有连接的客户端地图中 TODO
 //        webSocketHandler.sendMessage(gpsRealtime.getCar().getId() + "," + gpsRealtime.getLonGD() + "," + gpsRealtime.getLatGD());
 
@@ -251,7 +304,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                         carTrack.setWhatDay(String.valueOf(DateUtil.getDayOfWeek(carTrack.getTimeBegin())));
 //                        主驾驶人，默认为车辆负责人
                         User user = car.getUser();
-                        if(null!=user){
+                        if (null != user) {
                             carTrack.setUser(user);
                         }
 //                        保存car_track表
@@ -262,6 +315,9 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                         updateCar(carTrack, car);
 //                        清除缓存
                         clearCache(carTrackMap, devideId);
+
+//                        实时轨迹第三步：清理实时轨迹 TODO
+
                     }
                 }
             }

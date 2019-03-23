@@ -1,10 +1,8 @@
 /**
- * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
+ * Copyright &copy; 2018-2020 <a href="http://www.yinbin.ink/">青岛前途软件技术</a> All rights reserved.
  */
 package com.jeeplus.modules.tp.cartrack.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +14,7 @@ import javax.validation.ConstraintViolationException;
 import com.jeeplus.common.utils.JsonUtils;
 import com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory;
 import com.jeeplus.modules.tp.gpshistory.service.TpGpsHistoryService;
+import com.jeeplus.modules.tp.gpsrealtime.service.TpGpsRealtimeService;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +22,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Lists;
 import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.config.Global;
 import com.jeeplus.common.json.AjaxJson;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
@@ -55,6 +52,9 @@ public class TpCarTrackController extends BaseController {
 
     @Autowired
     private TpGpsHistoryService tpGpsHistoryService;
+
+    @Autowired
+    private TpGpsRealtimeService tpGpsRealtimeService;
 
     @ModelAttribute
     public TpCarTrack get(@RequestParam(required = false) String id) {
@@ -230,7 +230,7 @@ public class TpCarTrackController extends BaseController {
     }
 
     /**
-     * 选择查看轨迹
+     * 查看历史轨迹
      */
 //	@RequiresPermissions("tp:cartrack:tpCarTrack:selectGpsHistory")
     @RequestMapping(value = {"selectGpsHistory"})
@@ -248,15 +248,28 @@ public class TpCarTrackController extends BaseController {
 
     /**
      * 查看实时轨迹
+     * @see spring-context-websocket.xml MyWebSocketHandler MyHandshakeInterceptor
      */
-//	@RequiresPermissions("tp:cartrack:tpCarTrack:selectGpsHistory")
+	@RequiresPermissions("tp:cartrack:tpCarTrack:showGpsRealtime")
     @RequestMapping(value = {"showGpsRealtime"})
     public String showGpsRealtime(Model model) {
         return "modules/tp/cartrack/tpShowGpsRealtime";
     }
 
     /**
-     * 查看地点
+     * 第一次打开实时轨迹大瓶，初始化位置
+     * @return
+     */
+    @ResponseBody
+//    @RequiresPermissions("tp:cartrack:tpCarTrack:getGpsList")
+    @RequestMapping(value = "getGpsList")
+    public Map<String, Map<String, Object>> getGpsList(){
+        Map<String, Map<String, Object>> stringMapMap = tpGpsRealtimeService.loadRealtimeGpsMap();
+        return stringMapMap;
+    }
+
+    /**
+     * 查看最后定位地点
      */
 //	@RequiresPermissions("tp:maintenance:tpMaintenance:selectPostion")
     @RequestMapping(value = {"showPostion"})

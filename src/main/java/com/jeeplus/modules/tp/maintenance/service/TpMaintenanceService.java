@@ -3,12 +3,17 @@
  */
 package com.jeeplus.modules.tp.maintenance.service;
 
+import java.io.*;
 import java.util.*;
 
 import com.jeeplus.common.config.Global;
 import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.collection.ArrayUtil;
 import com.jeeplus.common.utils.time.DateUtil;
+import com.jeeplus.modules.sys.utils.DictUtils;
 import com.jeeplus.modules.tp.maintenance.gdbean.*;
+import com.jeeplus.modules.tp.material.entity.TpMaterialPart;
+import com.jeeplus.modules.tp.material.mapper.TpMaterialPartMapper;
 import com.jeeplus.modules.tp.road.entity.SysArea;
 import com.jeeplus.modules.tp.road.entity.TpRoad;
 import com.jeeplus.modules.tp.road.service.SysAreaService;
@@ -16,6 +21,8 @@ import com.jeeplus.modules.tp.road.service.TpRoadService;
 import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 import com.jeeplus.modules.tp.roadcross.service.TpRoadCrossingService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.jxls.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +34,8 @@ import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
 import com.jeeplus.modules.tp.maintenance.mapper.TpMaintenanceMapper;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenanceItem;
 import com.jeeplus.modules.tp.maintenance.mapper.TpMaintenanceItemMapper;
+import org.springframework.web.util.HtmlUtils;
+import org.springframework.web.util.UriUtils;
 
 /**
  * 施工Service
@@ -40,6 +49,9 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
 
     @Autowired
     private TpMaintenanceItemMapper tpMaintenanceItemMapper;
+
+    @Autowired
+    private TpMaterialPartMapper tpMaterialPartMapper;
 
     @Autowired
     private TpRoadService tpRoadService;
@@ -77,21 +89,23 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
                 标线	    3
                 标识标牌	4
              */
-            switch (tpMaintenance.getJobType()) {
-                case "1":
-                    num.append("XHD");
-                    break;
-                case "2":
-                    num.append("HL");
-                    break;
-                case "3":
-                    num.append("BX");
-                    break;
-                case "4":
-                    num.append("BZBP");
-                    break;
-            }
-            num.append(DateUtils.getDate("-yyMMdd-HHmmss-"));
+//            String jt = tpMaintenance.getJobType();
+//            switch (jt) {
+//                case "1":
+//                    num.append("XHD");
+//                    break;
+//                case "2":
+//                    num.append("HL");
+//                    break;
+//                case "3":
+//                    num.append("BX");
+//                    break;
+//                case "4":
+//                    num.append("BZBP");
+//                    break;
+//            }
+
+            num.append(DateUtils.getDate("A-yyMMdd-HHmmss-"));
             num.append(new Random().nextInt(10));
             tpMaintenance.setNum(num.toString());
         }
@@ -260,5 +274,100 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
         tpMaintenance.setNearestPoi(bean.getNearestpoi());
 
         return tpMaintenance;
+    }
+
+    /**
+     * 根据搜索条件返回报表所需数据
+     *
+     * @param tpMaintenance
+     * @return
+     */
+    public List<TpMaintenance> findReportData(TpMaintenance tpMaintenance) throws IOException {
+        List<TpMaintenance> allList = this.mapper.findList(tpMaintenance);
+        int i = 1;
+        for (TpMaintenance maintenance : allList) {
+            maintenance.setRemarks(String.valueOf(i++));
+            //            设置任务来源
+            String sourceValue = maintenance.getSource();
+            maintenance.setSource(DictUtils.getDictLabel(sourceValue, "job_source", "未知"));
+
+//            设置图片
+            setReportPicture(maintenance);
+
+//            清理施工过程html
+            String p = HtmlUtils.htmlUnescape(maintenance.getProcess());
+            maintenance.setProcess(stripHtml(p));
+
+//            设置物料明细
+            List<TpMaterialPart> materialParts = tpMaterialPartMapper.findListByMaintenance(maintenance.getId());
+            for (TpMaterialPart materialPart : materialParts) {
+                materialPart.setUnit(DictUtils.getDictLabel(materialPart.getUnit(), "material_unit", ""));
+            }
+            maintenance.setMaterialParts(materialParts);
+        }
+        return allList;
+    }
+
+    //方法一
+    private String stripHtml(String content) {
+        // <p>段落替换为换行
+        content = content.replaceAll("<p .*?>", "\r\n");
+        // <br><br/>替换为换行
+        content = content.replaceAll("<br\\s*/?>", "\r\n");
+        // 去掉其它的<>之间的东西
+        content = content.replaceAll("\\<.*?>", "");
+        // 去掉空格
+        content = content.replaceAll(" ", "");
+        return content;
+    }
+
+    /**
+     * 设置导出的excel中的图片
+     *
+     * @param maintenance
+     * @throws IOException
+     */
+    private void setReportPicture(TpMaintenance maintenance) throws IOException {
+        List<String> allPicList = new ArrayList<>();
+        allPicList.addAll(Arrays.asList(maintenance.getPrePic().split("\\|")));
+        allPicList.addAll(Arrays.asList(maintenance.getMiddlePic().split("\\|")));
+        allPicList.addAll(Arrays.asList(maintenance.getAfterPic().split("\\|")));
+/*
+/traffic_polling/userfiles/c879047cb47b423b95bfe1cb4e379760/程序附件//tp/maintenance/tpMaintenance/2019/3/730461337314237595.jpg
+ */
+        int len = allPicList.size() > 4 ? 4 : allPicList.size(); // 最多导出4张照片
+        for (int i = 0; i < len; i++) {
+            String filepath = allPicList.get(i);
+            if (StringUtils.isBlank(filepath)) continue;
+
+            try {
+                int index = filepath.indexOf(Global.USERFILES_BASE_URL);
+                if (index >= 0) {
+                    filepath = filepath.substring(index + Global.USERFILES_BASE_URL.length());
+                }
+                filepath = UriUtils.decode(filepath, "UTF-8");
+
+                String pathname = Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL + filepath;
+//                System.out.println(pathname);
+                InputStream imageInputStream = new FileInputStream(pathname);
+                byte[] imageBytes = Util.toByteArray(imageInputStream);
+                switch (i) {
+                    case 0:
+                        maintenance.setImage1(imageBytes);
+                        break;
+                    case 1:
+                        maintenance.setImage2(imageBytes);
+                        break;
+                    case 2:
+                        maintenance.setImage3(imageBytes);
+                        break;
+                    case 3:
+                        maintenance.setImage4(imageBytes);
+                        break;
+                }
+            } catch (UnsupportedEncodingException e1) {
+                logger.error(String.format("解释文件路径失败，URL地址为%s", filepath), e1);
+            }
+        }
     }
 }

@@ -182,5 +182,7 @@
 	<select id="findUniqueByProperty" resultType="TpMaintenanceItem" statementType="STATEMENT">
 		select * FROM tp_maintenance_item  where ${propertyName} = '${value}'
 	</select>
-	
+
+
+
 </mapper>

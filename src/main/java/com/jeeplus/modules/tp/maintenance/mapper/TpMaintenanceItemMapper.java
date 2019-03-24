@@ -7,6 +7,8 @@ import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenanceItem;
 
+import java.util.List;
+
 /**
  * 施工物料MAPPER接口
  * @author 尹彬
@@ -14,5 +16,5 @@ import com.jeeplus.modules.tp.maintenance.entity.TpMaintenanceItem;
  */
 @MyBatisMapper
 public interface TpMaintenanceItemMapper extends BaseMapper<TpMaintenanceItem> {
-	
+
 }

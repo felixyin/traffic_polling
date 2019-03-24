@@ -3,40 +3,43 @@
  */
 package com.jeeplus.modules.tp.maintenance.web;
 
-import java.net.URLDecoder;
-import java.util.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
-
+import com.google.common.collect.Lists;
+import com.jeeplus.common.json.AjaxJson;
+import com.jeeplus.common.utils.DateUtils;
+import com.jeeplus.common.utils.Encodes;
 import com.jeeplus.common.utils.JsonUtils;
+import com.jeeplus.common.utils.excel.ExportExcel;
+import com.jeeplus.common.utils.excel.ImportExcel;
 import com.jeeplus.common.utils.text.Charsets;
+import com.jeeplus.core.persistence.Page;
+import com.jeeplus.core.web.BaseController;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
+import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
 import com.jeeplus.modules.tp.maintenance.gdbean.PositionRootBean;
+import com.jeeplus.modules.tp.maintenance.service.TpMaintenanceService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.jxls.common.Context;
+import org.jxls.util.JxlsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.common.collect.Lists;
-import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.json.AjaxJson;
-import com.jeeplus.core.persistence.Page;
-import com.jeeplus.core.web.BaseController;
-import com.jeeplus.common.utils.excel.ExportExcel;
-import com.jeeplus.common.utils.excel.ImportExcel;
-import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
-import com.jeeplus.modules.tp.maintenance.service.TpMaintenanceService;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLDecoder;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 施工Controller
@@ -94,7 +97,7 @@ public class TpMaintenanceController extends BaseController {
         if (null == tpMaintenance.getSendBy()) {
             tpMaintenance.setSendBy(currentUser);
         }
-        if(null == tpMaintenance.getSendDate()){
+        if (null == tpMaintenance.getSendDate()) {
             tpMaintenance.setSendDate(new Date());
         }
         model.addAttribute("tpMaintenance", tpMaintenance);
@@ -157,11 +160,13 @@ public class TpMaintenanceController extends BaseController {
 
     /**
      * 导出excel文件
+     * 已废弃
      */
+    @Deprecated
     @ResponseBody
-    @RequiresPermissions("tp:maintenance:tpMaintenance:export")
-    @RequestMapping(value = "export")
-    public AjaxJson exportFile(TpMaintenance tpMaintenance, HttpServletRequest request, HttpServletResponse response) {
+    @RequiresPermissions("tp:maintenance:tpMaintenance:exportReport")
+    @RequestMapping(value = "exportReport")
+    public AjaxJson _exportFile(TpMaintenance tpMaintenance, HttpServletRequest request, HttpServletResponse response) {
         AjaxJson j = new AjaxJson();
         try {
             String fileName = "施工" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
@@ -175,6 +180,46 @@ public class TpMaintenanceController extends BaseController {
             j.setMsg("导出施工记录失败！失败信息：" + e.getMessage());
         }
         return j;
+    }
+
+    /**
+     * 导出excel报表
+     */
+    @RequiresPermissions("tp:maintenance:tpMaintenance:export")
+    @RequestMapping(value = "export")
+    public void exportReportFile(TpMaintenance tpMaintenance, HttpServletRequest request, HttpServletResponse response) throws IOException {
+//        AjaxJson j = new AjaxJson();
+//        try {
+        String fileSuffix = "";
+        Date beginSendDate = tpMaintenance.getBeginSendDate();
+        if (null != beginSendDate) {
+            fileSuffix = DateUtils.formatDate(beginSendDate, "YYYY年MM月份-");
+        }
+        String fileName = fileSuffix + "交通设施维保记录-" + DateUtils.getDate("ddHHmmss") + ".xlsx";
+
+        response.reset();
+        response.setContentType("application/octet-stream; charset=utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename=" + Encodes.urlEncode(fileName));
+        ServletOutputStream outputStream = response.getOutputStream();
+
+//         1、根据搜索条件查询数据
+        List<TpMaintenance> tpMaintenanceList = tpMaintenanceService.findReportData(tpMaintenance);
+
+//         2、导入模板，下载
+        InputStream is = TpMaintenanceController.class.getResourceAsStream("/template1.xlsx");
+        Context context = new Context();
+        context.putVar("tpmList", tpMaintenanceList);
+        context.putVar("monthStr", fileSuffix);
+        JxlsHelper.getInstance().processTemplate(is, outputStream, context);
+
+//            j.setSuccess(true);
+//            j.setMsg("导出成功！");
+//            return j;
+//        } catch (Exception e) {
+//            j.setSuccess(false);
+//            j.setMsg("导出施工记录失败！失败信息：" + e.getMessage());
+//        }
+//        return j;
     }
 
     @ResponseBody

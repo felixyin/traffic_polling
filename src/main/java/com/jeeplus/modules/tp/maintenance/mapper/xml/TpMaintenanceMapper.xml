@@ -100,7 +100,7 @@
 				AND a.num = #{num}
 			</if>
 			<if test="jobType != null and jobType != ''">
-				AND a.job_type = #{jobType}
+				AND concat(a.job_type,',') like concat('%',#{jobType},',%')
 			</if>
 			<if test="jobDescription != null and jobDescription != ''">
 				AND a.job_description = #{jobDescription}
@@ -162,7 +162,7 @@
 				ORDER BY ${page.orderBy}
 			</when>
 			<otherwise>
-				ORDER BY a.update_date DESC
+				ORDER BY a.send_date DESC
 			</otherwise>
 		</choose>
 	</select>

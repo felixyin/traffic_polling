@@ -200,4 +200,9 @@
 		limit 10
 	</select>
 
+    <select id="findListByMaintenance" resultType="com.jeeplus.modules.tp.material.entity.TpMaterialPart">
+		select materialPart.name,materialPart.standards,materialPart.unit,a.remarks as 'remarks',a.count from tp_maintenance_item a LEFT JOIN tp_material_part materialPart ON materialPart.id = a.material_part_id
+		where a.maintenance_id = #{maintenanceId}
+		limit 5
+	</select>
 </mapper>

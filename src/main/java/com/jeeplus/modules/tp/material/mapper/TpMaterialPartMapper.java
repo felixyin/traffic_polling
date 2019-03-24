@@ -13,6 +13,7 @@ import java.util.Map;
 
 /**
  * 物料零件MAPPER接口
+ *
  * @author 尹彬
  * @version 2018-12-23
  */
@@ -20,4 +21,7 @@ import java.util.Map;
 public interface TpMaterialPartMapper extends BaseMapper<TpMaterialPart> {
 
     List<Map<String, String>> autocomplete(@Param("query") String query);
+
+    List<TpMaterialPart> findListByMaintenance(@Param("maintenanceId") String maintenanceId);
+
 }

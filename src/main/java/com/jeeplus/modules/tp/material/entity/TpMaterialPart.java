@@ -31,6 +31,9 @@ public class TpMaterialPart extends DataEntity<TpMaterialPart> {
     private Double beginPrice;        // 开始 零件单价
     private Double endPrice;        // 结束 零件单价
 
+    // excel 报表导出用
+    private Integer count;
+
     public TpMaterialPart() {
         super();
     }
@@ -124,4 +127,11 @@ public class TpMaterialPart extends DataEntity<TpMaterialPart> {
         this.endPrice = endPrice;
     }
 
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
+    }
 }

@@ -69,7 +69,7 @@
 				<button id="btnImport" class="btn btn-info"><i class="fa fa-folder-open-o"></i> 导入</button>
 			</shiro:hasPermission>
 			<shiro:hasPermission name="tp:maintenance:tpMaintenanceItem:export">
-	        		<button id="export" class="btn btn-warning">
+	        		<button id="export" class="btn btn-warning" >
 					<i class="fa fa-file-excel-o"></i> 导出
 				</button>
 			 </shiro:hasPermission>

@@ -342,6 +342,8 @@
             });
         });
         $("#export").click(function () {//导出Excel文件
+            var self =this;
+            $(self).attr('disabled', 'disabled');
             var searchParam = $("#searchForm").serializeJSON();
             searchParam.pageNo = 1;
             searchParam.pageSize = -1;
@@ -356,6 +358,9 @@
             }
 
             jp.downloadFile('${ctx}/tp/maintenance/tpMaintenance/export?' + values);
+            setTimeout(function () {
+                $(self).removeAttr('disabled');
+            }, 5000);
         })
 
         $("#search").click("click", function () {// 绑定查询按扭

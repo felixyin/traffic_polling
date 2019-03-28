@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jeeplus.modules.tp.cartrack.mapper.TpCarTrackMapper">
-    
-	<sql id="tpCarTrackColumns">
+
+    <sql id="tpCarTrackColumns">
 		a.id AS "id",
 		a.create_by AS "createBy.id",
 		a.create_date AS "createDate",
@@ -44,101 +44,101 @@
 				
 		user.name AS "user.name"
 	</sql>
-	
-	<sql id="tpCarTrackJoins">
+
+    <sql id="tpCarTrackJoins">
 		
 		LEFT JOIN tp_car car ON car.id = a.car_id
 		LEFT JOIN tp_maintenance maintenance ON maintenance.id = a.maintenance_id
 		LEFT JOIN sys_user user ON user.id = a.user_id
 	</sql>
-	
-    
-	<select id="get" resultType="TpCarTrack" >
-		SELECT 
-			<include refid="tpCarTrackColumns"/>
-		FROM tp_car_track a
-		<include refid="tpCarTrackJoins"/>
-		WHERE a.id = #{id}
-	</select>
-	
-	<select id="findList" resultType="TpCarTrack" >
-		SELECT 
-			<include refid="tpCarTrackColumns"/>
-		FROM tp_car_track a
-		<include refid="tpCarTrackJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			${dataScope}
-			<if test="nameBegin != null and nameBegin != ''">
-				AND a.name_begin LIKE 
-					<if test="dbName == 'oracle'">'%'||#{nameBegin}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{nameBegin}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{nameBegin},'%')</if>
-			</if>
-			<if test="nameEnd != null and nameEnd != ''">
-				AND a.name_end LIKE 
-					<if test="dbName == 'oracle'">'%'||#{nameEnd}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{nameEnd}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{nameEnd},'%')</if>
-			</if>
-			<if test="beginTimeBegin != null and endTimeBegin != null ">
-				AND a.time_begin BETWEEN #{beginTimeBegin} AND #{endTimeBegin}
-			</if>
-			<if test="beginTimeEnd != null and endTimeEnd != null ">
-				AND a.time_end BETWEEN #{beginTimeEnd} AND #{endTimeEnd}
-			</if>
-			<if test="beginKm != null and endKm != null ">
-				AND a.km BETWEEN #{beginKm} AND #{endKm}
-			</if>
-			<if test="driverType != null and driverType != ''">
-				AND a.driver_type = #{driverType}
-			</if>
-			<if test="maintenance != null and maintenance.id != null and maintenance.id != ''">
-				AND a.maintenance_id = #{maintenance.id}
-			</if>
-			<if test="jobDesc != null and jobDesc != ''">
-				AND a.job_desc LIKE 
-					<if test="dbName == 'oracle'">'%'||#{jobDesc}||'%'</if>
-					<if test="dbName == 'mssql'">'%'+#{jobDesc}+'%'</if>
-					<if test="dbName == 'mysql'">concat('%',#{jobDesc},'%')</if>
-			</if>
-			<if test="user != null and user.id != null and user.id != ''">
-				AND a.user_id = #{user.id}
-			</if>
-			<if test="whatDay != null and whatDay != ''">
-				AND a.what_day = #{whatDay}
-			</if>
-		</where>
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<select id="findAllList" resultType="TpCarTrack" >
-		SELECT 
-			<include refid="tpCarTrackColumns"/>
-		FROM tp_car_track a
-		<include refid="tpCarTrackJoins"/>
-		<where>
-			a.del_flag = #{DEL_FLAG_NORMAL}
-			${dataScope}
-		</where>		
-		<choose>
-			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
-				ORDER BY ${page.orderBy}
-			</when>
-			<otherwise>
-				ORDER BY a.update_date DESC
-			</otherwise>
-		</choose>
-	</select>
-	
-	<insert id="insert">
+
+
+    <select id="get" resultType="TpCarTrack">
+        SELECT
+        <include refid="tpCarTrackColumns"/>
+        FROM tp_car_track a
+        <include refid="tpCarTrackJoins"/>
+        WHERE a.id = #{id}
+    </select>
+
+    <select id="findList" resultType="TpCarTrack">
+        SELECT
+        <include refid="tpCarTrackColumns"/>
+        FROM tp_car_track a
+        <include refid="tpCarTrackJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+            <if test="nameBegin != null and nameBegin != ''">
+                AND a.name_begin LIKE
+                <if test="dbName == 'oracle'">'%'||#{nameBegin}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{nameBegin}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{nameBegin},'%')</if>
+            </if>
+            <if test="nameEnd != null and nameEnd != ''">
+                AND a.name_end LIKE
+                <if test="dbName == 'oracle'">'%'||#{nameEnd}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{nameEnd}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{nameEnd},'%')</if>
+            </if>
+            <if test="beginTimeBegin != null and endTimeBegin != null ">
+                AND a.time_begin BETWEEN #{beginTimeBegin} AND #{endTimeBegin}
+            </if>
+            <if test="beginTimeEnd != null and endTimeEnd != null ">
+                AND a.time_end BETWEEN #{beginTimeEnd} AND #{endTimeEnd}
+            </if>
+            <if test="beginKm != null and endKm != null ">
+                AND a.km BETWEEN #{beginKm} AND #{endKm}
+            </if>
+            <if test="driverType != null and driverType != ''">
+                AND a.driver_type = #{driverType}
+            </if>
+            <if test="maintenance != null and maintenance.id != null and maintenance.id != ''">
+                AND a.maintenance_id = #{maintenance.id}
+            </if>
+            <if test="jobDesc != null and jobDesc != ''">
+                AND a.job_desc LIKE
+                <if test="dbName == 'oracle'">'%'||#{jobDesc}||'%'</if>
+                <if test="dbName == 'mssql'">'%'+#{jobDesc}+'%'</if>
+                <if test="dbName == 'mysql'">concat('%',#{jobDesc},'%')</if>
+            </if>
+            <if test="user != null and user.id != null and user.id != ''">
+                AND a.user_id = #{user.id}
+            </if>
+            <if test="whatDay != null and whatDay != ''">
+                AND a.what_day = #{whatDay}
+            </if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="findAllList" resultType="TpCarTrack">
+        SELECT
+        <include refid="tpCarTrackColumns"/>
+        FROM tp_car_track a
+        <include refid="tpCarTrackJoins"/>
+        <where>
+            a.del_flag = #{DEL_FLAG_NORMAL}
+            ${dataScope}
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${page.orderBy}
+            </when>
+            <otherwise>
+                ORDER BY a.update_date DESC
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insert">
 		INSERT INTO tp_car_track(
 			id,
 			create_by,
@@ -183,8 +183,8 @@
 			#{remarks}
 		)
 	</insert>
-	
-	<update id="update">
+
+    <update id="update">
 		UPDATE tp_car_track SET 	
 			update_by = #{updateBy.id},
 			update_date = #{updateDate},
@@ -204,25 +204,50 @@
 			remarks = #{remarks}
 		WHERE id = #{id}
 	</update>
-	
-	
-	<!--物理删除-->
-	<update id="delete">
+
+
+    <!--物理删除-->
+    <update id="delete">
 		DELETE FROM tp_car_track
 		WHERE id = #{id}
 	</update>
-	
-	<!--逻辑删除-->
-	<update id="deleteByLogic">
+
+    <!--逻辑删除-->
+    <update id="deleteByLogic">
 		UPDATE tp_car_track SET 
 			del_flag = #{DEL_FLAG_DELETE}
 		WHERE id = #{id}
 	</update>
-	
-	
-	<!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
-	<select id="findUniqueByProperty" resultType="TpCarTrack" statementType="STATEMENT">
+
+
+    <!-- 根据实体名称和字段名称和字段值获取唯一记录 -->
+    <select id="findUniqueByProperty" resultType="TpCarTrack" statementType="STATEMENT">
 		select * FROM tp_car_track  where ${propertyName} = '${value}'
 	</select>
-	
+
+    <select id="loadCarTrack" resultType="com.jeeplus.modules.tp.cartrack.entity.TpCarTrack">
+		select 	a.id AS "id",
+		a.create_by AS "createBy.id",
+		a.create_date AS "createDate",
+		a.update_by AS "updateBy.id",
+		a.update_date AS "updateDate",
+		a.del_flag AS "delFlag",
+		a.car_id AS "car.id",
+		a.location_begin AS "locationBegin",
+		a.name_begin AS "nameBegin",
+		a.location_end AS "locationEnd",
+		a.name_end AS "nameEnd",
+		a.time_begin AS "timeBegin",
+		a.time_end AS "timeEnd",
+		a.km AS "km",
+		a.driver_type AS "driverType",
+		a.maintenance_id AS "maintenance.id",
+		a.job_desc AS "jobDesc",
+		a.user_id AS "user.id",
+		a.remarks AS "remarks",
+		a.what_day AS "whatDay"
+				 FROM tp_car_track a left join tp_car tc on a.car_id = tc.id
+		where tc.name = #{carName} and a.time_begin = #{startTime}
+	</select>
+
 </mapper>

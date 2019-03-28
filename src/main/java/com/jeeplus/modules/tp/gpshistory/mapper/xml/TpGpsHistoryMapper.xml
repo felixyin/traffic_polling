@@ -47,6 +47,7 @@
 	</sql>
 
 
+
     <select id="get" resultType="TpGpsHistory">
         SELECT
         <include refid="tpGpsHistoryColumns"/>
@@ -205,7 +206,10 @@
 		DELETE FROM tp_gps_history
 		WHERE id = #{id}
 	</update>
-
+	<delete id="deleteByCarTrackId">
+		DELETE FROM tp_gps_history
+		WHERE car_track_id = #{carTrackId}
+	</delete>
     <!--逻辑删除-->
     <update id="deleteByLogic">
 		UPDATE tp_gps_history SET 

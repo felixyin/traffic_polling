@@ -5,6 +5,7 @@ package com.jeeplus.modules.tp.cartrack.service;
 
 import java.util.List;
 
+import com.jeeplus.modules.tp.gpshistory.service.TpGpsHistoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,8 @@ import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.service.CrudService;
 import com.jeeplus.modules.tp.cartrack.entity.TpCarTrack;
 import com.jeeplus.modules.tp.cartrack.mapper.TpCarTrackMapper;
+
+import javax.annotation.Resource;
 
 /**
  * 出车记录Service
@@ -21,6 +24,12 @@ import com.jeeplus.modules.tp.cartrack.mapper.TpCarTrackMapper;
 @Service
 @Transactional(readOnly = true)
 public class TpCarTrackService extends CrudService<TpCarTrackMapper, TpCarTrack> {
+
+	@Resource
+	private TpCarTrackMapper carTrackMapper;
+
+	@Resource
+	private TpGpsHistoryService gpsHistoryService;
 
 	public TpCarTrack get(String id) {
 		return super.get(id);
@@ -42,6 +51,10 @@ public class TpCarTrackService extends CrudService<TpCarTrackMapper, TpCarTrack>
 	@Transactional(readOnly = false)
 	public void delete(TpCarTrack tpCarTrack) {
 		super.delete(tpCarTrack);
+		gpsHistoryService.deleteByCarTrack(tpCarTrack);
 	}
-	
+
+    public TpCarTrack loadCarTrack(String carName, String startTime) {
+		return carTrackMapper.loadCarTrack(carName, startTime);
+    }
 }

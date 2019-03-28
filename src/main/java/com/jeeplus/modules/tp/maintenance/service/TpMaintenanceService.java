@@ -105,7 +105,8 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
 //                    break;
 //            }
 
-            num.append(DateUtils.getDate("A-yyMMdd-HHmmss-"));
+            num.append("A");
+            num.append(DateUtils.getDate("yyMMdd-HHmmss-"));
             num.append(new Random().nextInt(10));
             tpMaintenance.setNum(num.toString());
         }

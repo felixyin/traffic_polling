@@ -19,4 +19,6 @@ import java.util.List;
 public interface TpGpsHistoryMapper extends BaseMapper<TpGpsHistory> {
 
     List<TpGpsHistory> findListByCarTrackId(@Param("carTrackId") String carTrackId);
+
+    void deleteByCarTrackId(@Param("carTrackId") String carTrackId);
 }

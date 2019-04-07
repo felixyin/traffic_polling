@@ -65,6 +65,9 @@ public class TpDoSomethingService extends CrudService<TpGpsRealtimeMapper, TpGps
     @Resource
     private TpGpsHistoryService tpGpsHistoryService;
 
+    @Resource
+    private TpCarService tpCarService;
+
     @Transactional(readOnly = false)
     public void runTask() {
 
@@ -78,6 +81,7 @@ public class TpDoSomethingService extends CrudService<TpGpsRealtimeMapper, TpGps
             String[] split = job.split(",");
             String carName = split[0];
             String startTime = split[1];
+            String toCarName = split[2];
 
             TpCarTrack tpCarTrack = tpCarTrackService.loadCarTrack(carName, startTime);
 
@@ -111,6 +115,13 @@ public class TpDoSomethingService extends CrudService<TpGpsRealtimeMapper, TpGps
                 tpCarTrack.setKm((double) (Math.round(km * 100) / 100.0));
 
                 tpCarTrack.setRemarks("-");
+
+                TpCar carParam = new TpCar();
+                carParam.setName(toCarName);
+                List<TpCar> tpCars = tpCarService.findList(carParam);
+                if (null != tpCars && tpCars.size() > 0) {
+                    tpCarTrack.setCar(tpCars.get(0));
+                }
 
                 tpCarTrackService.save(tpCarTrack);
 

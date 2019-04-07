@@ -380,7 +380,12 @@
             $('#tpCarTrackTable').bootstrapTable('refresh');
         });
 
-
+        $('#beginDate').datetimepicker({
+            format: "YYYY-MM-DD"
+        });
+        $('#endDate').datetimepicker({
+            format: "YYYY-MM-DD"
+        });
     });
 
     function getIdSelections() {

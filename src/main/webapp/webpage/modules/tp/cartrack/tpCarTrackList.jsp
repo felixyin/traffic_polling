@@ -37,12 +37,12 @@
 				 </form:select>
 			</div>
 			 <div class="col-xs-12 col-sm-6 col-md-4">
-				<label class="label-item single-overflow pull-left" title="开始时间：">开始时间：</label>
-				<form:input path="timeBegin" htmlEscape="false"  class=" form-control"/>
+				<label class="label-item single-overflow pull-left" title="开始时间：">大于等于开始时间：</label>
+				<form:input path="timeBegin" htmlEscape="false"  class=" form-control" id="beginDate"/>
 			</div>
 			 <div class="col-xs-12 col-sm-6 col-md-4">
-				<label class="label-item single-overflow pull-left" title="结束时间：">结束时间：</label>
-				<form:input path="timeEnd" htmlEscape="false"  class=" form-control"/>
+				<label class="label-item single-overflow pull-left" title="结束时间：">小于等于结束时间：</label>
+				<form:input path="timeEnd" htmlEscape="false"  class=" form-control" id="endDate"/>
 			</div>
 			 <div class="col-xs-12 col-sm-6 col-md-4">
 				<label class="label-item single-overflow pull-left" title="行驶里程：">行驶里程：</label>

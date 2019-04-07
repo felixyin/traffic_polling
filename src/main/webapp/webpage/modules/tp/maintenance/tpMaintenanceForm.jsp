@@ -989,7 +989,7 @@
         });
         $(list + idx).find(".form_datetime").each(function () {
             $(this).datetimepicker({
-                format: "YYYY-MM-DD HH:mm:ss"
+                format: "YYYY-MM-DD"
             });
         });
         // 自动打开选择物料零件窗口

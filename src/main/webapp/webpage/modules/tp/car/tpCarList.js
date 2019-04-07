@@ -346,16 +346,16 @@ $(document).ready(function() {
 		});
 		
 		$('#beginInsuranceDate').datetimepicker({
-			 format: "YYYY-MM-DD HH:mm:ss"
+			 format: "YYYY-MM-DD"
 		});
 		$('#endInsuranceDate').datetimepicker({
-			 format: "YYYY-MM-DD HH:mm:ss"
+			 format: "YYYY-MM-DD"
 		});
 		$('#beginMaintainDate').datetimepicker({
-			 format: "YYYY-MM-DD HH:mm:ss"
+			 format: "YYYY-MM-DD"
 		});
 		$('#endMaintainDate').datetimepicker({
-			 format: "YYYY-MM-DD HH:mm:ss"
+			 format: "YYYY-MM-DD"
 		});
 		
 	});

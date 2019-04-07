@@ -375,22 +375,22 @@
         });
 
         $('#beginSendDate').datetimepicker({
-            format: "YYYY-MM-DD HH:mm:ss"
+            format: "YYYY-MM-DD"
         });
         $('#endSendDate').datetimepicker({
-            format: "YYYY-MM-DD HH:mm:ss"
+            format: "YYYY-MM-DD"
         });
         $('#beginJobBeginDate').datetimepicker({
-            format: "YYYY-MM-DD HH:mm:ss"
+            format: "YYYY-MM-DD"
         });
         $('#endJobBeginDate').datetimepicker({
-            format: "YYYY-MM-DD HH:mm:ss"
+            format: "YYYY-MM-DD"
         });
         $('#beginJobEndDate').datetimepicker({
-            format: "YYYY-MM-DD HH:mm:ss"
+            format: "YYYY-MM-DD"
         });
         $('#endJobEndDate').datetimepicker({
-            format: "YYYY-MM-DD HH:mm:ss"
+            format: "YYYY-MM-DD"
         });
 
     });

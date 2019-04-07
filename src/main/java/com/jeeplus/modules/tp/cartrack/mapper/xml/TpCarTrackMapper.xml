@@ -87,7 +87,13 @@
             <if test="beginTimeEnd != null and endTimeEnd != null ">
                 AND a.time_end BETWEEN #{beginTimeEnd} AND #{endTimeEnd}
             </if>
-            <if test="beginKm != null and endKm != null ">
+			<if test="timeBegin != null and timeBegin != null ">
+				AND a.time_begin &gt;= #{timeBegin}
+			</if>
+			<if test="timeEnd != null and timeEnd != null ">
+				AND a.time_end &lt;= #{timeEnd}
+			</if>
+			<if test="beginKm != null and endKm != null ">
                 AND a.km BETWEEN #{beginKm} AND #{endKm}
             </if>
             <if test="driverType != null and driverType != ''">

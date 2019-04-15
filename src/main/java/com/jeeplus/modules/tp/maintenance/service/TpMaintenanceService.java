@@ -329,13 +329,18 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
      * @throws IOException
      */
     private void setReportPicture(TpMaintenance maintenance) throws IOException {
-        List<String> allPicList = new ArrayList<>();
-        allPicList.addAll(Arrays.asList(maintenance.getPrePic().split("\\|")));
-        allPicList.addAll(Arrays.asList(maintenance.getMiddlePic().split("\\|")));
-        allPicList.addAll(Arrays.asList(maintenance.getAfterPic().split("\\|")));
+        List<String> allPicList1 = new ArrayList<>();
+        allPicList1.addAll(Arrays.asList(maintenance.getPrePic().split("\\|")));
+        allPicList1.addAll(Arrays.asList(maintenance.getMiddlePic().split("\\|")));
+        allPicList1.addAll(Arrays.asList(maintenance.getAfterPic().split("\\|")));
 /*
 /traffic_polling/userfiles/c879047cb47b423b95bfe1cb4e379760/程序附件//tp/maintenance/tpMaintenance/2019/3/730461337314237595.jpg
  */
+        List<String> allPicList = new ArrayList<>();
+        for (String pic : allPicList1) {
+            if (StringUtils.isBlank(pic)) continue;
+            allPicList.add(pic);
+        }
         int len = allPicList.size() > 4 ? 4 : allPicList.size(); // 最多导出4张照片
         for (int i = 0; i < len; i++) {
             String filepath = allPicList.get(i);
@@ -349,7 +354,7 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
                 filepath = UriUtils.decode(filepath, "UTF-8");
 
                 String pathname = Global.getUserfilesBaseDir() + Global.USERFILES_BASE_URL + filepath;
-//                System.out.println(pathname);
+                System.out.println(pathname);
                 InputStream imageInputStream = new FileInputStream(pathname);
                 byte[] imageBytes = Util.toByteArray(imageInputStream);
                 switch (i) {

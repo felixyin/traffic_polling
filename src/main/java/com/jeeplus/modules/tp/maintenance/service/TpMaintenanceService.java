@@ -22,6 +22,7 @@ import com.jeeplus.modules.tp.roadcross.entity.TpRoadCrossing;
 import com.jeeplus.modules.tp.roadcross.service.TpRoadCrossingService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.jxls.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,7 +107,9 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
 //            }
 
             num.append("A");
-            num.append(DateUtils.getDate("yyMMdd-HHmmss-"));
+            Date sendDate = tpMaintenance.getSendDate();
+            if (null == sendDate) sendDate = new Date();
+            num.append(DateFormatUtils.format(sendDate, "yyMMdd-HHmmss-"));
             num.append(new Random().nextInt(10));
             tpMaintenance.setNum(num.toString());
         }

@@ -114,6 +114,9 @@
             <if test="whatDay != null and whatDay != ''">
                 AND a.what_day = #{whatDay}
             </if>
+        	<if test="car !=null and car.name != null and car.name != ''">
+        		AND car.name like  concat('%',#{car.name},'%')
+			</if>
         </where>
         <choose>
             <when test="page !=null and page.orderBy != null and page.orderBy != ''">

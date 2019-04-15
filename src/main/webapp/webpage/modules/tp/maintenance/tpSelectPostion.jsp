@@ -99,7 +99,7 @@
             <div class="panel panel-primary" style="height: 78%">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        第三步：检查详细位置
+                        第三步：检查并修改详细位置
                     </h3>
                 </div>
                 <div id="my-detail" class="panel-body" style="overflow-y: scroll!important;height: 75%">
@@ -108,9 +108,11 @@
                     <div class='c'>地址:</div>
                     <div id='address'></div>
                     <div class='c'>最近的路口:</div>
-                    <div id='nearestJunction'></div>
+<%--                    <div id='nearestJunction'></div>--%>
+                    <input type="text" id="nearestJunction">
                     <div class='c'>最近的道路:</div>
-                    <div id='nearestRoad'></div>
+<%--                    <div id='nearestRoad'></div>--%>
+                    <input type="text" id="nearestRoad">
                     <%--<div class='c'>最近的POI:</div>--%>
                     <%--<div id='nearestPOI'></div>--%>
                 </div>
@@ -152,6 +154,8 @@
             return false;
         } else {
             jp.loading();
+            _positionResult.nearestJunction = document.getElementById('nearestJunction').value;
+            _positionResult.nearestRoad = document.getElementById('nearestRoad').value;
             jp.post("${ctx}/tp/maintenance/tpMaintenance/savePosition", {json: encodeURIComponent(JSON.stringify(_positionResult))}, function (data) {
                 if (data.success) {
                     var dialogIndex = parent.layer.getFrameIndex(window.name); // 获取窗口索引
@@ -236,15 +240,19 @@
             _positionResult = positionResult;
             document.getElementById('lnglat').innerHTML = positionResult.position;
             document.getElementById('address').innerHTML = positionResult.address;
-            document.getElementById('nearestJunction').innerHTML = positionResult.nearestJunction;
-            document.getElementById('nearestRoad').innerHTML = positionResult.nearestRoad;
+            // document.getElementById('nearestJunction').innerHTML = positionResult.nearestJunction;
+            // document.getElementById('nearestRoad').innerHTML = positionResult.nearestRoad;
+            document.getElementById('nearestJunction').value = positionResult.nearestJunction;
+            document.getElementById('nearestRoad').value = positionResult.nearestRoad;
             // document.getElementById('nearestPOI').innerHTML = positionResult.nearestPOI;
         });
         positionPicker.on('fail', function (positionResult) {
             document.getElementById('lnglat').innerHTML = ' ';
             document.getElementById('address').innerHTML = ' ';
-            document.getElementById('nearestJunction').innerHTML = ' ';
-            document.getElementById('nearestRoad').innerHTML = ' ';
+            // document.getElementById('nearestJunction').innerHTML = ' ';
+            // document.getElementById('nearestRoad').innerHTML = ' ';
+            document.getElementById('nearestJunction').value = ' ';
+            document.getElementById('nearestRoad').value = ' ';
             // document.getElementById('nearestPOI').innerHTML = ' ';
         });
 

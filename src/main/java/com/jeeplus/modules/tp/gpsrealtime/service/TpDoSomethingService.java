@@ -16,6 +16,7 @@ import com.jeeplus.modules.monitor.entity.ScheduleJob;
 import com.jeeplus.modules.monitor.service.ScheduleJobService;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.tp.car.entity.TpCar;
+import com.jeeplus.modules.tp.car.mapper.TpCarMapper;
 import com.jeeplus.modules.tp.car.service.TpCarService;
 import com.jeeplus.modules.tp.cartrack.entity.TpCarTrack;
 import com.jeeplus.modules.tp.cartrack.service.TpCarTrackService;
@@ -52,7 +53,7 @@ import java.util.*;
  */
 @Service
 @Transactional(readOnly = true)
-public class TpDoSomethingService extends CrudService<TpGpsRealtimeMapper, TpGpsRealtime> {
+public class TpDoSomethingService {
 
     private Logger logger = LoggerFactory.getLogger(TpDoSomethingService.class);
 
@@ -70,74 +71,76 @@ public class TpDoSomethingService extends CrudService<TpGpsRealtimeMapper, TpGps
 
     @Transactional(readOnly = false)
     public void runTask() {
-
-        ScheduleJob scheduleJob = scheduleJobService.findUniqueByProperty("classname", "com.jeeplus.modules.tp.gpsrealtime.service.DoSomethingTask");
-        String remarks = scheduleJob.getDescription();
-        Date now = new Date();
+        try {
+            ScheduleJob scheduleJob = scheduleJobService.findUniqueByProperty("classname", "com.jeeplus.modules.tp.gpsrealtime.service.DoSomethingTask");
+            String remarks = scheduleJob.getDescription();
+            Date now = new Date();
 //        Calendar c = Calendar.getInstance();
 
-        String[] jobs = remarks.split(";");
-        for (String job : jobs) {
-            String[] split = job.split(",");
-            String carName = split[0];
-            String startTime = split[1];
-            String toCarName = split[2];
+            String[] jobs = remarks.split(";");
+            for (String job : jobs) {
+                String[] split = job.split(",");
+                String carName = split[0];
+                String startTime = split[1];
+                String toCarName = split[2];
 
-            TpCarTrack tpCarTrack = tpCarTrackService.loadCarTrack(carName, startTime);
+                TpCarTrack tpCarTrack = tpCarTrackService.loadCarTrack(carName, startTime);
 
-            if (null != tpCarTrack) {
-                String trackId = tpCarTrack.getId();
+                if (null != tpCarTrack) {
+                    String trackId = tpCarTrack.getId();
 
-                tpCarTrack.setId(null);
+                    tpCarTrack.setId(null);
 
-                Date timeBegin = tpCarTrack.getTimeBegin();
-                Date timeBegin1 = new Date();
-                timeBegin1 = DateUtils.setHours(timeBegin1, timeBegin.getHours());
-                timeBegin1 = DateUtil.setMinutes(timeBegin1, timeBegin.getMinutes());
-                timeBegin1 = DateUtil.setSeconds(timeBegin1, timeBegin.getSeconds());
-                timeBegin1 = DateUtils.addSeconds(timeBegin1, RandomUtils.nextInt(100, 500));
-                tpCarTrack.setTimeBegin(timeBegin1);
+                    Date timeBegin = tpCarTrack.getTimeBegin();
+                    Date timeBegin1 = new Date();
+                    timeBegin1 = DateUtils.setHours(timeBegin1, timeBegin.getHours());
+                    timeBegin1 = DateUtil.setMinutes(timeBegin1, timeBegin.getMinutes());
+                    timeBegin1 = DateUtil.setSeconds(timeBegin1, timeBegin.getSeconds());
+                    timeBegin1 = DateUtils.addSeconds(timeBegin1, RandomUtils.nextInt(100, 500));
+                    tpCarTrack.setTimeBegin(timeBegin1);
 
-                Date timeEnd = tpCarTrack.getTimeEnd();
-                Date timeEnd1 = new Date();
-                timeEnd1 = DateUtils.setHours(timeEnd1, timeEnd.getHours());
-                timeEnd1 = DateUtil.setMinutes(timeEnd1, timeEnd.getMinutes());
-                timeEnd1 = DateUtil.setSeconds(timeEnd1, timeEnd.getSeconds());
-                timeEnd1 = DateUtils.addSeconds(timeEnd1, RandomUtils.nextInt(100, 500));
-                tpCarTrack.setTimeEnd(timeEnd1);
+                    Date timeEnd = tpCarTrack.getTimeEnd();
+                    Date timeEnd1 = new Date();
+                    timeEnd1 = DateUtils.setHours(timeEnd1, timeEnd.getHours());
+                    timeEnd1 = DateUtil.setMinutes(timeEnd1, timeEnd.getMinutes());
+                    timeEnd1 = DateUtil.setSeconds(timeEnd1, timeEnd.getSeconds());
+                    timeEnd1 = DateUtils.addSeconds(timeEnd1, RandomUtils.nextInt(100, 500));
+                    tpCarTrack.setTimeEnd(timeEnd1);
 
-                String nameEnd = tpCarTrack.getNameEnd();
-                String s = StringUtils.replacePattern(nameEnd, "\\d{1}米", RandomUtils.nextInt(1, 9) + "米");
-                tpCarTrack.setNameEnd(s);
+                    String nameEnd = tpCarTrack.getNameEnd();
+                    String s = StringUtils.replacePattern(nameEnd, "\\d{1}米", RandomUtils.nextInt(1, 9) + "米");
+                    tpCarTrack.setNameEnd(s);
 
-                Double km = tpCarTrack.getKm();
-                km += RandomUtils.nextDouble(0.10, 0.80);
-                tpCarTrack.setKm((double) (Math.round(km * 100) / 100.0));
+                    Double km = tpCarTrack.getKm();
+                    km += RandomUtils.nextDouble(0.10, 0.80);
+                    tpCarTrack.setKm((double) (Math.round(km * 100) / 100.0));
 
-                tpCarTrack.setRemarks("-");
+                    tpCarTrack.setRemarks("-");
 
-                TpCar carParam = new TpCar();
-                carParam.setName(toCarName);
-                List<TpCar> tpCars = tpCarService.findList(carParam);
-                if (null != tpCars && tpCars.size() > 0) {
-                    tpCarTrack.setCar(tpCars.get(0));
+                    TpCar carParam = new TpCar();
+                    carParam.setName(toCarName);
+
+                    TpCar tpCar = tpCarService.findUniqueByProperty("name", toCarName);
+                    tpCarTrack.setCar(tpCar);
+
+                    tpCarTrackService.save(tpCarTrack);
+
+                    List<TpGpsHistory> tpGpsHistories = tpGpsHistoryService.findListByCarTrackId(trackId);
+                    for (TpGpsHistory tpGpsHistory : tpGpsHistories) {
+                        System.out.println(tpGpsHistory);
+                        tpGpsHistory.setId(null);
+                        tpGpsHistory.setCarTrack(tpCarTrack);
+                        tpGpsHistory.setCar(tpCarTrack.getCar());
+                        tpGpsHistory.setRemarks("-");
+                        tpGpsHistoryService.save(tpGpsHistory);
+                    }
+
                 }
-
-                tpCarTrackService.save(tpCarTrack);
-
-                List<TpGpsHistory> tpGpsHistories = tpGpsHistoryService.findListByCarTrackId(trackId);
-                for (TpGpsHistory tpGpsHistory : tpGpsHistories) {
-                    System.out.println(tpGpsHistory);
-                    tpGpsHistory.setId(null);
-                    tpGpsHistory.setCarTrack(tpCarTrack);
-                    tpGpsHistory.setCar(tpCarTrack.getCar());
-                    tpGpsHistory.setRemarks("-");
-                    tpGpsHistoryService.save(tpGpsHistory);
-                }
-
             }
-        }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

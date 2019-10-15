@@ -115,6 +115,8 @@ public class TpDoSomethingService {
                     timeEnd1 = DateUtil.setHours(timeEnd1, timeEnd.getHours());
                     timeEnd1 = DateUtil.setMinutes(timeEnd1, timeEnd.getMinutes());
                     timeEnd1 = DateUtil.setSeconds(timeEnd1, timeEnd.getSeconds());
+
+
                     /*int d2 = c.get(Calendar.HOUR_OF_DAY);
                     if (d2 != 0) {
                         timeEnd1 = DateUtils.setHours(timeEnd1, d2);

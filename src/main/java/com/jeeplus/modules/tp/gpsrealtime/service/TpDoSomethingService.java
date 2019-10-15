@@ -83,9 +83,27 @@ public class TpDoSomethingService {
                     timeBegin1 = DateUtil.setDays(timeBegin1, c.get(Calendar.DAY_OF_MONTH));
                     timeBegin1 = DateUtil.setMonths(timeBegin1, c.get(Calendar.MONTH));
                     timeBegin1 = DateUtil.setYears(timeBegin1, c.get(Calendar.YEAR));
-                    timeBegin1 = DateUtils.setHours(timeBegin1, timeBegin.getHours());
+                    timeBegin1 = DateUtil.setHours(timeBegin1, timeBegin.getHours());
                     timeBegin1 = DateUtil.setMinutes(timeBegin1, timeBegin.getMinutes());
                     timeBegin1 = DateUtil.setSeconds(timeBegin1, timeBegin.getSeconds());
+                    /*int d1 = c.get(Calendar.HOUR_OF_DAY);
+                    if (d1 != 0) {
+                        timeBegin1 = DateUtils.setHours(timeBegin1, d1);
+                    } else {
+                        timeBegin1 = DateUtils.setHours(timeBegin1, timeBegin.getHours());
+                    }
+                    int m1 = c.get(Calendar.MINUTE);
+                    if (m1 != 0) {
+                        timeBegin1 = DateUtil.setMinutes(timeBegin1, m1);
+                    } else {
+                        timeBegin1 = DateUtil.setMinutes(timeBegin1, timeBegin.getMinutes());
+                    }
+                    int s1 = c.get(Calendar.SECOND);
+                    if (s1 != 0) {
+                        timeBegin1 = DateUtil.setSeconds(timeBegin1, s1);
+                    } else {
+                        timeBegin1 = DateUtil.setSeconds(timeBegin1, timeBegin.getSeconds());
+                    }*/
                     timeBegin1 = DateUtils.addSeconds(timeBegin1, RandomUtils.nextInt(100, 500));
                     tpCarTrack.setTimeBegin(timeBegin1);
 
@@ -94,9 +112,27 @@ public class TpDoSomethingService {
                     timeEnd1 = DateUtil.setDays(timeEnd1, c.get(Calendar.DAY_OF_MONTH));
                     timeEnd1 = DateUtil.setMonths(timeEnd1, c.get(Calendar.MONTH));
                     timeEnd1 = DateUtil.setYears(timeEnd1, c.get(Calendar.YEAR));
-                    timeEnd1 = DateUtils.setHours(timeEnd1, timeEnd.getHours());
+                    timeEnd1 = DateUtil.setHours(timeEnd1, timeEnd.getHours());
                     timeEnd1 = DateUtil.setMinutes(timeEnd1, timeEnd.getMinutes());
                     timeEnd1 = DateUtil.setSeconds(timeEnd1, timeEnd.getSeconds());
+                    /*int d2 = c.get(Calendar.HOUR_OF_DAY);
+                    if (d2 != 0) {
+                        timeEnd1 = DateUtils.setHours(timeEnd1, d2);
+                    } else {
+                        timeEnd1 = DateUtils.setHours(timeEnd1, timeEnd.getHours());
+                    }
+                    int m2 = c.get(Calendar.MINUTE);
+                    if (m2 != 0) {
+                        timeEnd1 = DateUtil.setMinutes(timeEnd1, m2);
+                    } else {
+                        timeEnd1 = DateUtil.setMinutes(timeEnd1, timeEnd.getMinutes());
+                    }
+                    int s2 = c.get(Calendar.SECOND);
+                    if (s2 != 0) {
+                        timeEnd1 = DateUtil.setSeconds(timeEnd1, s2);
+                    } else {
+                        timeEnd1 = DateUtil.setSeconds(timeEnd1, timeEnd.getSeconds());
+                    }*/
                     timeEnd1 = DateUtils.addSeconds(timeEnd1, RandomUtils.nextInt(100, 500));
                     tpCarTrack.setTimeEnd(timeEnd1);
 
@@ -114,13 +150,15 @@ public class TpDoSomethingService {
                     carParam.setName(toCarName);
 
                     TpCar tpCar = tpCarService.findUniqueByProperty("name", toCarName);
+                    if (tpCar == null && StringUtils.isBlank(tpCar.getId())) {
+                        continue; // 默认忽略，复制的目标车辆不存在的那些数据
+                    }
                     tpCarTrack.setCar(tpCar);
 
                     tpCarTrackService.save(tpCarTrack);
 
                     List<TpGpsHistory> tpGpsHistories = tpGpsHistoryService.findListByCarTrackId(trackId);
                     for (TpGpsHistory tpGpsHistory : tpGpsHistories) {
-                        System.out.println(tpGpsHistory);
                         tpGpsHistory.setId(null);
                         tpGpsHistory.setCarTrack(tpCarTrack);
                         tpGpsHistory.setCar(tpCarTrack.getCar());

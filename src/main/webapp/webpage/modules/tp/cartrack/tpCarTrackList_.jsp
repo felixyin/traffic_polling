@@ -219,12 +219,12 @@
                         <c:choose>
                         <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:edit')}">
                         return "<a href='javascript:viewCar(" + JSON.stringify({
-                            carId: row.car.id,
+                            carId: row.car?row.car.id:'',
                         }) + ")'>" + value + "</a>";
                         </c:when>
                         <c:when test="${fns:hasPermission('tp:cartrack:tpCarTrack:view')}">
                         return "<a href='javascript:viewCar(" + JSON.stringify({
-                            carId: row.car.id,
+                            carId: row.car?row.car.id:'',
                         }) + ")'>" + value + "</a>";
                         </c:when>
                         <c:otherwise>

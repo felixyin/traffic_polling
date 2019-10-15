@@ -3,47 +3,27 @@
  */
 package com.jeeplus.modules.tp.gpsrealtime.service;
 
-import com.jeeplus.common.config.Global;
-import com.jeeplus.common.utils.CacheUtils;
 import com.jeeplus.common.utils.DateUtils;
-import com.jeeplus.common.utils.JsonUtils;
 import com.jeeplus.common.utils.StringUtils;
-import com.jeeplus.common.utils.number.NumberUtil;
 import com.jeeplus.common.utils.time.DateUtil;
-import com.jeeplus.core.persistence.Page;
-import com.jeeplus.core.service.CrudService;
 import com.jeeplus.modules.monitor.entity.ScheduleJob;
 import com.jeeplus.modules.monitor.service.ScheduleJobService;
-import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.tp.car.entity.TpCar;
-import com.jeeplus.modules.tp.car.mapper.TpCarMapper;
 import com.jeeplus.modules.tp.car.service.TpCarService;
 import com.jeeplus.modules.tp.cartrack.entity.TpCarTrack;
 import com.jeeplus.modules.tp.cartrack.service.TpCarTrackService;
-import com.jeeplus.modules.tp.cartrack.websocket.MyWebSocketHandler;
 import com.jeeplus.modules.tp.gpshistory.entity.TpGpsHistory;
 import com.jeeplus.modules.tp.gpshistory.service.TpGpsHistoryService;
-import com.jeeplus.modules.tp.gpsrealtime.entity.TpGpsRealtime;
-import com.jeeplus.modules.tp.gpsrealtime.gdbean.DistanceRootBean;
-import com.jeeplus.modules.tp.gpsrealtime.gdbean.PoiRootBean;
-import com.jeeplus.modules.tp.gpsrealtime.gdbean.Results;
-import com.jeeplus.modules.tp.gpsrealtime.gdbean.Roadinters;
-import com.jeeplus.modules.tp.gpsrealtime.mapper.TpGpsRealtimeMapper;
-import com.jeeplus.modules.tp.gpsrealtime.util.ConvertLocationUtil;
-import com.jeeplus.modules.tp.gpsrealtime.util.HttpUtil;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.PatternMatchUtils;
 
 import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 轨迹加工Service
@@ -88,11 +68,21 @@ public class TpDoSomethingService {
 
                 if (null != tpCarTrack) {
                     String trackId = tpCarTrack.getId();
-
                     tpCarTrack.setId(null);
 
                     Date timeBegin = tpCarTrack.getTimeBegin();
+
+                    Calendar c = Calendar.getInstance();
+                    if (split.length == 4) { // 自定义时间
+                        Date customDate = new Date();
+                        String toStartTime = split[3];
+                        customDate = DateUtils.parseDate(toStartTime);
+                        c.setTime(customDate);
+                    }
                     Date timeBegin1 = new Date();
+                    timeBegin1 = DateUtil.setDays(timeBegin1, c.get(Calendar.DAY_OF_MONTH));
+                    timeBegin1 = DateUtil.setMonths(timeBegin1, c.get(Calendar.MONTH));
+                    timeBegin1 = DateUtil.setYears(timeBegin1, c.get(Calendar.YEAR));
                     timeBegin1 = DateUtils.setHours(timeBegin1, timeBegin.getHours());
                     timeBegin1 = DateUtil.setMinutes(timeBegin1, timeBegin.getMinutes());
                     timeBegin1 = DateUtil.setSeconds(timeBegin1, timeBegin.getSeconds());
@@ -101,6 +91,9 @@ public class TpDoSomethingService {
 
                     Date timeEnd = tpCarTrack.getTimeEnd();
                     Date timeEnd1 = new Date();
+                    timeEnd1 = DateUtil.setDays(timeEnd1, c.get(Calendar.DAY_OF_MONTH));
+                    timeEnd1 = DateUtil.setMonths(timeEnd1, c.get(Calendar.MONTH));
+                    timeEnd1 = DateUtil.setYears(timeEnd1, c.get(Calendar.YEAR));
                     timeEnd1 = DateUtils.setHours(timeEnd1, timeEnd.getHours());
                     timeEnd1 = DateUtil.setMinutes(timeEnd1, timeEnd.getMinutes());
                     timeEnd1 = DateUtil.setSeconds(timeEnd1, timeEnd.getSeconds());
@@ -141,6 +134,14 @@ public class TpDoSomethingService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private Date setDate(Date date, int type, int day) {
+        Calendar c = Calendar.getInstance();
+        c.setLenient(true);
+        c.setTime(date);
+        c.set(type, day);
+        return c.getTime();
     }
 
 }

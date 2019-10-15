@@ -192,13 +192,13 @@ public abstract class CrudService<M extends BaseMapper<T>, T extends DataEntity<
     }
 
     private void sleep() {
-        try {
+//        try {
             // 减慢速度，好收钱，收钱后，需要放开这个速度限制 fixme
-            int miao = 0;
-            Thread.sleep(1000 * miao);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//            int miao = 0;
+//            Thread.sleep(1000 * miao);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
 }

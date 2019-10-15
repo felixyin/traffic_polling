@@ -1,6 +1,7 @@
 <!-- for ehcache 2.x -->
 <ehcache updateCheck="false" dynamicConfig="false">
 
+<!--    fixme  发布服务器，这个地方默认就可以 -->
     <diskStore path="java.io.tmpdir"/>
 
 	<cacheManagerEventListenerFactory class="" properties=""/>

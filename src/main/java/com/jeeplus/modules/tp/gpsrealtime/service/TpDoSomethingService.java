@@ -146,10 +146,14 @@ public class TpDoSomethingService {
                     km += RandomUtils.nextDouble(0.10, 0.80);
                     tpCarTrack.setKm((double) (Math.round(km * 100) / 100.0));
 
+                    // 星期几
+                    tpCarTrack.setWhatDay(String.valueOf(DateUtil.getDayOfWeek(tpCarTrack.getTimeBegin())));
+
                     tpCarTrack.setRemarks("-");
 
                     TpCar carParam = new TpCar();
                     carParam.setName(toCarName);
+
 
                     TpCar tpCar = tpCarService.findUniqueByProperty("name", toCarName);
                     if (tpCar == null && StringUtils.isBlank(tpCar.getId())) {

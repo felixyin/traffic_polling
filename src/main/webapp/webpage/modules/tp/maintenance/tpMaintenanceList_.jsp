@@ -342,6 +342,18 @@
             });
         });
         $("#export").click(function () {//导出Excel文件
+
+            var bsd = $('#beginSendDate');
+            if(!bsd.children(':text').val()){
+                jp.warning('请先选择要导出数据的月份后，再点击导出按钮！');
+                bsd.datetimepicker({
+                    format: "YYYY-MM"
+                });
+                $('button[name="showSearch"]').click();
+                bsd.find('.glyphicon-calendar').click();
+                return;
+            }
+
             var self =this;
             $(self).attr('disabled', 'disabled');
             var searchParam = $("#searchForm").serializeJSON();

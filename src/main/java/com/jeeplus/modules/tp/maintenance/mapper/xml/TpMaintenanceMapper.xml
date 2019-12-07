@@ -132,8 +132,11 @@
 			<if test="sendBy != null and sendBy.id != null and sendBy.id != ''">
 				AND a.send_by = #{sendBy.id}
 			</if>
-			<if test="beginSendDate != null and endSendDate != null ">
-				AND a.send_date BETWEEN #{beginSendDate} AND #{endSendDate}
+			<if test="beginSendDate !=null">
+				AND  DATE_FORMAT(a.send_date,'%Y-%m-%d') &gt;= DATE_FORMAT(#{beginSendDate},'%Y-%m-%d')
+			</if>
+			<if test="endSendDate !=null">
+				AND  DATE_FORMAT(a.send_date,'%Y-%m-%d') &lt;= DATE_FORMAT(#{endSendDate},'%Y-%m-%d')
 			</if>
 			<if test="office != null and office.id != null and office.id != ''">
 				AND a.office = #{office.id}
@@ -141,11 +144,11 @@
 			<if test="leaderBy != null and leaderBy.id != null and leaderBy.id != ''">
 				AND a.leader_by = #{leaderBy.id}
 			</if>
-			<if test="beginJobBeginDate != null and endJobBeginDate != null ">
-				AND a.job_begin_date BETWEEN #{beginJobBeginDate} AND #{endJobBeginDate}
+			<if test="beginJobBeginDate !=null">
+				AND  DATE_FORMAT(a.job_begin_date,'%Y-%m-%d') &gt;= DATE_FORMAT(#{beginJobBeginDate},'%Y-%m-%d')
 			</if>
-			<if test="beginJobEndDate != null and endJobEndDate != null ">
-				AND a.job_end_date BETWEEN #{beginJobEndDate} AND #{endJobEndDate}
+			<if test="endJobBeginDate !=null">
+				AND  DATE_FORMAT(a.job_begin_date,'%Y-%m-%d') &lt;= DATE_FORMAT(#{endJobBeginDate},'%Y-%m-%d')
 			</if>
 			<if test="status != null and status != ''">
 				AND a.status = #{status}

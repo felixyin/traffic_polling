@@ -160,33 +160,6 @@
                         </div>
                         <div class="col-xs-12 col-sm-6 col-md-4">
                             <div class="form-group">
-                                <label class="label-item single-overflow pull-left"
-                                       title="施工结束时间：">&nbsp;施工结束时间：</label>
-                                <div class="col-xs-12">
-                                    <div class="col-xs-12 col-sm-5">
-                                        <div class='input-group date' id='beginJobEndDate' style="left: -10px;">
-                                            <input type='text' name="beginJobEndDate" class="form-control"/>
-                                            <span class="input-group-addon">
-					                       <span class="glyphicon glyphicon-calendar"></span>
-					                   </span>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-12 col-sm-1">
-                                        ~
-                                    </div>
-                                    <div class="col-xs-12 col-sm-5">
-                                        <div class='input-group date' id='endJobEndDate' style="left: -10px;">
-                                            <input type='text' name="endJobEndDate" class="form-control"/>
-                                            <span class="input-group-addon">
-					                       <span class="glyphicon glyphicon-calendar"></span>
-					                   </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-sm-6 col-md-4">
-                            <div class="form-group">
                                 <label class="label-item single-overflow pull-left" title="任务状态：">&nbsp;任务状态：</label>
                                 <div class="col-xs-12">
                                     <form:radiobuttons class="i-checks" path="status"
@@ -228,7 +201,7 @@
                     <button id="btnImport" class="btn btn-info"><i class="fa fa-folder-open-o"></i> 导入</button>
                 </shiro:hasPermission>
                 <shiro:hasPermission name="tp:maintenance:tpMaintenance:export">
-                    <button id="export" class="btn btn-warning">
+                    <button id="export" class="btn btn-warning" title="请先在派单时间中选择要导出的月份！">
                         <i class="fa fa-file-excel-o"></i> 导出
                     </button>
                 </shiro:hasPermission>

@@ -44,7 +44,7 @@
                            input-channel="startCase" async="true" auto-startup="true" send-timeout="${mqtt.completionTimeout}"
                            ref="tpGpsRealtimeService" method="handleGPS" />
 
-    <!--<bean id="mqttCaseService" class="com.jeeplus.modules.tp.mqtt.service.MqttService"/>-->
+<!--    <bean id="mqttCaseService" class="com.jeeplus.modules.tp.mqtt.service.MqttService"/>-->
 
 </beans>
 

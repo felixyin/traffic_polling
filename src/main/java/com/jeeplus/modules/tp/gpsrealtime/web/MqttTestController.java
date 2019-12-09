@@ -18,14 +18,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 
-@Controller
+//@Controller
 @RequestMapping("${adminPath}/tp/mqtt")
 public class MqttTestController extends BaseController {
 
-    @Resource
+//    @Resource
     private MqttPahoMessageHandler mqttHandler;
 
-    @Resource
+//    @Resource
     private MqttPahoMessageDrivenChannelAdapter mqttAdapter;
 
     public void send(String topic, String content) {

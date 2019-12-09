@@ -10,6 +10,7 @@ import com.jeeplus.common.utils.time.DateUtil;
 import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.service.CrudService;
 import com.jeeplus.modules.sys.utils.DictUtils;
+import com.jeeplus.modules.tp.maintenance.entity.TpExportReport;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenanceItem;
 import com.jeeplus.modules.tp.maintenance.gdbean.*;
@@ -383,5 +384,24 @@ public class TpMaintenanceService extends CrudService<TpMaintenanceMapper, TpMai
                 logger.error(String.format("解释文件路径失败，URL地址为%s", filepath), e1);
             }
         }
+    }
+
+    /**
+     * 查询统计报表
+     * @param mapPage
+     * @param tpMaintenance
+     * @return
+     */
+    public List<TpExportReport> findTongJiList(TpMaintenance tpMaintenance) {
+        List<TpExportReport> tongJiList = mapper.findTongJiList(tpMaintenance);
+        Double all_money  = 0D;
+        for (TpExportReport m : tongJiList) {
+           all_money += Double.parseDouble(m.getAllMoney());
+        }
+        TpExportReport tongJi = new TpExportReport();
+        tongJi.setProjectName("合计");
+        tongJi.setAllMoney(all_money.toString());
+        tongJiList.add(tongJi);
+        return tongJiList;
     }
 }

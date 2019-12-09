@@ -29,6 +29,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.streaming.SXSSFSheet;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFClientAnchor;
 import org.apache.poi.xssf.usermodel.XSSFRichTextString;
@@ -58,7 +59,7 @@ public class ExportExcel {
 	/**
 	 * 工作表对象
 	 */
-	private Sheet sheet;
+	private SXSSFSheet sheet;
 	
 	/**
 	 * 样式列表
@@ -189,6 +190,8 @@ public class ExportExcel {
 	private void initialize(String title, List<String> headerList) {
 		this.wb = new SXSSFWorkbook(500);
 		this.sheet = wb.createSheet("Export");
+		// 自动调整列宽
+		this.sheet.trackAllColumnsForAutoSizing();
 		this.styles = createStyles(wb);
 		// Create title
 		if (StringUtils.isNotBlank(title)){

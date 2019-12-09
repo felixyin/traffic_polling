@@ -357,8 +357,7 @@ public class LoginController extends BaseController{
 	 */
 	@RequestMapping(value = "${adminPath}/home")
 	public String home(HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
-		
+//		return	"modules/tp/cartrack/tpRealtimeLocations";
 		return "modules/sys/login/sysHome";
-		
 	}
 }

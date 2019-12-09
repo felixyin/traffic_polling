@@ -314,5 +314,124 @@
 	<select id="findUniqueByProperty" resultType="TpMaintenance" statementType="STATEMENT">
 		select * FROM tp_maintenance  where ${propertyName} = '${value}'
 	</select>
-	
+
+	<select id="findTongJiList" resultType="com.jeeplus.modules.tp.maintenance.entity.TpExportReport">
+		SELECT
+		tmi.remarks as verb,
+		tmi.category,
+		tmp.`name` as itemName,
+		concat( tmi.remarks,' ', tmi.category,'-',tmp.`name` ) AS projectName,
+		tmp.unit,
+		SUM( tmi.count ) AS allCount,
+		tmi.price,
+		SUM( tmi.money ) AS allMoney
+		FROM
+		tp_maintenance a
+		LEFT JOIN sys_area area ON area.id = a.area_id
+		LEFT JOIN tp_road_crossing roadcross ON roadcross.id = a.roadcross_id
+		LEFT JOIN tp_road road ON road.id = a.road_id
+		LEFT JOIN sys_user sendBy ON sendBy.id = a.send_by
+		LEFT JOIN sys_office office ON office.id = a.office
+		LEFT JOIN sys_user leaderBy ON leaderBy.id = a.leader_by
+		LEFT JOIN tp_maintenance_item tmi ON a.id = tmi.maintenance_id
+		LEFT JOIN tp_material_part tmp on tmp.id = tmi.material_part_id
+		<where>
+			a.del_flag = #{DEL_FLAG_NORMAL}
+			${dataScope}
+			<if test="num != null and num != ''">
+				AND a.num = #{num}
+			</if>
+			<if test="jobType != null and jobType != ''">
+				AND concat(a.job_type,',') like concat('%',#{jobType},',%')
+			</if>
+			<if test="jobDescription != null and jobDescription != ''">
+				AND a.job_description = #{jobDescription}
+			</if>
+			<if test="source != null and source != ''">
+				AND a.job_source = #{source}
+			</if>
+			<if test="area != null and area.id != null and area.id != ''">
+				AND a.area_id = #{area.id}
+			</if>
+			<if test="roadcross != null and roadcross.id != null and roadcross.id != ''">
+				AND a.roadcross_id = #{roadcross.id}
+			</if>
+			<if test="road != null and road.id != null and road.id != ''">
+				AND a.road_id = #{road.id}
+			</if>
+			<if test="address != null and address != ''">
+				AND a.address LIKE
+				<if test="dbName == 'oracle'">'%'||#{address}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{address}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{address},'%')</if>
+			</if>
+			<if test="nearestPoi != null and nearestPoi != ''">
+				AND a.nearest_poi LIKE
+				<if test="dbName == 'oracle'">'%'||#{nearestPoi}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{nearestPoi}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{nearestPoi},'%')</if>
+			</if>
+			<if test="sendBy != null and sendBy.id != null and sendBy.id != ''">
+				AND a.send_by = #{sendBy.id}
+			</if>
+			<if test="beginSendDate !=null">
+				AND  DATE_FORMAT(a.send_date,'%Y-%m-%d') &gt;= DATE_FORMAT(#{beginSendDate},'%Y-%m-%d')
+			</if>
+			<if test="endSendDate !=null">
+				AND  DATE_FORMAT(a.send_date,'%Y-%m-%d') &lt;= DATE_FORMAT(#{endSendDate},'%Y-%m-%d')
+			</if>
+			<if test="office != null and office.id != null and office.id != ''">
+				AND a.office = #{office.id}
+			</if>
+			<if test="leaderBy != null and leaderBy.id != null and leaderBy.id != ''">
+				AND a.leader_by = #{leaderBy.id}
+			</if>
+			<if test="beginJobBeginDate !=null">
+				AND  DATE_FORMAT(a.job_begin_date,'%Y-%m-%d') &gt;= DATE_FORMAT(#{beginJobBeginDate},'%Y-%m-%d')
+			</if>
+			<if test="endJobBeginDate !=null">
+				AND  DATE_FORMAT(a.job_begin_date,'%Y-%m-%d') &lt;= DATE_FORMAT(#{endJobBeginDate},'%Y-%m-%d')
+			</if>
+			<if test="status != null and status != ''">
+				AND a.status = #{status}
+			</if>
+			<if test="malfunctionType != null and malfunctionType != ''">
+				AND a.malfunction_type = #{malfunctionType}
+			</if>
+			<if test="whatDay != null and whatDay != ''">
+				AND a.what_day = #{whatDay}
+			</if>
+		</where>
+		GROUP BY
+		tmi.remarks,
+		tmi.category,
+		tmp.`name`,
+		concat( tmi.remarks, ' ', tmi.category,'-',tmp.`name` ) ,
+		tmp.unit,
+		tmi.price
+		HAVING projectName is not null
+		<choose>
+			<when test="group != null and group == '1'.toString()">
+				ORDER BY tmi.category
+			</when>
+			<when test="group != null and group == '2'.toString()">
+				ORDER BY tmi.remarks
+			</when>
+			<when test="group != null and group == '3'.toString()">
+				ORDER BY tmp.unit
+			</when>
+			<otherwise>
+				<choose>
+					<when test="orderBy != null and orderBy != ''">
+						ORDER BY ${orderBy}
+					</when>
+					<otherwise>
+						ORDER BY allMoney DESC
+					</otherwise>
+				</choose>
+			</otherwise>
+		</choose>
+
+	</select>
+
 </mapper>

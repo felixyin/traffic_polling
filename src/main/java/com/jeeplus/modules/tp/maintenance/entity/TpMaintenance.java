@@ -68,6 +68,11 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
     // 导出的物料list
     private List<TpMaterialPart> materialParts = Lists.newArrayList();
 
+    // 物料统计 排序
+	private String orderBy;
+	// 查询分组方式
+	private String group;
+
 	public TpMaintenance() {
 		super();
 	}
@@ -415,4 +420,20 @@ public class TpMaintenance extends DataEntity<TpMaintenance> {
     public void setMaterialParts(List<TpMaterialPart> materialParts) {
         this.materialParts = materialParts;
     }
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
+	}
 }

@@ -15,6 +15,7 @@ import com.jeeplus.core.persistence.Page;
 import com.jeeplus.core.web.BaseController;
 import com.jeeplus.modules.sys.entity.User;
 import com.jeeplus.modules.sys.utils.UserUtils;
+import com.jeeplus.modules.tp.maintenance.entity.TpExportReport;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
 import com.jeeplus.modules.tp.maintenance.gdbean.PositionRootBean;
 import com.jeeplus.modules.tp.maintenance.service.TpMaintenanceService;
@@ -36,10 +37,7 @@ import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLDecoder;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 施工Controller
@@ -159,25 +157,24 @@ public class TpMaintenanceController extends BaseController {
     }
 
     /**
-     * 导出excel文件
-     * 已废弃
+     * 导出物料统计报表
      */
-    @Deprecated
     @ResponseBody
-    @RequiresPermissions("tp:maintenance:tpMaintenance:exportReport")
+//    @RequiresPermissions("tp:maintenance:tpMaintenance:exportReport")
+    @RequiresPermissions("tp:maintenance:tpMaintenance:export")
     @RequestMapping(value = "exportReport")
     public AjaxJson _exportFile(TpMaintenance tpMaintenance, HttpServletRequest request, HttpServletResponse response) {
         AjaxJson j = new AjaxJson();
         try {
-            String fileName = "施工" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
-            Page<TpMaintenance> page = tpMaintenanceService.findPage(new Page<TpMaintenance>(request, response, -1), tpMaintenance);
-            new ExportExcel("施工", TpMaintenance.class).setDataList(page.getList()).write(response, fileName).dispose();
+            String fileName = "物料统计-" + DateUtils.getDate("yyyyMMddHHmmss") + ".xlsx";
+            List<TpExportReport> list= tpMaintenanceService.findTongJiList(tpMaintenance);
+            new ExportExcel("物料统计", TpExportReport.class).setDataList(list).write(response, fileName).dispose();
             j.setSuccess(true);
             j.setMsg("导出成功！");
             return j;
         } catch (Exception e) {
             j.setSuccess(false);
-            j.setMsg("导出施工记录失败！失败信息：" + e.getMessage());
+            j.setMsg("导出物料统计数据失败！失败信息：" + e.getMessage());
         }
         return j;
     }
@@ -312,6 +309,30 @@ public class TpMaintenanceController extends BaseController {
         j.setBody(map);
         j.setMsg("位置保存成功");
         return j;
+    }
+
+
+    /**
+     * 统计列表页面
+     */
+    @RequiresPermissions("tp:maintenance:tpMaintenance:tongJi")
+    @RequestMapping(value = {"tongJi"})
+    public String tongji(TpMaintenance tpMaintenance, Model model) {
+        model.addAttribute("tpMaintenance", tpMaintenance);
+        return "modules/tp/maintenance/tpTongJiList";
+    }
+
+    /**
+     * 统计列表数据
+     */
+    @ResponseBody
+    @RequiresPermissions("tp:maintenance:tpMaintenance:tongJi")
+    @RequestMapping(value = "tongJidata")
+    public Map<String, Object> tongJiData(TpMaintenance tpMaintenance, HttpServletRequest request, HttpServletResponse response, Model model) {
+        List<TpExportReport> tongJiList= tpMaintenanceService.findTongJiList(tpMaintenance);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("rows",tongJiList);
+        return map;
     }
 
 }

@@ -5,7 +5,11 @@ package com.jeeplus.modules.tp.maintenance.mapper;
 
 import com.jeeplus.core.persistence.BaseMapper;
 import com.jeeplus.core.persistence.annotation.MyBatisMapper;
+import com.jeeplus.modules.tp.maintenance.entity.TpExportReport;
 import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 施工MAPPER接口
@@ -14,5 +18,7 @@ import com.jeeplus.modules.tp.maintenance.entity.TpMaintenance;
  */
 @MyBatisMapper
 public interface TpMaintenanceMapper extends BaseMapper<TpMaintenance> {
-	
+
+    List<TpExportReport> findTongJiList(TpMaintenance tpMaintenance);
+
 }

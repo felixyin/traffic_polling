@@ -571,7 +571,7 @@
                                             <shiro:hasPermission name="tp:maintenance:tpMaintenance:money">
                                                 <th>金额</th>
                                             </shiro:hasPermission>
-                                            <th>备注信息</th>
+                                            <th>维保方式</th>
                                             <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
                                                 <th width="10">&nbsp;</th>
                                             </shiro:hasPermission>
@@ -683,15 +683,19 @@
                                             </shiro:lacksPermission>
 
                                             <td>
-                                                <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
-                                                    <input id="tpMaintenanceItemList{{idx}}_remarks" autocomplete="off"
-                                                           name="tpMaintenanceItemList[{{idx}}].remarks" type="text" value="{{row.remarks}}"
-                                                           class="form-control "/>
+
+                                                  <shiro:hasPermission name="tp:maintenance:tpMaintenance:weiBao">
+                                                    <select id="tpMaintenanceItemList{{idx}}_remarks" readonly="readonly"
+                                                            name="tpMaintenanceItemList[{{idx}}].remarks" data-value="{{row.remarks}}"
+                                                            class="form-control m-b  required my-remarks" style="min-width:45px;">
+                                                        <option value=""></option>
+                                                        <c:forEach items="${fns:getDictList('material_verb')}" var="dict">
+                                                            <option value="${dict.value}">${dict.label}</option>
+                                                        </c:forEach>
+                                                    </select>
                                                 </shiro:hasPermission>
                                                 <shiro:lacksPermission name="tp:maintenance:tpMaintenance:weiBao">
-                                                    <input type="hidden" name="tpMaintenanceItemList[{{idx}}].remarks"
-                                                           value="{{row.remarks}}">
-                                                    {{row.remarks}}
+                                                    <input type="hidden" name="tpMaintenanceItemList[{{idx}}].remarks" value="{{row.remarks}}">
                                                 </shiro:lacksPermission>
 
                                             </td>

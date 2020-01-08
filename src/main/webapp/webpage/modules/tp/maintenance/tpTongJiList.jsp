@@ -7,6 +7,7 @@
     <meta name="decorator" content="ani"/>
     <%@ include file="/webpage/include/bootstraptable.jsp" %>
     <%@include file="/webpage/include/treeview.jsp" %>
+    <%@ include file="/webpage/include/echarts.jsp"%>
     <%@include file="tpTongJiList_.jsp" %>
     <style type="text/css">
 
@@ -199,7 +200,8 @@
 
             <!-- 表格 套用overflow，是为了解决chrome下滚动条，和图片弹框一起存在，滚在上的bug-->
             <div style="overflow: hidden">
-            <table id="tpMaintenanceTable" data-toolbar="#toolbar" style="display: inline-block;"></table>
+                <table id="tpMaintenanceTable" data-toolbar="#toolbar" style="display: inline-block;"></table>
+                <div id="main" style="width: 100%;height: 500px"></div>
             </div>
 
             <!-- context menu -->

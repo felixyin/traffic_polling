@@ -1,6 +1,70 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <script>
     $(document).ready(function () {
+        myChart = echarts.init(document.getElementById('main'));
+        window.onresize = myChart.resize;
+        jp.get("${ctx}/echarts/other/testPieClass/option", function (option) {
+            // 指定图表的配置项和数据
+            // 使用刚指定的配置项和数据显示图表。
+            // myChart.setOption(option);
+        })
+
+        /**
+         * 生成图表
+         */
+        function onLoadSuccess(result) {
+            console.log(result);
+            var ret = {};
+            var allM = 0;
+            for (var i = 0; i < result.rows.length; i++) {
+                var row = result.rows[i];
+                if (row.projectName === '合计') {
+                    allM = row.allMoney;
+                    continue;
+                }
+                var k = row.verb;
+                if (!k) k = '未知';
+                var v = ret[k];
+                if (!v) {
+                    v = 0;
+                }
+                ret[k] = v + parseFloat(row.allMoney);
+            }
+            console.log(ret);
+            var data = [];
+            for (var r in ret) {
+                var c = ret[r];
+                data.push({
+                    value: c,
+                    name: r + ' - 金额：' + c + ' - 占比：' + (Math.round(c / allM * 100)) + '%'
+                });
+            }
+            console.log(data);
+            var option = {
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            saveAsImage: {
+                                show: true, title: '保存图片', type: 'png', lang: ['点击保存']
+                            }
+                        }
+                    },
+                    title: {
+                        text: '维护方式', subtext: '费用占比'
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            name: '费用占比',
+                            data: data,
+                        }
+                    ]
+                }
+            ;
+            myChart.setOption(option);
+
+        }
+
         var $tpMaintenanceTable = $('#tpMaintenanceTable');
         $tpMaintenanceTable.bootstrapTable({
 
@@ -87,6 +151,7 @@
             onShowSearch: function () {
                 $("#search-collapse").slideToggle();
             },
+            onLoadSuccess: onLoadSuccess,
             columns: [
                 {
                     field: '序号',
@@ -140,7 +205,7 @@
                     title: '备注',
                     sortable: true,
                     // sortName: 'remarks',
-                    width:'100px'
+                    width: '100px'
                 }
             ]
 
@@ -219,7 +284,7 @@
         $("#export").click(function () {//导出Excel文件
 
             var bsd = $('#beginSendDate');
-            if(!bsd.children(':text').val()){
+            if (!bsd.children(':text').val()) {
                 jp.warning('请先选择要导出数据的月份后，再点击导出按钮！');
                 bsd.datetimepicker({
                     format: "YYYY-MM"
@@ -229,7 +294,7 @@
                 return;
             }
 
-            var self =this;
+            var self = this;
             $(self).attr('disabled', 'disabled');
             var searchParam = $("#searchForm").serializeJSON();
             searchParam.pageNo = 1;

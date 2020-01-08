@@ -85,7 +85,7 @@ public class TestPieClassController extends BaseController {
 		List<TestPieClass> list = testPieClassService.findList(new TestPieClass());
 		ArrayList arrayList = new ArrayList();
 		for(TestPieClass p:list){
-			arrayList.add(new PieData(p.getClassName(), p.getNum()));
+			arrayList.add(new PieData(p.getClassName() +" - " + p.getNum() +"%", p.getNum()));
 		}
 		Pie pie = new Pie().name("班级人数比");
 		pie.setData(arrayList);

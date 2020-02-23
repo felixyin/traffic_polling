@@ -221,5 +221,29 @@ public class TpGpsRealtime extends DataEntity<TpGpsRealtime> {
 	public void setEndUpTime(Date endUpTime) {
 		this.endUpTime = endUpTime;
 	}
-		
+
+	@Override
+	public String toString() {
+		return "TpGpsRealtime{" +
+				"car=" + car +
+				", deviceId='" + deviceId + '\'' +
+				", upTime=" + upTime +
+				", locationStatus='" + locationStatus + '\'' +
+				", latGps='" + latGps + '\'' +
+				", latHemisphere='" + latHemisphere + '\'' +
+				", lonGps='" + lonGps + '\'' +
+				", lonHemisphere='" + lonHemisphere + '\'' +
+				", groundRate='" + groundRate + '\'' +
+				", groundDirection='" + groundDirection + '\'' +
+				", declination='" + declination + '\'' +
+				", declinationDirection='" + declinationDirection + '\'' +
+				", model='" + model + '\'' +
+				", latCal='" + latCal + '\'' +
+				", lonCal='" + lonCal + '\'' +
+				", latGD='" + latGD + '\'' +
+				", lonGD='" + lonGD + '\'' +
+				", beginUpTime=" + beginUpTime +
+				", endUpTime=" + endUpTime +
+				'}';
+	}
 }

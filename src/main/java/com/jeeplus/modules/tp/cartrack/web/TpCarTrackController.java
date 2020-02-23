@@ -250,6 +250,7 @@ public class TpCarTrackController extends BaseController {
      * 查看实时轨迹
      * @see spring-context-websocket.xml MyWebSocketHandler MyHandshakeInterceptor
      */
+    @Deprecated
 	@RequiresPermissions("tp:cartrack:tpCarTrack:showGpsRealtime")
     @RequestMapping(value = {"showGpsRealtime"})
     public String showGpsRealtime(Model model) {

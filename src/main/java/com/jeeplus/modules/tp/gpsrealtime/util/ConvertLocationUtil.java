@@ -317,8 +317,9 @@ public class ConvertLocationUtil {
 
     public static void main(String[] args) {
         String gpsMsg = "$$$,car00001,$GPRMC,124757.000,A,3609.8498,N,12024.9730,E,0.0,0.0,030119,6.0,W,A*10";
-        logger.debug("gps上传信息：" + gpsMsg);
-//        GpsBean gpsBean = ConvertLocationUtil.convert(gpsMsg);
-//        logger.debug("解析处理后的信息：" + gpsBean.toString());
+        gpsMsg = "$$$,1440031793292,$GPRMC,040823.000,A,3611.9304,N,11646.2414,E,0.01,279.49,210220,,,A*6C";
+        System.out.println("gps上传信息：" + gpsMsg);
+        TpGpsRealtime gpsBean = ConvertLocationUtil.convert(gpsMsg);
+        System.out.println("解析处理后的信息：" + gpsBean.toString());
     }
 }

@@ -74,7 +74,8 @@
 
 
     var div = document.getElementById('div');
-    var socket = new WebSocket('ws://localhost:8080/websocket');
+    // fixme 此端口需要修改
+    var socket = new WebSocket('ws://152.136.144.79:8201/websocket');
 
 
     var city = "<%= Global.getConfig("city")%>".trim();

@@ -40,6 +40,8 @@ import com.jeeplus.modules.tp.gpsrealtime.mapper.TpGpsRealtimeMapper;
 
 import javax.annotation.Resource;
 
+import static org.apache.commons.beanutils.BeanUtils.copyProperties;
+
 /**
  * 实时轨迹Service
  *
@@ -317,6 +319,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
                         clearCache(carTrackMap, devideId);
 
 //                        实时轨迹第三步：清理实时轨迹 TODO
+                        clearRealtime(devideId);
 
                     }
                 }
@@ -373,14 +376,40 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
         for (TpGpsRealtime gpsRealtime : gpsRealtimes) {
             TpGpsHistory gpsHistory = new TpGpsHistory();
             try {
-                BeanUtils.copyProperties(gpsHistory, gpsRealtime);
+//                copyProperties(gpsHistory, gpsRealtime);
+
                 gpsHistory.setCar(carTrack.getCar());
                 gpsHistory.setCarTrack(carTrack);
                 gpsHistory.setId(null);
+                gpsHistory.setBeginUpTime(gpsRealtime.getBeginUpTime());
+                gpsHistory.setDeclination(gpsRealtime.getDeclination());
+                gpsHistory.setDeclinationDirection(gpsRealtime.getDeclinationDirection());
+                gpsHistory.setDeviceId(gpsRealtime.getDeviceId());
+                gpsHistory.setEndUpTime(gpsRealtime.getEndUpTime());
+                gpsHistory.setGroundDirection(gpsRealtime.getGroundDirection());
+                gpsHistory.setGroundRate(gpsRealtime.getGroundRate());
+                gpsHistory.setLatCal(gpsRealtime.getLatCal());
+                gpsHistory.setLatGD(gpsRealtime.getLatGD());
+                gpsHistory.setLatGps(gpsRealtime.getLatGps());
+                gpsHistory.setLatHemisphere(gpsRealtime.getLatHemisphere());
+                gpsHistory.setLonCal(gpsRealtime.getLonCal());
+                gpsHistory.setLonGD(gpsRealtime.getLonGD());
+                gpsHistory.setLonGps(gpsRealtime.getLonGps());
+                gpsHistory.setLonHemisphere(gpsRealtime.getLonHemisphere());
+                gpsHistory.setLocationStatus(gpsRealtime.getLocationStatus());
+                gpsHistory.setModel(gpsRealtime.getModel());
+                gpsHistory.setUpTime(gpsRealtime.getUpTime());
+                gpsHistory.setCreateBy(gpsRealtime.getCreateBy());
+                gpsHistory.setCreateDate(gpsRealtime.getCreateDate());
+                gpsHistory.setUpdateBy(gpsRealtime.getUpdateBy());
+                gpsHistory.setUpdateDate(gpsRealtime.getUpdateDate());
+                gpsHistory.setRemarks(gpsRealtime.getRemarks());
+
                 gpsHistoryService.save(gpsHistory);
                 gpsRealtimeService.delete(gpsRealtime);
                 logger.info("=================> 迁移gps轨迹为history:" + gpsHistory);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (Exception e) {
+                gpsRealtimeService.delete(gpsRealtime);
                 e.printStackTrace();
                 logger.error("发生了严重错误： ----------------1 ");
                 logger.error(e.getMessage());

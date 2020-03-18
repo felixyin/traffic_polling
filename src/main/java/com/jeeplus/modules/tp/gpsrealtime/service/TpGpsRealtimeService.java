@@ -376,35 +376,7 @@ public class TpGpsRealtimeService extends CrudService<TpGpsRealtimeMapper, TpGps
         for (TpGpsRealtime gpsRealtime : gpsRealtimes) {
             TpGpsHistory gpsHistory = new TpGpsHistory();
             try {
-//                copyProperties(gpsHistory, gpsRealtime);
-
-                gpsHistory.setCar(carTrack.getCar());
-                gpsHistory.setCarTrack(carTrack);
-                gpsHistory.setId(null);
-                gpsHistory.setBeginUpTime(gpsRealtime.getBeginUpTime());
-                gpsHistory.setDeclination(gpsRealtime.getDeclination());
-                gpsHistory.setDeclinationDirection(gpsRealtime.getDeclinationDirection());
-                gpsHistory.setDeviceId(gpsRealtime.getDeviceId());
-                gpsHistory.setEndUpTime(gpsRealtime.getEndUpTime());
-                gpsHistory.setGroundDirection(gpsRealtime.getGroundDirection());
-                gpsHistory.setGroundRate(gpsRealtime.getGroundRate());
-                gpsHistory.setLatCal(gpsRealtime.getLatCal());
-                gpsHistory.setLatGD(gpsRealtime.getLatGD());
-                gpsHistory.setLatGps(gpsRealtime.getLatGps());
-                gpsHistory.setLatHemisphere(gpsRealtime.getLatHemisphere());
-                gpsHistory.setLonCal(gpsRealtime.getLonCal());
-                gpsHistory.setLonGD(gpsRealtime.getLonGD());
-                gpsHistory.setLonGps(gpsRealtime.getLonGps());
-                gpsHistory.setLonHemisphere(gpsRealtime.getLonHemisphere());
-                gpsHistory.setLocationStatus(gpsRealtime.getLocationStatus());
-                gpsHistory.setModel(gpsRealtime.getModel());
-                gpsHistory.setUpTime(gpsRealtime.getUpTime());
-                gpsHistory.setCreateBy(gpsRealtime.getCreateBy());
-                gpsHistory.setCreateDate(gpsRealtime.getCreateDate());
-                gpsHistory.setUpdateBy(gpsRealtime.getUpdateBy());
-                gpsHistory.setUpdateDate(gpsRealtime.getUpdateDate());
-                gpsHistory.setRemarks(gpsRealtime.getRemarks());
-
+                copyProperties(gpsHistory, gpsRealtime);
                 gpsHistoryService.save(gpsHistory);
                 gpsRealtimeService.delete(gpsRealtime);
                 logger.info("=================> 迁移gps轨迹为history:" + gpsHistory);
